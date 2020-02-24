@@ -2,6 +2,7 @@ const functions = require('firebase-functions');
 
 const express = require('express');
 const axios = require('axios');
+const dabasKey = '1156f1c4-2973-4b1e-a874-185023cc50c3';
 var cors = require('cors');
 
 const app = express();
@@ -21,7 +22,7 @@ app.get('/search', (req, res) => {
 
     axios
         .get(
-            `http://api.dabas.com/DABASService/V2/articles/searchparameter/${query}/json?apikey=1156f1c4-2973-4b1e-a874-185023cc50c3`,
+            `http://api.dabas.com/DABASService/V2/articles/searchparameter/${query}/json?apikey=${dabasKey}`,
         )
         .then(result => {
             return res.json(result.data);
