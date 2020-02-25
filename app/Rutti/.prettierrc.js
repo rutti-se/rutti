@@ -6,4 +6,5 @@ module.exports = {
     semi: true,
     tabWidth: 4,
     useTabs: false,
+    'editor.formatOnSave': true,
 };
