@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {Image, TouchableHighlight, Text, StyleSheet, View} from 'react-native';
+import {TouchableHighlight, Text, StyleSheet, View} from 'react-native';
+import {Icon} from '../assets/icomoon/';
 
 export default class Button extends Component {
     constructor() {
@@ -7,6 +8,23 @@ export default class Button extends Component {
         this.state = {};
     }
 
+    renderIcon(icon, iconColor) {
+        if (icon) {
+            return (
+                <Icon
+                    name={icon}
+                    size={30}
+                    color={iconColor ? iconColor : 'white'}></Icon>
+            );
+        }
+    }
+
+    renderText(text) {
+        console.log('TJooo');
+        if (text) {
+            return <Text style={styles.text}>{text}</Text>;
+        }
+    }
     render() {
         const {
             text,
@@ -14,6 +32,7 @@ export default class Button extends Component {
             icon,
             color,
             underlayColor,
+            iconColor,
             disabled,
         } = this.props;
 
@@ -29,7 +48,8 @@ export default class Button extends Component {
                     onPress={onPress}
                     disabled={disabled}>
                     <View style={styles.buttonContent}>
-                        <Text style={styles.text}>{text}</Text>
+                        {this.renderIcon(icon, iconColor)}
+                        {this.renderText(text)}
                     </View>
                 </TouchableHighlight>
             </View>
@@ -43,20 +63,12 @@ const styles = StyleSheet.create({
     },
     button: {
         width: '100%',
-        padding: 5,
         borderRadius: 25,
-        backgroundColor: '#FF3258',
-    },
-    primary: {
-        backgroundColor: '#FF3258',
     },
     buttonContent: {
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-    },
-    green: {
-        backgroundColor: '#00FF00',
     },
     text: {
         fontSize: 20,

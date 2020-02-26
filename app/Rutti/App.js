@@ -10,7 +10,9 @@ const App: () => React$Node = () => {
 };
 
 const styles = StyleSheet.create({
-    container: {},
+    container: {
+        width: '100%',
+    },
 });
 
 export default App;
