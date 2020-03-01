@@ -9,6 +9,8 @@ import {
 } from 'react-native';
 
 import ScrollPage from './components/ScrollPage';
+import Button from './components/Button';
+import BottomDrawer from './components/BottomDrawer/BottomDrawer';
 const App: () => React$Node = () => {
     return (
         <>
@@ -19,7 +21,6 @@ const App: () => React$Node = () => {
                     underlayColor={'#333333'}
                     onPress={() => console.log('Press')}></Button>
                 <BottomDrawer username={'Oscar'} amount={3}></BottomDrawer> */}
-
                 <ScrollPage></ScrollPage>
             </View>
         </>
@@ -29,8 +30,13 @@ const App: () => React$Node = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        //height: '100%',
+        height: '100%',
         backgroundColor: '#FFE5EA',
+        justifyContent: 'center',
+    },
+    button: {
+        alignSelf: 'center',
+        marginTop: 25,
     },
 });
 
