@@ -27,36 +27,30 @@ export default class ScrollPage extends Component {
                 overScrollMode={'never'}
                 bounces={false}
                 style={styles.ScrollView}>
-                //Page 1
                 <LinearGradient
                     start={{x: 0, y: 0}}
                     end={{x: 1, y: 0}}
                     colors={[COLOR.PRIMARY, '#FD7790']}
                     style={styles.page}>
-                    //Content
                     <Text style={styles.text}>PAGE 1</Text>
                 </LinearGradient>
-                //Page 2
                 <LinearGradient
                     start={{x: 0, y: 0}}
                     end={{x: 1, y: 0}}
                     colors={['#FD7790', '#FEC6D1']}
                     style={styles.page}>
-                    //Content
                     <Text style={styles.text}>PAGE 2</Text>
                 </LinearGradient>
-                //Page 3
+
                 <LinearGradient
                     start={{x: 0, y: 0}}
                     end={{x: 1, y: 0}}
                     colors={['#FEC6D1', '#FEE5EA']}
                     style={styles.page}>
-                    //Content
                     <Text style={[styles.text, {color: 'black'}]}>PAGE 3</Text>
                 </LinearGradient>
-                //Page 4
+
                 <View style={[styles.page, {backgroundColor: COLOR.SECONDARY}]}>
-                    //Content
                     <Text style={[styles.text, {color: 'black'}]}>PAGE 4</Text>
                 </View>
             </ScrollView>
