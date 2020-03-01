@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {TouchableHighlight, Text, StyleSheet, View} from 'react-native';
-import {Icon} from '../assets/icomoon/';
+import {Icon} from '../assets/icomoon';
 import COLOR from '../assets/colors';
 
 export default class Button extends Component {
@@ -9,20 +9,19 @@ export default class Button extends Component {
         this.state = {};
     }
 
-    renderIcon(icon, iconColor) {
-        return (
-            <Icon
-                name={icon}
-                size={30}
-                color={iconColor ? iconColor : COLOR.WHITE}></Icon>
-        );
-    }
-
-    renderText(text, icon) {
-        if (text.length > 0) {
+    renderContent(icon, iconColor, text) {
+        if (icon) {
+            return (
+                <Icon
+                    name={icon}
+                    size={30}
+                    color={iconColor ? iconColor : 'white'}></Icon>
+            );
+        } else {
             return <Text style={styles.text}>{text}</Text>;
         }
     }
+
     render() {
         const {
             text,
@@ -33,11 +32,11 @@ export default class Button extends Component {
             iconColor,
             disabled,
         } = this.props;
-        console.log(underlayColor);
+
         return (
             <View style={styles.Box}>
                 <TouchableHighlight
-                    underlayColor={underlayColor}
+                    underlayColor={'white'}
                     style={[
                         styles.button,
                         {backgroundColor: color ? color : COLOR.PRIMARY},
@@ -45,8 +44,7 @@ export default class Button extends Component {
                     onPress={onPress}
                     disabled={disabled}>
                     <View style={styles.buttonContent}>
-                        {this.renderIcon(icon, iconColor)}
-                        {this.renderText(text)}
+                        {this.renderContent(icon, iconColor, text)}
                     </View>
                 </TouchableHighlight>
             </View>
@@ -55,24 +53,16 @@ export default class Button extends Component {
 }
 
 const styles = StyleSheet.create({
-    Box: {
-        flexWrap: 'wrap',
-    },
     button: {
-        width: '100%',
-        borderRadius: 25,
-        padding: 5,
-    },
-    buttonContent: {
-        flexDirection: 'row',
+        height: 50,
+        width: 50, //The Width must be the same as the height
+        borderRadius: 400, //Then Make the Border Radius twice the size of width or Height
         justifyContent: 'center',
         alignItems: 'center',
     },
+
     text: {
         fontSize: 20,
         color: COLOR.WHITE,
-        margin: 15,
-        marginLeft: 10,
-        textAlign: 'center',
     },
 });

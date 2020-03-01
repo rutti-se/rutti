@@ -1,0 +1,15 @@
+export default {
+    WHITE: '#FFF',
+    BLACK: '#000',
+    GRAY_1: '#333333',
+    GRAY_2: '#4F4F4F',
+    GRAY_3: '#828282',
+    GRAY_4: '#BDBDBD',
+    GRAY_5: '#E0E0E0',
+    GRAY_6: '#F2F2F2',
+    PRIMARY: '#FF3258',
+    SECONDARY: '#FFE5EA',
+    YELLOW: '#FFC43D',
+    GREEN: '#3C9E2F',
+    GREEN_DISABLED: '#B1EAA9',
+};
