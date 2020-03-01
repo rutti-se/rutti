@@ -19,7 +19,7 @@ export default class Button extends Component {
     }
 
     renderText(text, icon) {
-        if (text.length > 0) {
+        if (text) {
             return <Text style={styles.text}>{text}</Text>;
         }
     }
