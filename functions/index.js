@@ -12,10 +12,14 @@ const getProducts = functions
 const search = functions
     .region('europe-west2')
     .https.onRequest(require('./src/search').app);
+const generateUsername = functions
+    .region('europe-west2')
+    .https.onRequest(require('./src/generateUsername').app);
 
 module.exports = {
     findStores,
     getProduct,
     getProducts,
     search,
+    generateUsername,
 };
