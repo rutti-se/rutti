@@ -11,17 +11,12 @@ import {
 import ScrollPage from './components/ScrollPage';
 import Button from './components/Button';
 import BottomDrawer from './components/BottomDrawer/BottomDrawer';
+import RegisterPage from './components/RegisterPage';
 const App: () => React$Node = () => {
     return (
         <>
             <View style={styles.container}>
-                {/*    <Button
-                    style={styles.button}
-                    text="Register"
-                    underlayColor={'#333333'}
-                    onPress={() => console.log('Press')}></Button>
-                <BottomDrawer username={'Oscar'} amount={3}></BottomDrawer> */}
-                <ScrollPage></ScrollPage>
+                <RegisterPage></RegisterPage>
             </View>
         </>
     );

@@ -23,6 +23,11 @@ export default class Button extends Component {
             return <Text style={styles.text}>{text}</Text>;
         }
     }
+    renderShadow(shadow) {
+        if (shadow) {
+            return styles.shadow;
+        }
+    }
     render() {
         const {
             text,
@@ -32,14 +37,16 @@ export default class Button extends Component {
             underlayColor,
             iconColor,
             disabled,
+            shadow,
         } = this.props;
-        console.log(underlayColor);
+
         return (
             <View style={styles.Box}>
                 <TouchableHighlight
                     underlayColor={underlayColor}
                     style={[
                         styles.button,
+                        shadow ? styles.shadow : '',
                         {backgroundColor: color ? color : COLOR.PRIMARY},
                     ]}
                     onPress={onPress}
@@ -60,7 +67,7 @@ const styles = StyleSheet.create({
     },
     button: {
         width: '100%',
-        borderRadius: 25,
+        borderRadius: 50,
         padding: 5,
     },
     buttonContent: {
@@ -74,5 +81,11 @@ const styles = StyleSheet.create({
         margin: 15,
         marginLeft: 10,
         textAlign: 'center',
+        fontFamily: 'Montserrat-Bold',
+    },
+    shadow: {
+        shadowOffset: {width: 0, height: 5},
+        shadowColor: COLOR.GRAY_4,
+        shadowOpacity: 1.0,
     },
 });

@@ -1,13 +1,5 @@
 import React, {Component} from 'react';
-import {
-    Animated,
-    ScrollView,
-    View,
-    SafeAreaView,
-    Text,
-    StyleSheet,
-    Dimensions,
-} from 'react-native';
+import {ScrollView, View, Text, StyleSheet, Dimensions} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
 import COLOR from '../assets/colors';
