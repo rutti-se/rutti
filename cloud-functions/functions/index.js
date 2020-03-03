@@ -2,25 +2,31 @@ const functions = require('firebase-functions');
 const express = require('express');
 const axios = require('axios');
 const getNearbyCityGrossStores = require('./citygross');
+const dabasKey = process.env.DABAS_KEY;
 var cors = require('cors');
 
 const app = express();
 app.use(cors());
 
-// app.get('/citygross', async (req, res) => {
-//     if (req.method !== 'GET') {
-//         res.status(405).json({ error: 'Request method not allowed.' });
-//     }
-//     let { zipCode } = req.query;
+app.get('/search', (req, res) => {
+    if (req.method !== 'GET') {
+        res.status(405).json({ error: 'Request method not allowed.' });
+    }
+    const { q: query } = req.query;
 
-//     if (!zipCode) {
-//         res.status(400).json({ error: 'No zipCode parameter.' });
-//     }
+    if (!query) {
+        res.status(400).json({ error: 'No query' });
+    }
 
-//     const nearbyStores = await getNearbyCityGrossStores(zipCode);
-
-//     res.json(nearbyStores);
-// });
+    axios
+        .get(
+            `http://api.dabas.com/DABASService/V2/articles/searchparameter/${query}/json?apikey=${dabasKey}`,
+        )
+        .then(result => {
+            return res.json(result.data);
+        })
+        .catch(error => console.log(error));
+});
 
 app.get('/findStores', (req, res) => {
     if (req.method !== 'GET') {
