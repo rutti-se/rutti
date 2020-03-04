@@ -35,11 +35,29 @@ function onPanResponderRelease(_, gestureState) {
     animateMove(toValue);
 }
 
+function onStartShouldSetPanResponderCapture(_, gestureState) {
+    return false;
+}
+
+function onStartShouldSetPanResponder(_, gestureState) {
+    return false;
+}
+function onMoveShouldSetPanResponderCapture(_, gestureState) {
+    return false;
+}
+function onPanResponderGrant(_, gestureState) {
+    return false;
+}
+
 const panGesture = PanResponder.create({
     onPanResponderMove,
     onPanResponderRelease,
     onMoveShouldSetPanResponder,
-    onStartShouldSetPanResponderCapture: onMoveShouldSetPanResponder,
+    onStartShouldSetPanResponderCapture,
+    onMoveShouldSetPanResponder,
+    onStartShouldSetPanResponder,
+    onMoveShouldSetPanResponderCapture,
+    onPanResponderGrant,
 });
 
 export {animatedPosition, panGesture};

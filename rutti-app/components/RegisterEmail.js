@@ -1,18 +1,33 @@
 import React, {Component} from 'react';
-import {TextInput, View, Text, StyleSheet, SafeAreaView} from 'react-native';
+import {View, Text, StyleSheet, SafeAreaView} from 'react-native';
 import Button from './Button';
-import COLORS from '../assets/colors';
 import InputField from './InputField';
+
 export default class RegisterPage extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            username: '',
+            email: '',
+            password: '',
+            rePassword: '',
+        };
+
+        this.handleChange = this.handleChange.bind(this);
+        this.handlePress = this.handlePress.bind(this);
     }
 
-    handlePress() {}
+    handlePress() {
+        if (this.state.password != this.state.rePassword) {
+            alert('Fel Lösenord');
+        } else {
+            console.log(this.state);
+        }
+    }
 
-    inputTextChanged(text) {
-        console.log(text);
+    handleChange(event) {
+        const {name, text} = event;
+        this.setState({[name]: text});
     }
 
     render() {
@@ -24,30 +39,38 @@ export default class RegisterPage extends Component {
                 </View>
                 <View style={styles.inputForm}>
                     <InputField
+                        onChange={this.handleChange}
                         onSubmitEditing={() => this.email.getInnerRef().focus()}
                         autoCorrect={false}
-                        text={'Användarnamn'}></InputField>
+                        name={'username'}
+                        labelText={'Användarnamn'}></InputField>
                     <InputField
+                        onChange={this.handleChange}
                         onSubmitEditing={() =>
                             this.password.getInnerRef().focus()
                         }
                         ref={r => (this.email = r)}
                         type={'email-address'}
-                        text={'E-post'}></InputField>
+                        name={'email'}
+                        labelText={'E-post'}></InputField>
 
                     <InputField
+                        onChange={this.handleChange}
                         ref={r => (this.password = r)}
                         onSubmitEditing={() =>
                             this.rePassword.getInnerRef().focus()
                         }
                         secure={true}
-                        text={'Lösenord'}></InputField>
+                        name={'password'}
+                        labelText={'Lösenord'}></InputField>
 
                     <InputField
+                        onChange={this.handleChange}
                         ref={r => (this.rePassword = r)}
                         autoCorrect={false}
                         secure={true}
-                        text={'Bekräfta lösenord'}></InputField>
+                        name={'rePassword'}
+                        labelText={'Bekräfta lösenord'}></InputField>
                 </View>
 
                 <View style={styles.bottomContainer}>
@@ -66,8 +89,6 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'flex-end',
-
-        // marginBottom: '20%',
     },
     topContainer: {
         flex: 1,
@@ -86,7 +107,7 @@ const styles = StyleSheet.create({
     },
     bottomContainer: {
         width: '90%',
-        flex: 1,
+        flex: 2,
         justifyContent: 'center',
         alignSelf: 'center',
     },

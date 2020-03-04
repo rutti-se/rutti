@@ -12,11 +12,13 @@ import ScrollPage from './components/ScrollPage';
 import Button from './components/Button';
 import BottomDrawer from './components/BottomDrawer/BottomDrawer';
 import RegisterPage from './components/RegisterPage';
+import RegisterEmail from './components/RegisterEmail';
+
 const App: () => React$Node = () => {
     return (
         <>
             <View style={styles.container}>
-                <BottomDrawer />
+                <RegisterEmail></RegisterEmail>
             </View>
         </>
     );
