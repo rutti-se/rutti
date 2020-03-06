@@ -14,5 +14,6 @@ app/Rutti/ios/Rutti/Images.xcassets/AppIcon.appiconset/Contents.json
 rutti-app/ios/Podfile.lock
 rutti-app/ios/Rutti.xcworkspace/contents.xcworkspacedata
 rutti-app/ios/Rutti.xcodeproj/project.pbxproj
+
 rutti-app/android/google-services.json
 rutti-app/ios/GoogleService-Info.plist
