@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* RuttiTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* RuttiTests.m */; };
-		0C6DEF6124127D6E001CFD0D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0C6DEF6024127D6E001CFD0D /* GoogleService-Info.plist */; };
+		0C6DEF6324128499001CFD0D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0C6DEF6224128499001CFD0D /* GoogleService-Info.plist */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -49,7 +49,7 @@
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* RuttiTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RuttiTests.m; sourceTree = "<group>"; };
 		0659D6F4A2832C526C05447E /* libPods-Rutti-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Rutti-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		0C6DEF6024127D6E001CFD0D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		0C6DEF6224128499001CFD0D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		10D73A23A9683058CDBE9E8B /* Pods-RuttiTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RuttiTests.release.xcconfig"; path = "Target Support Files/Pods-RuttiTests/Pods-RuttiTests.release.xcconfig"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* Rutti.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Rutti.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Rutti/AppDelegate.h; sourceTree = "<group>"; };
@@ -177,7 +177,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				0C6DEF6024127D6E001CFD0D /* GoogleService-Info.plist */,
+				0C6DEF6224128499001CFD0D /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* Rutti */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* RuttiTests */,
@@ -367,7 +367,7 @@
 				D66E67C5BD024BB58390586C /* icomoon.ttf in Resources */,
 				3363E78D5CE249D1B6CE746E /* Montserrat-Bold.ttf in Resources */,
 				5A9940FB8F034E539F1E721C /* Montserrat-Regular.ttf in Resources */,
-				0C6DEF6124127D6E001CFD0D /* GoogleService-Info.plist in Resources */,
+				0C6DEF6324128499001CFD0D /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
