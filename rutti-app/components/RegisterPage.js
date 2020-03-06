@@ -2,13 +2,24 @@ import React, {Component} from 'react';
 import {View, Text, StyleSheet, SafeAreaView} from 'react-native';
 import Button from './Button';
 import COLORS from '../assets/colors';
+import {facebookLogin, googleLogin} from '../api/signInMethods';
+
 export default class RegisterPage extends Component {
     constructor(props) {
         super(props);
         this.state = {};
     }
 
-    handlePress(event) {}
+    handlePress(event) {
+        switch (event) {
+            case 'Facebook':
+                facebookLogin();
+                break;
+            case 'Google':
+                googleLogin();
+                break;
+        }
+    }
     render() {
         const {} = this.props;
         return (
@@ -33,9 +44,9 @@ export default class RegisterPage extends Component {
                                 this.handlePress('Twitter')
                             }></Button>
                         <Button
-                            text="Gmail"
+                            text="Google"
                             shadow={true}
-                            onPress={() => this.handlePress('Gmail')}></Button>
+                            onPress={() => this.handlePress('Google')}></Button>
                     </View>
                     <View style={styles.bottomButton}>
                         <Button

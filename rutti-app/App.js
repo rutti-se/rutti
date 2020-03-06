@@ -18,7 +18,7 @@ const App: () => React$Node = () => {
     return (
         <>
             <View style={styles.container}>
-                <RegisterEmail></RegisterEmail>
+                <RegisterPage></RegisterPage>
             </View>
         </>
     );

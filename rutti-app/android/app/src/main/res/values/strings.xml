@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Rutti</string>
+    <string name="facebook_app_id">849631702129966</string>
+    <string name="fb_login_protocol_scheme">fb849631702129966</string>
 </resources>
