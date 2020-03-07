@@ -62,3 +62,29 @@ export async function googleLogin() {
         console.error(e);
     }
 }
+
+export async function emailSignUp(email, password) {
+    try {
+        firebase
+            .auth()
+            .createUserWithEmailAndPassword(email, password)
+            .then(user => {
+                console.log(user);
+            });
+    } catch (error) {
+        console.log(error.toString(error));
+    }
+}
+
+export async function emailLogin(email, password) {
+    try {
+        firebase
+            .auth()
+            .signInWithEmailAndPassword(email, password)
+            .then(res => {
+                console.log(res.user.email);
+            });
+    } catch (error) {
+        console.log(error.toString(error));
+    }
+}

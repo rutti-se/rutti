@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {View, Text, StyleSheet, SafeAreaView} from 'react-native';
 import Button from './Button';
 import InputField from './InputField';
+import {emailSignUp} from '../api/signInMethods';
 
 export default class RegisterPage extends Component {
     constructor(props) {
@@ -22,6 +23,7 @@ export default class RegisterPage extends Component {
             alert('Fel Lösenord');
         } else {
             console.log(this.state);
+            emailSignUp(this.state.email, this.state.password);
         }
     }
 

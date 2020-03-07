@@ -18,7 +18,8 @@ const App: () => React$Node = () => {
     return (
         <>
             <View style={styles.container}>
-                <RegisterPage></RegisterPage>
+                {/* <RegisterPage></RegisterPage> */}
+                <RegisterEmail></RegisterEmail>
             </View>
         </>
     );
