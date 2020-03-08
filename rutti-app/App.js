@@ -20,6 +20,7 @@ const App: () => React$Node = () => {
             <View style={styles.container}>
                 {/* <RegisterPage></RegisterPage> */}
                 <RegisterEmail></RegisterEmail>
+                <BottomDrawer></BottomDrawer>
             </View>
         </>
     );
