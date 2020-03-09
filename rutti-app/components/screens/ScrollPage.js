@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import {ScrollView, View, Text, StyleSheet, Dimensions} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import StartScreen from './StartScreen';
 
-import COLOR from '../assets/colors';
+import COLOR from '../../assets/colors';
 
 const DEVICE = Dimensions.get('window');
 export default class ScrollPage extends Component {
@@ -43,7 +44,9 @@ export default class ScrollPage extends Component {
                 </LinearGradient>
 
                 <View style={[styles.page, {backgroundColor: COLOR.SECONDARY}]}>
-                    <Text style={[styles.text, {color: 'black'}]}>PAGE 4</Text>
+                    {/* <Text style={[styles.text, {color: 'black'}]}>PAGE 4</Text> */}
+                    <StartScreen
+                        navigation={this.props.navigation}></StartScreen>
                 </View>
             </ScrollView>
         );

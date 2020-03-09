@@ -1,4 +1,7 @@
 import React, {Component} from 'react';
+import 'react-native-gesture-handler';
+import {NavigationContainer, StackActions} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
 import {
     TouchableOpacity,
     ScrollView,
@@ -8,35 +11,33 @@ import {
     StyleSheet,
 } from 'react-native';
 
-import ScrollPage from './components/ScrollPage';
+import ScrollPage from './components/screens/ScrollPage';
 import Button from './components/Button';
 import BottomDrawer from './components/BottomDrawer/BottomDrawer';
-import RegisterPage from './components/RegisterPage';
+import RegisterPage from './components/screens/RegisterPage';
 import RegisterEmail from './components/RegisterEmail';
+export default class App extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {};
+    }
 
-const App: () => React$Node = () => {
-    return (
-        <>
-            <View style={styles.container}>
-                {/* <RegisterPage></RegisterPage> */}
-                <RegisterEmail></RegisterEmail>
-                <BottomDrawer></BottomDrawer>
-            </View>
-        </>
-    );
-};
+    render() {
+        return (
+            <NavigationContainer>
+                <Stack.Navigator
+                    screenOptions={{
+                        headerShown: false,
+                    }}>
+                    <Stack.Screen name="StartPage" component={ScrollPage} />
+                    <Stack.Screen
+                        name="RegisterPage"
+                        component={RegisterPage}
+                    />
+                </Stack.Navigator>
+            </NavigationContainer>
+        );
+    }
+}
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        height: '100%',
-        backgroundColor: '#FFE5EA',
-        justifyContent: 'center',
-    },
-    button: {
-        alignSelf: 'center',
-        marginTop: 25,
-    },
-});
-
-export default App;
+const Stack = createStackNavigator();
