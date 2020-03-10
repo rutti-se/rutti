@@ -1,5 +1,12 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, SafeAreaView, Image} from 'react-native';
+import {
+    Animated,
+    View,
+    Text,
+    StyleSheet,
+    SafeAreaView,
+    Image,
+} from 'react-native';
 import Button from '../Button';
 import COLORS from '../../assets/colors';
 import {SvgCssUri} from 'react-native-svg';
@@ -22,7 +29,7 @@ export default class StartScreen extends Component {
     render() {
         return (
             <SafeAreaView style={styles.container}>
-                <View style={styles.topContainer}>
+                <Animated.View style={styles.topContainer}>
                     <SvgCssUri
                         width={250}
                         height={250}
@@ -30,7 +37,7 @@ export default class StartScreen extends Component {
                             'https://firebasestorage.googleapis.com/v0/b/rutti-ca262.appspot.com/o/rutti_logo.svg?alt=media&token=c485a8e0-6f48-4bd3-9c77-ce64b51d15af'
                         }
                     />
-                </View>
+                </Animated.View>
                 <View style={styles.buttonContainer}>
                     <Button
                         text="Registrera mig"
@@ -69,9 +76,5 @@ const styles = StyleSheet.create({
         fontSize: 48,
         margin: 20,
         fontFamily: 'Montserrat-Bold',
-    },
-    image: {
-        width: 200,
-        height: 200,
     },
 });

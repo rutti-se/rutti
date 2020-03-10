@@ -1,6 +1,7 @@
 import {AccessToken, LoginManager} from 'react-native-fbsdk';
 import {GoogleSignin} from 'react-native-google-signin';
 import {firebase} from '@react-native-firebase/auth';
+import * as RootNavigation from '../components/screens/RootNavigation';
 
 // Calling the following function will open the FB login dialogue:
 export async function facebookLogin() {
@@ -35,6 +36,13 @@ export async function facebookLogin() {
             .signInWithCredential(credential);
 
         console.warn(JSON.stringify(firebaseUserCredential.user.toJSON()));
+
+        if (firebaseUserCredential.user) {
+            RootNavigation.replace(
+                'Home',
+                firebaseUserCredential.user.toJSON(),
+            );
+        }
     } catch (e) {
         console.error(e);
     }
@@ -70,6 +78,10 @@ export async function emailSignUp(email, password) {
             .createUserWithEmailAndPassword(email, password)
             .then(user => {
                 console.log(user);
+                RootNavigation.replace(
+                    'Home',
+                    firebaseUserCredential.user.toJSON(),
+                );
             });
     } catch (error) {
         console.log(error.toString(error));

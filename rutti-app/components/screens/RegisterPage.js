@@ -18,6 +18,8 @@ export default class RegisterPage extends Component {
             case 'Google':
                 googleLogin();
                 break;
+            case 'Email':
+                this.props.navigation.navigate('RegisterEmail');
         }
     }
     render() {
