@@ -1,42 +1,59 @@
-import React, {Component} from 'react';
-import {
-    TouchableOpacity,
-    ScrollView,
-    Text,
-    View,
-    SafeAreaView,
-    StyleSheet,
-} from 'react-native';
+import React from 'react';
+import 'react-native-gesture-handler';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
 
-import ScrollPage from './components/ScrollPage';
-import Button from './components/Button';
-import BottomDrawer from './components/BottomDrawer/BottomDrawer';
-import RegisterPage from './components/RegisterPage';
+import ScrollPage from './components/screens/ScrollPage';
+import RegisterPage from './components/screens/RegisterPage';
 import RegisterEmail from './components/RegisterEmail';
+import {navigationRef} from './components/screens/RootNavigation';
+import HomePage from './components/screens/HomePage';
 
-const App: () => React$Node = () => {
+export default class App extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {};
+    }
+
+    render() {
+        return (
+            <NavigationContainer ref={navigationRef}>
+                <RootStack.Navigator
+                    screenOptions={{
+                        headerShown: false,
+                    }}
+                    initialRouteName="SignIn">
+                    <RootStack.Screen name="SignIn" component={SignIn} />
+                    <RootStack.Screen name="Home" component={Home} />
+                </RootStack.Navigator>
+            </NavigationContainer>
+        );
+    }
+}
+const RootStack = createStackNavigator();
+const AuthStack = createStackNavigator();
+const HomeStack = createStackNavigator();
+
+function SignIn() {
     return (
-        <>
-            <View style={styles.container}>
-                {/* <RegisterPage></RegisterPage> */}
-                <RegisterEmail></RegisterEmail>
-                <BottomDrawer></BottomDrawer>
-            </View>
-        </>
+        <AuthStack.Navigator
+            screenOptions={{
+                headerShown: false,
+            }}>
+            <AuthStack.Screen name="StartPage" component={ScrollPage} />
+            <AuthStack.Screen name="RegisterPage" component={RegisterPage} />
+            <AuthStack.Screen name="RegisterEmail" component={RegisterEmail} />
+        </AuthStack.Navigator>
     );
-};
+}
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        height: '100%',
-        backgroundColor: '#FFE5EA',
-        justifyContent: 'center',
-    },
-    button: {
-        alignSelf: 'center',
-        marginTop: 25,
-    },
-});
-
-export default App;
+function Home() {
+    return (
+        <HomeStack.Navigator
+            screenOptions={{
+                headerShown: false,
+            }}>
+            <HomeStack.Screen name="HomePage" component={HomePage} />
+        </HomeStack.Navigator>
+    );
+}

@@ -3,6 +3,7 @@ import {View, Text, StyleSheet, SafeAreaView} from 'react-native';
 import Button from './Button';
 import InputField from './InputField';
 import {emailSignUp} from '../api/signInMethods';
+import COLORS from '../assets/colors';
 
 export default class RegisterPage extends Component {
     constructor(props) {
@@ -91,6 +92,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'flex-end',
+        backgroundColor: COLORS.SECONDARY,
     },
     topContainer: {
         flex: 1,

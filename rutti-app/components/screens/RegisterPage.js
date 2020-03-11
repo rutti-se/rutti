@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {View, Text, StyleSheet, SafeAreaView} from 'react-native';
-import Button from './Button';
-import COLORS from '../assets/colors';
-import {facebookLogin, googleLogin} from '../api/signInMethods';
+import Button from '../Button';
+import COLORS from '../../assets/colors';
+import {facebookLogin, googleLogin} from '../../api/signInMethods';
 
 export default class RegisterPage extends Component {
     constructor(props) {
@@ -18,6 +18,8 @@ export default class RegisterPage extends Component {
             case 'Google':
                 googleLogin();
                 break;
+            case 'Email':
+                this.props.navigation.navigate('RegisterEmail');
         }
     }
     render() {
@@ -66,7 +68,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'flex-end',
-        marginBottom: '20%',
+        backgroundColor: COLORS.SECONDARY,
     },
     topContainer: {
         flex: 7,
@@ -86,6 +88,7 @@ const styles = StyleSheet.create({
         flex: 2,
         justifyContent: 'flex-end',
         borderTopColor: 'white',
+        marginBottom: '20%',
     },
 
     text: {
