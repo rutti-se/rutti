@@ -3,38 +3,61 @@ import {TouchableHighlight, Text, StyleSheet, View} from 'react-native';
 import {Icon} from '../assets/icomoon/';
 import COLOR from '../assets/colors';
 
-export default props => {
-    function renderIcon(icon, iconColor) {
-        return (
-            <Icon
-                name={icon}
-                size={30}
-                color={iconColor ? iconColor : COLOR.WHITE}></Icon>
-        );
-    }
-
-    function renderText(text, icon) {
-        if (text) {
-            return <Text style={styles.text}>{text}</Text>;
-        }
-    }
-
+export default (
+    {icon, iconColor, text, shadow, type, backgroundColor, children},
+    props,
+) => {
     return (
         <View style={styles.Box}>
             <TouchableHighlight
                 style={[
                     styles.button,
                     shadow ? styles.shadow : '',
-                    {backgroundColor: color ? color : COLOR.PRIMARY},
+                    {
+                        backgroundColor: getBackgroundColor(),
+                    },
                 ]}
                 {...props}>
                 <View style={styles.buttonContent}>
-                    {renderIcon(icon, iconColor)}
-                    {renderText(text)}
+                    {renderIcon()}
+                    {renderText()}
+                    {children}
                 </View>
             </TouchableHighlight>
         </View>
     );
+
+    function renderIcon() {
+        return (
+            icon && (
+                <Icon
+                    name={icon}
+                    size={30}
+                    color={iconColor ? iconColor : COLOR.WHITE}></Icon>
+            )
+        );
+    }
+
+    function renderText() {
+        return (
+            text && text.length > 0 && <Text style={styles.text}>{text}</Text>
+        );
+    }
+
+    function getBackgroundColor() {
+        if (backgroundColor) {
+            return backgroundColor;
+        }
+        if (!type) {
+            return COLOR.PRIMARY;
+        }
+        switch (type) {
+            case 'primary':
+                return COLOR.PRIMARY;
+            case 'secondary':
+                return COLOR.GRAY_2;
+        }
+    }
 };
 
 const styles = StyleSheet.create({

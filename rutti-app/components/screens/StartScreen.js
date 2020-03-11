@@ -42,11 +42,12 @@ export default class StartScreen extends Component {
                     <Button
                         text="Registrera mig"
                         shadow={true}
+                        type={'primary'}
                         onPress={() => this.handlePress('Register')}></Button>
                     <Button
                         shadow={true}
-                        color={COLORS.GRAY_2}
                         text="Logga in"
+                        type={'secondary'}
                         onPress={() => this.handlePress('SignIn')}></Button>
                 </View>
             </SafeAreaView>
