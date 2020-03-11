@@ -41,19 +41,24 @@ export default StyleSheet.create({
 
         justifyContent: 'center',
         alignItems: 'center',
+        padding: 10,
     },
-    pullItem: {
-        width: 40,
-        height: 5,
-        borderRadius: 20,
-
-        backgroundColor: COLOR.SECONDARY,
-    },
+    pullItem: {},
 
     content: {
         marginVertical: 30,
         paddingHorizontal: 10,
 
         height: '100%',
+    },
+    text: {
+        color: COLOR.WHITE,
+        fontSize: 25,
+        textAlign: 'center',
+    },
+    barTitle: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-around',
     },
 });
