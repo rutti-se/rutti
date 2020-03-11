@@ -43,19 +43,28 @@ async function getSearchResults({ q, stores }) {
         }
     });
 
+    addRequest(
+        `https://api.mathem.io/ecom-recipe/noauth/search/query?q=${query}&index=0&size=40&mainIngredient=&courseType=&origin=&mealType=&occasion=&other=`,
+        { retailer: 'mathem' },
+    );
+
     const results = await axios.all(requests);
 
     let searchResults = new Map();
+    let recipes = {};
 
     results.forEach(result => {
         const store = requestMap.get(result.config.url);
+
+        console.log(store);
+
         if (store.retailer === 'ica') {
             if (result.data && result.data.products) {
                 result.data.products.forEach(item => {
                     searchResults.set(item, null);
                 });
             }
-        } else if (requestMap.get(result.config.url).retailer === 'coop') {
+        } else if (store.retailer === 'coop') {
             if (result.data && result.data.products) {
                 result.data.products.forEach(item => {
                     if (item.code) {
@@ -63,7 +72,7 @@ async function getSearchResults({ q, stores }) {
                     }
                 });
             }
-        } else if (requestMap.get(result.config.url).retailer === 'citygross') {
+        } else if (store.retailer === 'citygross') {
             if (result.data && result.data.data) {
                 result.data.data.forEach(item => {
                     if (item.gtin) {
@@ -71,10 +80,16 @@ async function getSearchResults({ q, stores }) {
                     }
                 });
             }
+        } else if (store.retailer === 'mathem') {
+            console.log('issa mathem');
+            recipes = result.data;
         }
     });
 
-    return { status: 200, data: [...searchResults.keys()] };
+    return {
+        status: 200,
+        data: { products: [...searchResults.keys()], recipes: recipes },
+    };
 }
 
 app.get('*', (req, res) =>

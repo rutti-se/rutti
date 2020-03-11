@@ -1,15 +1,10 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {TouchableHighlight, Text, StyleSheet, View} from 'react-native';
 import {Icon} from '../assets/icomoon/';
 import COLOR from '../assets/colors';
 
-export default class Button extends Component {
-    constructor() {
-        super();
-        this.state = {};
-    }
-
-    renderIcon(icon, iconColor) {
+export default props => {
+    function renderIcon(icon, iconColor) {
         return (
             <Icon
                 name={icon}
@@ -18,48 +13,29 @@ export default class Button extends Component {
         );
     }
 
-    renderText(text, icon) {
+    function renderText(text, icon) {
         if (text) {
             return <Text style={styles.text}>{text}</Text>;
         }
     }
-    renderShadow(shadow) {
-        if (shadow) {
-            return styles.shadow;
-        }
-    }
-    render() {
-        const {
-            text,
-            onPress,
-            icon,
-            color,
-            underlayColor,
-            iconColor,
-            disabled,
-            shadow,
-        } = this.props;
 
-        return (
-            <View style={styles.Box}>
-                <TouchableHighlight
-                    underlayColor={underlayColor}
-                    style={[
-                        styles.button,
-                        shadow ? styles.shadow : '',
-                        {backgroundColor: color ? color : COLOR.PRIMARY},
-                    ]}
-                    onPress={onPress}
-                    disabled={disabled}>
-                    <View style={styles.buttonContent}>
-                        {this.renderIcon(icon, iconColor)}
-                        {this.renderText(text)}
-                    </View>
-                </TouchableHighlight>
-            </View>
-        );
-    }
-}
+    return (
+        <View style={styles.Box}>
+            <TouchableHighlight
+                style={[
+                    styles.button,
+                    shadow ? styles.shadow : '',
+                    {backgroundColor: color ? color : COLOR.PRIMARY},
+                ]}
+                {...props}>
+                <View style={styles.buttonContent}>
+                    {renderIcon(icon, iconColor)}
+                    {renderText(text)}
+                </View>
+            </TouchableHighlight>
+        </View>
+    );
+};
 
 const styles = StyleSheet.create({
     Box: {
