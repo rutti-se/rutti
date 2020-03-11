@@ -9,7 +9,8 @@ const animatedPosition = new Animated.Value(STARTING_POSITION);
 function animateMove(toValue) {
     Animated.spring(animatedPosition, {
         toValue,
-        tension: 120,
+        tension: 12,
+        //velocity: 1,
     }).start();
 }
 
@@ -49,6 +50,12 @@ function onPanResponderGrant(_, gestureState) {
     return false;
 }
 
+function onPanPress(isEnflated) {
+    const toValue = isEnflated ? STARTING_POSITION : 0;
+
+    animateMove(toValue);
+}
+
 const panGesture = PanResponder.create({
     onPanResponderMove,
     onPanResponderRelease,
@@ -60,4 +67,4 @@ const panGesture = PanResponder.create({
     onPanResponderGrant,
 });
 
-export {animatedPosition, panGesture};
+export {animatedPosition, panGesture, onPanPress};

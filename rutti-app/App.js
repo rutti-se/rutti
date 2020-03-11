@@ -22,7 +22,7 @@ export default class App extends React.Component {
                     screenOptions={{
                         headerShown: false,
                     }}
-                    initialRouteName="SignIn">
+                    initialRouteName="Home">
                     <RootStack.Screen name="SignIn" component={SignIn} />
                     <RootStack.Screen name="Home" component={Home} />
                 </RootStack.Navigator>
