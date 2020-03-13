@@ -7,12 +7,12 @@ app.use(cors());
 
 app.post('/:productSku', async (req, res) => {
     const { stores } = req.body;
-
+    const { productSku } = req.params;
     if (!stores || stores.length < 1) {
         return { status: 400, data: { error: 'No stores.' } };
     }
 
-    const productInfo = await getProduct(req.params);
+    const productInfo = await getProduct({ productSku, stores });
     res.status(productInfo.status).json(productInfo.data);
 });
 
@@ -52,25 +52,66 @@ async function getProduct({ productSku, stores }) {
 
         const results = await axios.all(requests);
 
-        let productResult = [];
+        let productResult = {
+            productInformation: {
+                gtin,
+                name,
+                brand,
+                imageUrl,
+                type,
+                description,
+                salesUnit,
+                originCountry,
+                environmentalMarkingCodes,
+                fromSweden,
+                ingredientInfo,
+                grossWeight,
+                netWeightVolume,
+                nutritionalInfo,
+            },
+            storeInformation: [],
+        };
 
         results.map(result => {
             if (result) {
                 const store = requestMap.get(result.config.url);
-                let data = {};
+                let storeData = {
+                    price,
+                    comparePrice,
+                    isPromotion,
+                    currentPromotions: [
+                        {
+                            type,
+                            price,
+                            endDate,
+                            noOfItemsToDiscount,
+                            limitOfItems,
+                            forRegisteredCustomer,
+                            requiredSpendValue,
+                        },
+                    ],
+                };
+
                 switch (store.retailer) {
                     case 'ica':
-                        data = result.data.length ? result.data : null;
+                        storeData = result.data.length
+                            ? getIcaStoreData(result.data)
+                            : null;
                         break;
                     case 'coop':
-                        data = result.data;
+                        storeData = getCoopStoreData(result.data);
                         break;
                     case 'citygross':
-                        data = result.data.data[0] ? result.data.data[0] : null;
+                        storeData = result.data.data[0]
+                            ? getCityGrossStoreData(result.data.data[0])
+                            : null;
                         break;
                 }
                 if (data) {
-                    productResult.push({ store: store, data: data });
+                    productResult.storeInformation.push({
+                        store: store,
+                        priceInformation: storeData,
+                    });
                 }
             }
         });
@@ -80,6 +121,74 @@ async function getProduct({ productSku, stores }) {
         return { status: 400, data: { error: exception } };
     }
 }
+
+function getIcaStoreData(data) {
+    const isPromotion = data.promotions.length > 0;
+
+    let currentPromotions = [];
+
+    data.promotions.forEach(promotion => {
+        currentPromotions.push({
+            promoId: promotion.promotionId,
+            type: promotion.type,
+            price: promotion.discountValue,
+            comparePrice: promotion.discountedComparePrice,
+            endDate: promotion.endUsable,
+            noOfItemsToDiscount: promotion.noOfItemsToDiscount,
+            limitOfItems:
+                promotion.noOfGroupsToDiscount > 0
+                    ? promotion.noOfGroupsToDiscount
+                    : null,
+            forRegisteredCustomer: promotion.forRegisteredCustomer,
+            requiredSpendValue: data.promoPriceProps.spendValue,
+        });
+    });
+
+    return {
+        price: data.price.listPriceWithoutDeposit,
+        comparePrice: price.comparePrice,
+        comparePriceUnit: comparePriceCode,
+        isPromotion,
+        currentPromotions,
+    };
+}
+
+function getCoopStoreData(data) {
+    const isPromotion = data.potentialPromotions.length > 0;
+
+    let currentPromotions = [];
+
+    data.potentialPromotions.forEach(promotion => {
+        currentPromotions.push({
+            promoId: promotion.code,
+            type: promotion.type,
+            price: promotion.discountValue,
+            comparePrice: promotion.discountedComparePrice,
+            endDate: promotion.endUsable,
+            noOfItemsToDiscount: promotion.noOfItemsToDiscount,
+            limitOfItems:
+                promotion.noOfGroupsToDiscount > 0
+                    ? promotion.noOfGroupsToDiscount
+                    : null,
+            forRegisteredCustomer: promotion.forRegisteredCustomer,
+            requiredSpendValue: data.promoPriceProps.spendValue,
+        });
+    });
+
+    const comparePrice = /\d+\.\d+/.exec(price.comparePrice)[0];
+
+    const comparePriceUnit = string.replace(comparePrice + ' ', '');
+
+    return {
+        price: data.pickPrice.value,
+        comparePrice,
+        comparePriceUnit,
+        isPromotion,
+        currentPromotions,
+    };
+}
+
+function getCityGrossStoreData(data) {}
 
 app.get('*', (req, res) =>
     res.status(400).json({

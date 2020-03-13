@@ -7,9 +7,9 @@ import {
     SafeAreaView,
 } from 'react-native';
 import COLORS from '../../assets/colors';
-//import BottomDrawer from '../BottomDrawer/BottomDrawer';
+import BottomDrawer from '../BottomDrawer/BottomDrawer';
 import {Icon} from '../../assets/icomoon/';
-import BottomDrawer from 'rn-bottom-drawer';
+//import BottomDrawer from 'rn-bottom-drawer';
 import {Dimensions} from 'react-native';
 const DEVICE = Dimensions.get('window');
 export default class HomePage extends Component {
@@ -19,8 +19,6 @@ export default class HomePage extends Component {
     }
 
     render() {
-        const TAB_BAR_HEIGHT = 49;
-        const {} = this.props;
         return (
             <View style={styles.container}>
                 <BottomDrawer
