@@ -7,7 +7,7 @@ import {
     SafeAreaView,
 } from 'react-native';
 import COLORS from '../../assets/colors';
-import BottomDrawer from '../BottomDrawer/BottomDrawer';
+import {BottomDrawer} from '../BottomDrawer/BottomDrawer';
 import {Icon} from '../../assets/icomoon/';
 //import BottomDrawer from 'rn-bottom-drawer';
 import {Dimensions} from 'react-native';
@@ -28,7 +28,9 @@ export default class HomePage extends Component {
                     downDisplay={DEVICE.height / 1.4}
                     roundedEdges={true}
                     shadow={true}
-                    startUp={false}></BottomDrawer>
+                    startUp={false}>
+                    <Text>Hello</Text>
+                </BottomDrawer>
             </View>
         );
     }
