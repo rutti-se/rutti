@@ -12,6 +12,8 @@ app.post('/:productSku', async (req, res) => {
         return { status: 400, data: { error: 'No stores.' } };
     }
 
+    console.log(productSku);
+
     const productInfo = await getProduct({ productSku, stores });
     res.status(productInfo.status).json(productInfo.data);
 });
@@ -53,61 +55,48 @@ async function getProduct({ productSku, stores }) {
         const results = await axios.all(requests);
 
         let productResult = {
-            productInformation: {
-                gtin,
-                name,
-                brand,
-                imageUrl,
-                type,
-                description,
-                salesUnit,
-                originCountry,
-                environmentalMarkingCodes,
-                fromSweden,
-                ingredientInfo,
-                grossWeight,
-                netWeightVolume,
-                nutritionalInfo,
-            },
+            productInformation: null,
             storeInformation: [],
         };
 
         results.map(result => {
             if (result) {
                 const store = requestMap.get(result.config.url);
-                let storeData = {
-                    price,
-                    comparePrice,
-                    isPromotion,
-                    currentPromotions: [
-                        {
-                            type,
-                            price,
-                            endDate,
-                            noOfItemsToDiscount,
-                            limitOfItems,
-                            forRegisteredCustomer,
-                            requiredSpendValue,
-                        },
-                    ],
-                };
+                let storeData;
 
                 switch (store.retailer) {
                     case 'ica':
-                        storeData = result.data.length
-                            ? getIcaStoreData(result.data)
-                            : null;
+                        if (result.data.length) {
+                            storeData = getIcaStoreData(result.data[0]);
+                            if (!productResult.productInformation) {
+                                productResult.productInformation = getIcaProductInformation(
+                                    result.data[0],
+                                );
+                            }
+                        }
                         break;
                     case 'coop':
                         storeData = getCoopStoreData(result.data);
+                        if (!productResult.productInformation) {
+                            productResult.productInformation = getCoopProductInformation(
+                                result.data,
+                            );
+                        }
                         break;
                     case 'citygross':
-                        storeData = result.data.data[0]
-                            ? getCityGrossStoreData(result.data.data[0])
-                            : null;
+                        if (result.data.data[0]) {
+                            storeData = getCityGrossStoreData(
+                                result.data.data[0],
+                            );
+                        }
+                        if (!productResult.productInformation) {
+                            productResult.productInformation = getCityGrossProductInformation(
+                                result.data.data[0],
+                            );
+                        }
                         break;
                 }
-                if (data) {
+                if (storeData) {
                     productResult.storeInformation.push({
                         store: store,
                         priceInformation: storeData,
@@ -118,43 +107,85 @@ async function getProduct({ productSku, stores }) {
 
         return { status: 200, data: productResult };
     } catch (exception) {
+        console.log(exception);
         return { status: 400, data: { error: exception } };
     }
 }
 
 function getIcaStoreData(data) {
-    const isPromotion = data.promotions.length > 0;
+    const isPromotion = data.promotions && data.promotions.length > 0;
 
     let currentPromotions = [];
 
-    data.promotions.forEach(promotion => {
-        currentPromotions.push({
-            promoId: promotion.promotionId,
-            type: promotion.type,
-            price: promotion.discountValue,
-            comparePrice: promotion.discountedComparePrice,
-            endDate: promotion.endUsable,
-            noOfItemsToDiscount: promotion.noOfItemsToDiscount,
-            limitOfItems:
-                promotion.noOfGroupsToDiscount > 0
-                    ? promotion.noOfGroupsToDiscount
-                    : null,
-            forRegisteredCustomer: promotion.forRegisteredCustomer,
-            requiredSpendValue: data.promoPriceProps.spendValue,
+    if (isPromotion) {
+        data.promotions.forEach(promotion => {
+            currentPromotions.push({
+                promoId: promotion.promotionId,
+                type: promotion.type,
+                price: promotion.discountValue,
+                comparePrice: promotion.discountedComparePrice,
+                endDate: promotion.endUsable,
+                noOfItemsToDiscount: promotion.noOfItemsToDiscount,
+                limitOfItems:
+                    promotion.noOfGroupsToDiscount > 0 &&
+                    promotion.noOfGroupsToDiscount,
+                forRegisteredCustomer: promotion.forRegisteredCustomer,
+                requiredSpendValue: data.promoPriceProps.spendValue,
+            });
         });
-    });
+    }
 
     return {
-        price: data.price.listPriceWithoutDeposit,
-        comparePrice: price.comparePrice,
-        comparePriceUnit: comparePriceCode,
+        price:
+            data.price.comparePriceCode === 'pkg'
+                ? data.price.listPriceWithoutDeposit * (1000 / data.meanWeight)
+                : data.price.listPriceWithoutDeposit,
+        comparePrice: data.price.comparePrice,
+        comparePriceUnit: data.price.comparePriceCode,
         isPromotion,
         currentPromotions,
     };
 }
 
+function getIcaProductInformation(data) {
+    return {
+        gtin: data.product.sku,
+        name: formatProductName(data.product.name, data.product.brand),
+        brand: data.product.brand,
+        imageUrl: `https://assets.icanet.se/t_product_large_v1,f_auto/${data.product.imageId}.jpg`,
+        description: data.product.longDescription,
+        salesUnit: getUnit(data.product.salesUnit),
+        originCountry: data.product.originCountryCode
+            ? data.product.originCountryCode.name
+            : null,
+        environmentalMarkingCodes: data.product.environmentalMarkingCodes,
+        fromSweden:
+            data.product.originCountryCode &&
+            data.product.originCountryCode.code === 'SE',
+        ingredientInfo:
+            data.product.ingredientInfo &&
+            data.product.ingredientInfo.replace('Ingredienser: ', ''),
+        weight: data.product.grossWeight,
+        nutritionalInfo:
+            data.product.nutrientInformations &&
+            data.product.nutrientInformations.nutrientStatement,
+    };
+}
+
+/**
+ * workus in progressus
+ * */
 function getCoopStoreData(data) {
     const isPromotion = data.potentialPromotions.length > 0;
+
+    const comparePrice = /\d+\.\d+/.exec(
+        data.comparisonPrice.formattedValue,
+    )[0];
+
+    const comparePriceUnit = data.comparisonPrice.formattedValue.replace(
+        comparePrice + ' ',
+        '',
+    );
 
     let currentPromotions = [];
 
@@ -162,22 +193,17 @@ function getCoopStoreData(data) {
         currentPromotions.push({
             promoId: promotion.code,
             type: promotion.type,
-            price: promotion.discountValue,
-            comparePrice: promotion.discountedComparePrice,
-            endDate: promotion.endUsable,
+            price: promotion.promotionPrice.value,
+            comparePrice:
+                promotion.promotionPrice.value /
+                (data.pickPrice.value / comparePrice),
+            endDate: promotion.endDate,
             noOfItemsToDiscount: promotion.noOfItemsToDiscount,
             limitOfItems:
-                promotion.noOfGroupsToDiscount > 0
-                    ? promotion.noOfGroupsToDiscount
-                    : null,
-            forRegisteredCustomer: promotion.forRegisteredCustomer,
-            requiredSpendValue: data.promoPriceProps.spendValue,
+                promotion.maxUseText && promotion.maxUseText.length > 0,
+            forRegisteredCustomer: promotion.medmera,
         });
     });
-
-    const comparePrice = /\d+\.\d+/.exec(price.comparePrice)[0];
-
-    const comparePriceUnit = string.replace(comparePrice + ' ', '');
 
     return {
         price: data.pickPrice.value,
@@ -188,7 +214,105 @@ function getCoopStoreData(data) {
     };
 }
 
-function getCityGrossStoreData(data) {}
+function getCoopProductInformation(data) {
+    let nutritionalInfo;
+
+    if (!data.foodAnnexNotRequired) {
+        nutritionalInfo = '';
+        data.foodAnnex.forEach(({ name, value }, index) => {
+            if (name.length > 0) {
+                nutritionalInfo += name + ': ' + value;
+                if (data.foodAnnex.length - 1 !== index) {
+                    nutritionalInfo += ', ';
+                }
+            }
+        });
+    }
+
+    return {
+        gtin: data.code,
+        name: data.name,
+        brand: data.manufacturer,
+        imageUrl: data.images[0].url,
+        description: data.description,
+        salesUnit: data.unit.name,
+        originCountry: data.fromSweden && 'Sverige',
+        environmentalMarkingCodes: data.productLabels,
+        fromSweden: data.fromSweden,
+        ingredientInfo: data.listOfIngredients,
+        weight: data.packageSize,
+        nutritionalInfo,
+    };
+}
+
+function getCityGrossStoreData(data) {
+    const isPromotion =
+        data.prices[0].promotions && data.prices[0].promotions.length > 0;
+
+    let currentPromotions = [];
+
+    if (isPromotion) {
+        data.prices[0].promotions.forEach(promotion => {
+            currentPromotions.push({
+                promoId: promotion.promotionId,
+                type: promotion.effectType,
+                price: promotion.effectAmount,
+                comparePrice: promotion.price.comparisonPrice,
+                endDate: promotion.endUsable,
+                noOfItemsToDiscount: promotion.numberOfItems,
+                limitOfItems:
+                    promotion.amountLimitPerReceipt > 0 &&
+                    promotion.amountLimitPerReceipt,
+                forRegisteredCustomer: promotion.onlyForMembers,
+                requiredSpendValue: promotion.purchaseAmount,
+            });
+        });
+    }
+
+    return {
+        price: data.prices[0].ordinaryPrice.price,
+        comparePrice: data.prices[0].ordinaryPrice.comparisonPrice,
+        comparePriceUnit: 'st',
+        isPromotion,
+        currentPromotions,
+    };
+}
+
+function getCityGrossProductInformation(data) {
+    return {
+        gtin: data.gtin,
+        name: data.name,
+        brand: data.brand,
+        imageUrl: data.images[0].url,
+        description: data.description,
+        salesUnit: '',
+        originCountry: data.country,
+        environmentalMarkingCodes: data.markings,
+        fromSweden: data.country === 'SE',
+        ingredientInfo:
+            data.foodAndBeverageExtension &&
+            data.foodAndBeverageExtension.ingredientStatement,
+        weight: data.netContent && data.netContent.value,
+        nutrionalInfo:
+            data.foodAndBeverageExtension &&
+            data.foodAndBeverageExtension.nutrientInformations &&
+            data.foodAndBeverageExtension.nutrientInformations[0]
+                .nutrientStatement,
+    };
+}
+
+function getUnit(unit) {
+    if (unit === 'pce') {
+        return 'st';
+    }
+}
+
+function formatProductName(productName, brandName) {
+    return productName.substr(
+        0,
+        productName.toLowerCase().indexOf(brandName.replace(/[-]+/g, '')),
+    );
+}
 
 app.get('*', (req, res) =>
     res.status(400).json({
