@@ -10,6 +10,8 @@ app.post('*', async (req, res) => {
     const { q } = req.query;
     const { stores } = req.body;
 
+    console.log('new request');
+
     const searchResults = await getSearchResults({ q, stores });
     res.status(searchResults.status).json(searchResults.data);
 });
@@ -55,8 +57,6 @@ async function getSearchResults({ q, stores }) {
 
     results.forEach(result => {
         const store = requestMap.get(result.config.url);
-
-        console.log(store);
 
         if (store.retailer === 'ica') {
             if (result.data && result.data.products) {
