@@ -75,6 +75,12 @@ export default () => {
         }
     }
 
+    function onTextChange(event) {
+        if (event.text && event.text.length > 2) {
+            setSearchTerm(event.text);
+        }
+    }
+
     return (
         <View style={styles.container}>
             <InputField onChange={onTextChange}></InputField>
