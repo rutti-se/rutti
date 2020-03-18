@@ -7,6 +7,9 @@ import findStores from '../../api/findStores';
 import searchProducts from '../../api/searchProducts';
 import {Dimensions} from 'react-native';
 import useDebounce from '../useDebounce';
+import SelectStorePage from './SelectStorePage';
+import ProductPage from './ProductPage';
+
 const DEVICE = Dimensions.get('window');
 
 const stores = [
@@ -26,48 +29,32 @@ const stores = [
 
 export default () => {
     const [searchTerm, setSearchTerm] = useState('');
-    // State and setter for search results
+
     const [results, setResults] = useState([]);
-    // State for search status (whether there is a pending API request)
+
     const [isSearching, setIsSearching] = useState(false);
-    // S
+
     const [products, setProducts] = useState([]);
 
     const [recipes, setRecipes] = useState([]);
-    // Now we call our hook, passing in the current searchTerm value.
-    // The hook will only return the latest value (what we passed in) ...
-    // ... if it's been more than 500ms since it was last called.
-    // Otherwise, it will return the previous value of searchTerm.
-    // The goal is to only have the API call fire when user stops typing ...
-    // ... so that we aren't hitting our API rapidly.
+
     const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
-    useEffect(
-        () => {
-            // Make sure we have a value (user has entered something in input)
-            if (debouncedSearchTerm) {
-                // Set isSearching state
-                setIsSearching(true);
-                // Fire off our API call
-                searchProducts({q: debouncedSearchTerm, stores}).then(
-                    result => {
-                        setIsSearching(false);
-                        const {products, recipes} = result;
-                        setProducts(products);
-                        setRecipes(recipes);
-                        console.log(result);
-                    },
-                );
-            } else {
-                setResults([]);
-            }
-        },
-        // This is the useEffect input array
-        // Our useEffect function will only execute if this value changes ...
-        // ... and thanks to our hook it will only change if the original ...
-        // value (searchTerm) hasn't changed for more than 500ms.
-        [debouncedSearchTerm],
-    );
+    useEffect(() => {
+        if (debouncedSearchTerm) {
+            setIsSearching(true);
+
+            searchProducts({q: debouncedSearchTerm, stores}).then(result => {
+                setIsSearching(false);
+                const {products, recipes} = result;
+                setProducts(products);
+                setRecipes(recipes);
+                //console.log(result);
+            });
+        } else {
+            setResults([]);
+        }
+    }, [debouncedSearchTerm]);
 
     function onTextChange(event) {
         if (event.text && event.text.length > 2) {
@@ -79,11 +66,24 @@ export default () => {
         if (event.text && event.text.length > 2) {
             setSearchTerm(event.text);
         }
+    }
+
+    function renderProductPage() {
+        return (
+            products &&
+            stores && (
+                <ProductPage
+                    stores={stores}
+                    productSkus={products}></ProductPage>
+            )
+        );
     }
 
     return (
         <View style={styles.container}>
             <InputField onChange={onTextChange}></InputField>
+            {/*  <SelectStorePage /> */}
+            {renderProductPage()}
             <BottomDrawer
                 style={{borderTopEndRadius: 100}}
                 backgroundColor={COLORS.GRAY_2}
