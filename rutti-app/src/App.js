@@ -3,7 +3,7 @@ import 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
-import ScrollPage from './views/ScrollPage';
+import LoginView from './views/LoginView';
 import RegisterPage from './views/RegisterPage';
 import HomePage from './views/HomePage';
 import RegisterEmail from './components/RegisterEmail';
@@ -40,7 +40,7 @@ function SignIn() {
             screenOptions={{
                 headerShown: false,
             }}>
-            <AuthStack.Screen name="StartPage" component={ScrollPage} />
+            <AuthStack.Screen name="LoginPage" component={LoginView} />
             <AuthStack.Screen name="RegisterPage" component={RegisterPage} />
             <AuthStack.Screen name="RegisterEmail" component={RegisterEmail} />
         </AuthStack.Navigator>
