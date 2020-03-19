@@ -137,8 +137,9 @@ function getIcaStoreData(data) {
 
     return {
         price:
-            data.price.comparePriceCode === 'pkg'
-                ? data.price.listPriceWithoutDeposit * (1000 / data.meanWeight)
+            data.product.salesUnit === 'kgm'
+                ? data.price.listPriceWithoutDeposit /
+                  (1000 / data.product.meanWeight)
                 : data.price.listPriceWithoutDeposit,
         comparePrice: data.price.comparePrice,
         comparePriceUnit: data.price.comparePriceCode,
@@ -148,10 +149,14 @@ function getIcaStoreData(data) {
 }
 
 function getIcaProductInformation(data) {
+    if (!data.product.brand) {
+        data.product.brand = 'ICA';
+    }
+    const icaNames = formatIcaNames(data.product.name, data.product.brand);
     return {
         gtin: data.product.sku,
-        name: formatProductName(data.product.name, data.product.brand),
-        brand: data.product.brand,
+        name: icaNames.name,
+        brand: icaNames.brand,
         imageUrl: `https://assets.icanet.se/t_product_large_v1,f_auto/${data.product.imageId}.jpg`,
         description: data.product.longDescription,
         salesUnit: getUnit(data.product.salesUnit),
@@ -190,15 +195,29 @@ function getCoopStoreData(data) {
     let currentPromotions = [];
 
     data.potentialPromotions.forEach(promotion => {
+        let noOfItemsToDiscount, price;
+
+        if (promotion.description.includes('för')) {
+            const amounts = promotion.description.split(' för ');
+            noOfItemsToDiscount = amounts[0];
+            price = amounts[1].replace(':-', '');
+        }
+
+        if (
+            promotion.description.includes('/kg') ||
+            promotion.description.includes('/st')
+        ) {
+            noOfItemsToDiscount = 1;
+            price = data.promotionPrice.value;
+        }
+
         currentPromotions.push({
             promoId: promotion.code,
             type: promotion.type,
-            price: promotion.promotionPrice.value,
-            comparePrice:
-                promotion.promotionPrice.value /
-                (data.pickPrice.value / comparePrice),
+            price: price,
+            comparePrice: price / (data.pickPrice.value / comparePrice),
             endDate: promotion.endDate,
-            noOfItemsToDiscount: promotion.noOfItemsToDiscount,
+            noOfItemsToDiscount: noOfItemsToDiscount,
             limitOfItems:
                 promotion.maxUseText && promotion.maxUseText.length > 0,
             forRegisteredCustomer: promotion.medmera,
@@ -302,16 +321,29 @@ function getCityGrossProductInformation(data) {
 }
 
 function getUnit(unit) {
-    if (unit === 'pce') {
-        return 'st';
-    }
+    return 'st';
+    // if (unit === 'pce') {
+    //     return 'st';
+    // } else if (unit === 'kgm') {
+    //     return '/kg';
+    // }
 }
 
-function formatProductName(productName, brandName) {
-    return productName.substr(
-        0,
-        productName.toLowerCase().indexOf(brandName.replace(/[-]+/g, '')),
-    );
+function formatIcaNames(productName, brandName) {
+    let name = productName;
+    let brand = brandName;
+
+    const index = productName
+        .toLowerCase()
+        .replace(/å|ä/, 'a')
+        .replace(/ö/, 'o')
+        .indexOf(brandName.replace(/[-]+/g, ''));
+
+    if (index > -1) {
+        name = productName.substr(0, index - 1);
+        brand = productName.substr(index, productName.length);
+    }
+    return { name, brand };
 }
 
 app.get('*', (req, res) =>

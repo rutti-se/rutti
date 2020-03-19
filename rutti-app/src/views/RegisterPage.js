@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {View, Text, StyleSheet, SafeAreaView} from 'react-native';
-import Button from '../Button';
+import Button from '../components/Button';
 import COLORS from '../../assets/colors';
-import {facebookLogin, googleLogin} from '../../api/signInMethods';
+import {facebookLogin, googleLogin} from '../api/signInMethods';
 
 export default class RegisterPage extends Component {
     constructor(props) {

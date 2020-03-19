@@ -1,6 +1,6 @@
 import React, {useRef} from 'react';
 import {TextInput, View, Text, StyleSheet, SafeAreaView} from 'react-native';
-import COLORS from '../assets/colors';
+import COLORS from '../../assets/colors';
 
 export default (
     {labelText, type, secure, autoCorrect, onSubmitEditing, name, onChange},

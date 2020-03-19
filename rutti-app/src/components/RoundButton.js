@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {TouchableHighlight, Text, StyleSheet, View} from 'react-native';
-import {Icon} from '../assets/icomoon';
-import COLOR from '../assets/colors';
+import {Icon} from '../../assets/icomoon';
+import COLOR from '../../assets/colors';
 
 export default class Button extends Component {
     constructor() {

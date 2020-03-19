@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import COLORS from '../../assets/colors';
-import {BottomDrawer} from '../BottomDrawer/BottomDrawer';
-import InputField from '../InputField';
-import findStores from '../../api/findStores';
-import searchProducts from '../../api/searchProducts';
+import {BottomDrawer} from '../components/BottomDrawer/BottomDrawer';
+import InputField from '../components/InputField';
+import findStores from '../api/findStores';
+import searchProducts from '../api/searchProducts';
 import {Dimensions} from 'react-native';
-import useDebounce from '../useDebounce';
+import useDebounce from '../utilities/useDebounce';
 import SelectStorePage from './SelectStorePage';
 import ProductPage from './ProductPage';
 

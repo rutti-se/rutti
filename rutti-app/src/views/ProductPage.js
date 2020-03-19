@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, ScrollView, FlatList} from 'react-native';
-import InputField from '../InputField';
-import getProducts from '../../api/getProducts';
+import InputField from '../components/InputField';
+import getProducts from '../api/getProducts';
 import COLORS from '../../assets/colors';
-import ProductItem from '../ProductItem';
+import ProductItem from '../components/ProductItem';
 
 export default ({productSkus, stores}) => {
     const [productDetails, setProductDetails] = useState([]);
@@ -17,7 +17,7 @@ export default ({productSkus, stores}) => {
         }
     }, [stores, productSkus]); //När denna är tom körs det en gång
 
-    renderProductItems = ({index}) => {
+    renderProductItems(({index}) => {
         if (productDetails[index].status !== 400) {
             return (
                 <ProductItem
@@ -27,13 +27,13 @@ export default ({productSkus, stores}) => {
                     }></ProductItem>
             );
         }
-    };
+    });
 
     return (
         <FlatList
             data={productDetails}
             style={styles.container}
-            renderItem={this.renderProductItems}
+            renderItem={renderProductItems}
             numColumns={2}></FlatList>
     );
 };

@@ -1,7 +1,7 @@
 import {AccessToken, LoginManager} from 'react-native-fbsdk';
 import {GoogleSignin} from 'react-native-google-signin';
 import {firebase} from '@react-native-firebase/auth';
-import * as RootNavigation from '../components/screens/RootNavigation';
+import * as RootNavigation from '../views/RootNavigation';
 
 // Calling the following function will open the FB login dialogue:
 export async function facebookLogin() {
@@ -53,7 +53,8 @@ export async function googleLogin() {
     try {
         await GoogleSignin.configure({
             scopes: ['https://www.googleapis.com/auth/drive.readonly'],
-            webClientId: '', // required
+            webClientId:
+                '267478448957-36dpovnt82hop9ksgcslanrjnnbofnhp.apps.googleusercontent.com', // required
         });
 
         const {accessToken, idToken} = await GoogleSignin.signIn();

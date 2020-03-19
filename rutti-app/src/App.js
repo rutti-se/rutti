@@ -3,11 +3,11 @@ import 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
-import ScrollPage from './components/screens/ScrollPage';
-import RegisterPage from './components/screens/RegisterPage';
+import ScrollPage from './views/ScrollPage';
+import RegisterPage from './views/RegisterPage';
+import HomePage from './views/HomePage';
 import RegisterEmail from './components/RegisterEmail';
-import {navigationRef} from './components/screens/RootNavigation';
-import HomePage from './components/screens/HomePage';
+import {navigationRef} from './views/RootNavigation';
 
 export default class App extends React.Component {
     constructor(props) {
@@ -22,7 +22,7 @@ export default class App extends React.Component {
                     screenOptions={{
                         headerShown: false,
                     }}
-                    initialRouteName="Home">
+                    initialRouteName="SignIn">
                     <RootStack.Screen name="SignIn" component={SignIn} />
                     <RootStack.Screen name="Home" component={Home} />
                 </RootStack.Navigator>

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import InputField from '../InputField';
-import findStores from '../../api/findStores';
+import InputField from '../components/InputField';
+import findStores from '../api/findStores';
 import COLORS from '../../assets/colors';
 
 export default () => {

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, Image, TextInput} from 'react-native';
-import COLORS from '../assets/colors';
+import COLORS from '../../assets/colors';
 import RoundButton from './RoundButton';
 export default ({productInfo, storeInfo}) => {
     const [lowestPrice, setLowestPrice] = useState(null);

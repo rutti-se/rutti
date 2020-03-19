@@ -7,7 +7,7 @@ import {
     SafeAreaView,
     Image,
 } from 'react-native';
-import Button from '../Button';
+import Button from '../components/Button';
 import COLORS from '../../assets/colors';
 import {SvgCssUri} from 'react-native-svg';
 
@@ -20,7 +20,8 @@ export default class StartScreen extends Component {
     handlePress(event) {
         switch (event) {
             case 'Register':
-                this.props.navigation.navigate('RegisterPage');
+                console.log('register');
+
                 break;
             case 'SignIn':
                 break;
@@ -43,7 +44,10 @@ export default class StartScreen extends Component {
                         text="Registrera mig"
                         shadow={true}
                         type={'primary'}
-                        onPress={() => this.handlePress('Register')}></Button>
+                        onPress={() => {
+                            console.log('register');
+                            this.props.navigation.navigate('RegisterPage');
+                        }}></Button>
                     <Button
                         shadow={true}
                         text="Logga in"

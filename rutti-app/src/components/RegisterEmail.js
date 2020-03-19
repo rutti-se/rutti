@@ -3,7 +3,7 @@ import {View, Text, StyleSheet, SafeAreaView} from 'react-native';
 import Button from './Button';
 import InputField from './InputField';
 import {emailSignUp} from '../api/signInMethods';
-import COLORS from '../assets/colors';
+import COLORS from '../../assets/colors';
 
 export default class RegisterPage extends Component {
     constructor(props) {
