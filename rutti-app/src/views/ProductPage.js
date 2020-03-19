@@ -17,7 +17,7 @@ export default ({productSkus, stores}) => {
         }
     }, [stores, productSkus]); //När denna är tom körs det en gång
 
-    renderProductItems(({index}) => {
+    function renderProductItems({index}) {
         if (productDetails[index].status !== 400) {
             return (
                 <ProductItem
@@ -27,7 +27,7 @@ export default ({productSkus, stores}) => {
                     }></ProductItem>
             );
         }
-    });
+    }
 
     return (
         <FlatList

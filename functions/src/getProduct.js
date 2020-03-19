@@ -252,7 +252,8 @@ function getCoopProductInformation(data) {
         gtin: data.code,
         name: data.name,
         brand: data.manufacturer,
-        imageUrl: data.images[0].url,
+        /* imageUrl: data.images[0].url, */
+        imageUrl: formatImageUrl(data.images[0].url),
         description: data.description,
         salesUnit: data.unit.name,
         originCountry: data.fromSweden && 'Sverige',
@@ -329,6 +330,9 @@ function getUnit(unit) {
     // }
 }
 
+function formatImageUrl(url) {
+    return url.replace('upload/', 'upload/h_200/');
+}
 function formatIcaNames(productName, brandName) {
     let name = productName;
     let brand = brandName;
