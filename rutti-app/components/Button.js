@@ -4,12 +4,13 @@ import {Icon} from '../assets/icomoon/';
 import COLOR from '../assets/colors';
 
 export default (
-    {icon, iconColor, text, shadow, type, backgroundColor, children},
+    {icon, iconColor, text, shadow, type, backgroundColor, children, onPress},
     props,
 ) => {
     return (
         <View style={styles.Box}>
             <TouchableHighlight
+                onPress={onPress}
                 style={[
                     styles.button,
                     shadow ? styles.shadow : '',

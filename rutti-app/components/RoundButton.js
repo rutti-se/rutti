@@ -54,9 +54,9 @@ export default class Button extends Component {
 
 const styles = StyleSheet.create({
     button: {
-        height: 50,
-        width: 50, //The Width must be the same as the height
-        borderRadius: 400, //Then Make the Border Radius twice the size of width or Height
+        height: 40,
+        width: 40,
+        borderRadius: 400,
         justifyContent: 'center',
         alignItems: 'center',
     },
