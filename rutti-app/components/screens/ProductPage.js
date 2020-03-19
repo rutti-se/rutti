@@ -10,6 +10,7 @@ export default ({productSkus, stores}) => {
 
     useEffect(() => {
         if (productSkus && productSkus.length > 0 && stores) {
+            setProductDetails([]);
             getProducts({stores, productSkus}).then(result => {
                 setProductDetails(result);
             });
