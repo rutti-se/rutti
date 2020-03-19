@@ -45,14 +45,56 @@ async function getNearbyStores({ zipCode }) {
 
     let storesResults = [];
 
-    results.map(result =>
-        storesResults.push({
-            store: result.config
-                ? requestMap.get(result.config.url)
-                : 'CITYGROSS',
-            data: result.config ? result.data : result,
-        }),
-    );
+    results.map(result => {
+        const retailer = result.config
+            ? requestMap.get(result.config.url)
+            : 'CITYGROSS';
+
+        switch (retailer) {
+            case 'ICA':
+                result.data.forPickupDelivery.forEach(store => {
+                    storesResults.push({
+                        storeId: store.id,
+                        retailer,
+                        name: store.name,
+                        city: store.city,
+                        street: store.street,
+                        zipCode: store.zipCode,
+                        latitude: store.latitude,
+                        longitude: store.longitude,
+                    });
+                });
+                break;
+            case 'COOP':
+                result.data.stores.forEach(store => {
+                    storesResults.push({
+                        storeId: store.storeId,
+                        retailer,
+                        name: store.displayName,
+                        city: store.address.town,
+                        street: store.address.line1,
+                        zipCode: store.address.postalCode,
+                        latitude: store.geoPoint.latitude,
+                        longitude: store.geoPoint.longitude,
+                    });
+                });
+                break;
+            case 'CITYGROSS':
+                result.forEach(store => {
+                    storesResults.push({
+                        storeId: store.id,
+                        retailer,
+                        name: store.name,
+                        city: store.city,
+                        street: store.streetAddress,
+                        zipCode: store.zipcode,
+                        latitude: store.latitude,
+                        longitude: store.longitude,
+                    });
+                });
+                break;
+        }
+    });
 
     return { status: 200, data: storesResults };
 }
