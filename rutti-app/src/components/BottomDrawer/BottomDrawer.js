@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import COLORS from '../../../assets/colors';
 import {
     PanResponder,
     Animated,
@@ -116,18 +117,26 @@ export class BottomDrawer extends Component {
                 downPosition={this.DOWN_POSITION}
                 roundedEdges={this.props.roundedEdges}
                 shadow={this.props.shadow}
+                dragBar={this.props.dragBar}
                 containerHeight={this.props.containerHeight}
                 backgroundColor={this.props.backgroundColor}
                 onExpanded={() => this.props.onExpanded()}
                 onCollapsed={() => this.props.onCollapsed()}>
+                <View
+                    style={{
+                        backgroundColor: COLORS.GRAY_4,
+                        width: 70,
+                        height: 5,
+                        borderRadius: 25,
+                        alignSelf: 'center',
+                        marginTop: 10,
+                    }}></View>
                 {this.props.children}
-
                 <View
                     style={{
                         height: Math.sqrt(SCREEN_HEIGHT),
                         backgroundColor: this.props.backgroundColor,
-                    }}
-                />
+                    }}></View>
             </Animator>
         );
     }

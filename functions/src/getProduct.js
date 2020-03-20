@@ -331,7 +331,9 @@ function getUnit(unit) {
 }
 
 function formatImageUrl(url) {
-    return url.replace('upload/', 'upload/h_200/');
+    var temp = url.replace('upload/', 'upload/h_300,w_300,c_pad/');
+
+    return temp.replace('.tiff', '.jpg');
 }
 function formatIcaNames(productName, brandName) {
     let name = productName;

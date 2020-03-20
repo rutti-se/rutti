@@ -47,7 +47,7 @@ export default () => {
             searchProducts({q: debouncedSearchTerm, stores}).then(result => {
                 setIsSearching(false);
                 const {products, recipes} = result;
-                setProducts(products);
+                setProducts(products.reverse());
                 setRecipes(recipes);
             });
         } else {
@@ -70,6 +70,7 @@ export default () => {
     function renderProductPage() {
         return (
             products &&
+            products.length > 0 &&
             stores && (
                 <ProductPage
                     stores={stores}
@@ -93,7 +94,8 @@ export default () => {
                 downDisplay={DEVICE.height / 1.4}
                 roundedEdges={true}
                 shadow={true}
-                startUp={false}>
+                startUp={false}
+                dragBar={true}>
                 <Text>Hello</Text>
             </BottomDrawer>
         </View>

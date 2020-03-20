@@ -30,11 +30,15 @@ export default ({productSkus, stores}) => {
     }
 
     return (
-        <FlatList
-            data={productDetails}
-            style={styles.container}
-            renderItem={renderProductItems}
-            numColumns={2}></FlatList>
+        <View>
+            <Text>Visar sökresultat</Text>
+            <FlatList
+                data={productDetails}
+                style={styles.container}
+                renderItem={renderProductItems}
+                keyExtractor={(item, index) => index.toString()}
+                numColumns={2}></FlatList>
+        </View>
     );
 };
 
