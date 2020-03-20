@@ -9,10 +9,8 @@ export default class RegisterPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: '',
             email: '',
             password: '',
-            rePassword: '',
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -20,12 +18,12 @@ export default class RegisterPage extends Component {
     }
 
     handlePress() {
-        if (this.state.password != this.state.rePassword) {
-            alert('Fel Lösenord');
-        } else {
-            console.log(this.state);
-            emailSignUp(this.state.email, this.state.password);
-        }
+        // if (this.state.password != this.state.rePassword) {
+        //     alert('Fel Lösenord');
+        // } else {
+        //     console.log(this.state);
+        //     emailSignUp(this.state.email, this.state.password);
+        // }
     }
 
     handleChange(event) {
@@ -38,15 +36,9 @@ export default class RegisterPage extends Component {
         return (
             <SafeAreaView style={styles.container}>
                 <View style={styles.topContainer}>
-                    <Text style={styles.text}>Registrera</Text>
+                    <Text style={styles.text}>Logga in</Text>
                 </View>
                 <View style={styles.inputForm}>
-                    <InputField
-                        onChange={this.handleChange}
-                        onSubmitEditing={() => this.email.getInnerRef().focus()}
-                        autoCorrect={false}
-                        name={'username'}
-                        labelText={'Användarnamn'}></InputField>
                     <InputField
                         onChange={this.handleChange}
                         onSubmitEditing={() =>
@@ -66,21 +58,13 @@ export default class RegisterPage extends Component {
                         secure={true}
                         name={'password'}
                         labelText={'Lösenord'}></InputField>
-
-                    <InputField
-                        onChange={this.handleChange}
-                        ref={r => (this.rePassword = r)}
-                        autoCorrect={false}
-                        secure={true}
-                        name={'rePassword'}
-                        labelText={'Bekräfta lösenord'}></InputField>
                 </View>
 
                 <View style={styles.bottomContainer}>
                     <Button
                         shadow={true}
                         onPress={this.handlePress}
-                        text={'Registrera mig!'}></Button>
+                        text={'Logga in!'}></Button>
                 </View>
             </SafeAreaView>
         );

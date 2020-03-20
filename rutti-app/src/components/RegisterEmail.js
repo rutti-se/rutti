@@ -1,91 +1,128 @@
-import React, {Component} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {View, Text, StyleSheet, SafeAreaView} from 'react-native';
 import Button from './Button';
 import InputField from './InputField';
 import {emailSignUp} from '../api/signInMethods';
 import COLORS from '../../assets/colors';
+import getGeneratedUsername from '../api/getGeneratedUsername';
+import RoundButton from './RoundButton';
 
-export default class RegisterPage extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            username: '',
-            email: '',
-            password: '',
-            rePassword: '',
-        };
+export default props => {
+    let [username, setUsername] = useState('');
+    let [email, setEmail] = useState('');
+    let [password, setPassword] = useState('');
+    let [confirmedPassword, setConfirmedPassword] = useState('');
 
-        this.handleChange = this.handleChange.bind(this);
-        this.handlePress = this.handlePress.bind(this);
+    let [faultyInputs, setFaultyInputs] = useState({});
+
+    useEffect(() => {
+        randomUsername();
+    }, []);
+
+    function randomUsername() {
+        getGeneratedUsername().then(result => {
+            setUsername(result.username);
+        });
     }
 
-    handlePress() {
-        if (this.state.password != this.state.rePassword) {
-            alert('Fel Lösenord');
-        } else {
-            console.log(this.state);
-            emailSignUp(this.state.email, this.state.password);
+    function signUp() {
+        faultyInputs = {};
+
+        const validEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
+            email,
+        );
+
+        const okPassword = /^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})/.test(
+            password,
+        );
+
+        const matchingPassword = password === confirmedPassword;
+
+        console.log(password, confirmedPassword, matchingPassword);
+
+        faultyInputs.email = !validEmail;
+        faultyInputs.okPassword = !okPassword;
+        faultyInputs.matchingPassword = !matchingPassword;
+
+        console.log(faultyInputs);
+        setFaultyInputs(faultyInputs);
+
+        if (
+            !faultyInputs.email &&
+            !faultyInputs.okPassword &&
+            !faultyInputs.matchingPassword
+        ) {
+            //Register
         }
     }
 
-    handleChange(event) {
-        const {name, text} = event;
-        this.setState({[name]: text});
-    }
-
-    render() {
-        const {} = this.props;
-        return (
-            <SafeAreaView style={styles.container}>
-                <View style={styles.topContainer}>
-                    <Text style={styles.text}>Registrera</Text>
-                </View>
-                <View style={styles.inputForm}>
-                    <InputField
-                        onChange={this.handleChange}
-                        onSubmitEditing={() => this.email.getInnerRef().focus()}
-                        autoCorrect={false}
-                        name={'username'}
-                        labelText={'Användarnamn'}></InputField>
-                    <InputField
-                        onChange={this.handleChange}
-                        onSubmitEditing={() =>
-                            this.password.getInnerRef().focus()
-                        }
-                        ref={r => (this.email = r)}
-                        type={'email-address'}
-                        name={'email'}
-                        labelText={'E-post'}></InputField>
-
-                    <InputField
-                        onChange={this.handleChange}
-                        ref={r => (this.password = r)}
-                        onSubmitEditing={() =>
-                            this.rePassword.getInnerRef().focus()
-                        }
-                        secure={true}
-                        name={'password'}
-                        labelText={'Lösenord'}></InputField>
-
-                    <InputField
-                        onChange={this.handleChange}
-                        ref={r => (this.rePassword = r)}
-                        autoCorrect={false}
-                        secure={true}
-                        name={'rePassword'}
-                        labelText={'Bekräfta lösenord'}></InputField>
+    return (
+        <SafeAreaView style={styles.container}>
+            <View style={styles.topContainer}>
+                <Text style={styles.text}>Registrera</Text>
+            </View>
+            <View style={styles.inputForm}>
+                <View>
+                    <Text
+                        style={{
+                            color: COLORS.PRIMARY,
+                            fontFamily: 'Montserrat-Bold',
+                            paddingBottom: 10,
+                            paddingTop: 10,
+                        }}>
+                        Användarnamn
+                    </Text>
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                        }}>
+                        <Text style={{fontSize: 20, fontWeight: 'bold'}}>
+                            {username}
+                        </Text>
+                        <RoundButton
+                            onPress={() => randomUsername()}
+                            icon={'arrow-left'}
+                        />
+                    </View>
                 </View>
 
-                <View style={styles.bottomContainer}>
-                    <Button
-                        shadow={true}
-                        onPress={this.handlePress}
-                        text={'Registrera mig!'}></Button>
-                </View>
-            </SafeAreaView>
-        );
-    }
-}
+                <InputField
+                    onChangeText={text => setEmail(text)}
+                    invalidInput={faultyInputs.email}
+                    invalidMessage={'Du måste ange en riktig e-post.'}
+                    type={'email-address'}
+                    name={'email'}
+                    labelText={'E-post'}></InputField>
+                <InputField
+                    onChangeText={text => setPassword(text)}
+                    secure={true}
+                    invalidInput={faultyInputs.okPassword}
+                    invalidMessage={
+                        'Lösenordet måste vara minst 6 tecken långt och innehålla minst en stor bokstav eller siffra.'
+                    }
+                    name={'password'}
+                    labelText={'Lösenord'}></InputField>
+                <InputField
+                    onChangeText={text => setConfirmedPassword(text)}
+                    autoCorrect={false}
+                    invalidInput={faultyInputs.matchingPassword}
+                    invalidMessage={'Lösenorden stämmer inte överens.'}
+                    secure={true}
+                    name={'confirmedPassword'}
+                    labelText={'Bekräfta lösenord'}></InputField>
+            </View>
+
+            <View style={styles.bottomContainer}>
+                <Button
+                    shadow={true}
+                    onPress={() => signUp()}
+                    text={'Registrera mig!'}></Button>
+            </View>
+        </SafeAreaView>
+    );
+};
 
 const styles = StyleSheet.create({
     container: {
