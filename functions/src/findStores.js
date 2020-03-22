@@ -68,7 +68,7 @@ async function getNearbyStores({ zipCode }) {
             case 'COOP':
                 result.data.stores.forEach(store => {
                     storesResults.push({
-                        storeId: store.storeId,
+                        storeId: store.name,
                         retailer,
                         name: store.displayName,
                         city: store.address.town,

@@ -6,6 +6,7 @@ import {View, StyleSheet} from 'react-native';
 import {firebase} from '@react-native-firebase/auth';
 import AuthView from './AuthView';
 import Button from '../components/Button';
+import SelectStoresView from './SelectStoresView';
 
 export default () => {
     let [loading, setLoading] = useState(true);
@@ -25,7 +26,9 @@ export default () => {
 
     return (
         <View style={styles.container}>
-            {loading ? (
+            <SelectStoresView />
+
+            {/* {loading ? (
                 <>
                     <View style={styles.topContainer}>
                         <RuttiLogo height={250} width={250} />
@@ -46,7 +49,7 @@ export default () => {
                 </>
             ) : (
                 <AuthView />
-            )}
+            )} */}
         </View>
     );
 };

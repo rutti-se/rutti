@@ -1,29 +1,14 @@
 import {AsyncStorage} from 'react-native';
 import {useState, useEffect} from 'react';
 
-let currentStores = useStores();
-
-let storesUpdated = 0;
-
-export function useStores() {
-    let [stores, setStores] = useState([]);
-    let [error, setError] = useState(null);
-
-    console.log(stores);
-
-    useEffect(async () => {
-        AsyncStorage.getItem('stores')
-            .then(value => {
-                if (value) {
-                    setStores(JSON.parse(value));
-                    setError(null);
-                }
-            })
-            .catch(error => {
-                setError(error);
-                console.log(error);
-            });
-    }, [storesUpdated]);
+export function getStores() {
+    return AsyncStorage.getItem('stores').then(value => {
+        if (value) {
+            return value;
+        } else {
+            return [];
+        }
+    });
 }
 
 export function addStore(store) {
