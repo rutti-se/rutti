@@ -4,6 +4,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import LoginView from './views/LoginView';
+import Splashscreen from './views/Splashscreen';
 import RegisterPage from './views/RegisterPage';
 import HomePage from './views/HomePage';
 import RegisterEmail from './components/RegisterEmail';
@@ -40,7 +41,7 @@ function SignIn() {
             screenOptions={{
                 headerShown: false,
             }}>
-            <AuthStack.Screen name="LoginPage" component={LoginView} />
+            <AuthStack.Screen name="SplashScreen" component={Splashscreen} />
             <AuthStack.Screen name="RegisterPage" component={RegisterPage} />
             <AuthStack.Screen name="RegisterEmail" component={RegisterEmail} />
         </AuthStack.Navigator>

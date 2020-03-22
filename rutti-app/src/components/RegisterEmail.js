@@ -7,7 +7,7 @@ import COLORS from '../../assets/colors';
 import getGeneratedUsername from '../api/getGeneratedUsername';
 import RoundButton from './RoundButton';
 
-export default props => {
+export default ({onRegistrationComplete, goToLogin}) => {
     let [username, setUsername] = useState('');
     let [email, setEmail] = useState('');
     let [password, setPassword] = useState('');
@@ -25,7 +25,7 @@ export default props => {
         });
     }
 
-    function signUp() {
+    async function signUp() {
         faultyInputs = {};
 
         const validEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
@@ -53,6 +53,22 @@ export default props => {
             !faultyInputs.matchingPassword
         ) {
             //Register
+            emailSignUp(email, password, username)
+                .then(signUpResult => {
+                    console.log('signupresult', signUpResult);
+                    if (signUpResult.user) {
+                        console.log(
+                            'successfully registered user: ',
+                            signUpResult.user,
+                        );
+                    } else {
+                        console.log(
+                            'failed registration: ',
+                            signUpResult.error,
+                        );
+                    }
+                })
+                .catch(error => console.log(error));
         }
     }
 
@@ -97,7 +113,7 @@ export default props => {
                     labelText={'E-post'}></InputField>
                 <InputField
                     onChangeText={text => setPassword(text)}
-                    secure={true}
+                    secureTextEntry={true}
                     invalidInput={faultyInputs.okPassword}
                     invalidMessage={
                         'Lösenordet måste vara minst 6 tecken långt och innehålla minst en stor bokstav eller siffra.'
@@ -109,7 +125,7 @@ export default props => {
                     autoCorrect={false}
                     invalidInput={faultyInputs.matchingPassword}
                     invalidMessage={'Lösenorden stämmer inte överens.'}
-                    secure={true}
+                    secureTextEntry={true}
                     name={'confirmedPassword'}
                     labelText={'Bekräfta lösenord'}></InputField>
             </View>
@@ -119,6 +135,18 @@ export default props => {
                     shadow={true}
                     onPress={() => signUp()}
                     text={'Registrera mig!'}></Button>
+
+                {goToLogin && (
+                    <Text
+                        style={{
+                            textDecorationLine: 'underline',
+                            textAlign: 'center',
+                            paddingTop: 20,
+                        }}
+                        onPress={() => goToLogin()}>
+                        Har du redan ett konto? Logga in istället.
+                    </Text>
+                )}
             </View>
         </SafeAreaView>
     );

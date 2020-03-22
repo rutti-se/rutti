@@ -1,75 +1,86 @@
-import React, {Component} from 'react';
+import React, {useState} from 'react';
 import {View, Text, StyleSheet, SafeAreaView} from 'react-native';
 import Button from './Button';
 import InputField from './InputField';
-import {emailSignUp} from '../api/signInMethods';
+import {emailLogin} from '../api/signInMethods';
 import COLORS from '../../assets/colors';
 
-export default class RegisterPage extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            email: '',
-            password: '',
-        };
+export default ({onLoginComplete, goToRegistration}) => {
+    let [email, setEmail] = useState('');
+    let [password, setPassword] = useState('');
+    let [faultyInputs, setFaultyInputs] = useState({});
 
-        this.handleChange = this.handleChange.bind(this);
-        this.handlePress = this.handlePress.bind(this);
-    }
+    function login() {
+        console.log('email', email, 'password', password);
+        faultyInputs = {};
 
-    handlePress() {
-        // if (this.state.password != this.state.rePassword) {
-        //     alert('Fel Lösenord');
-        // } else {
-        //     console.log(this.state);
-        //     emailSignUp(this.state.email, this.state.password);
-        // }
-    }
-
-    handleChange(event) {
-        const {name, text} = event;
-        this.setState({[name]: text});
-    }
-
-    render() {
-        const {} = this.props;
-        return (
-            <SafeAreaView style={styles.container}>
-                <View style={styles.topContainer}>
-                    <Text style={styles.text}>Logga in</Text>
-                </View>
-                <View style={styles.inputForm}>
-                    <InputField
-                        onChange={this.handleChange}
-                        onSubmitEditing={() =>
-                            this.password.getInnerRef().focus()
-                        }
-                        ref={r => (this.email = r)}
-                        type={'email-address'}
-                        name={'email'}
-                        labelText={'E-post'}></InputField>
-
-                    <InputField
-                        onChange={this.handleChange}
-                        ref={r => (this.password = r)}
-                        onSubmitEditing={() =>
-                            this.rePassword.getInnerRef().focus()
-                        }
-                        secure={true}
-                        name={'password'}
-                        labelText={'Lösenord'}></InputField>
-                </View>
-
-                <View style={styles.bottomContainer}>
-                    <Button
-                        shadow={true}
-                        onPress={this.handlePress}
-                        text={'Logga in!'}></Button>
-                </View>
-            </SafeAreaView>
+        const validEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
+            email,
         );
+
+        const okPassword = /^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})/.test(
+            password,
+        );
+
+        faultyInputs.email = !validEmail;
+        faultyInputs.okPassword = !okPassword;
+
+        console.log(faultyInputs);
+        setFaultyInputs(faultyInputs);
+
+        if (!faultyInputs.email && !faultyInputs.okPassword) {
+            emailLogin(email, password).then(signInResult => {
+                if (signInResult && signInResult.user) {
+                    //Successful login
+                    onLoginComplete(signInResult.user);
+                } else {
+                    if (signInResult.error.includes('email-already-in-use')) {
+                        //E-mail already in use
+                    }
+                }
+            });
+        }
     }
-}
+
+    return (
+        <SafeAreaView style={styles.container}>
+            <View style={styles.topContainer}>
+                <Text style={styles.text}>Logga in</Text>
+            </View>
+            <View style={styles.inputForm}>
+                <InputField
+                    onChangeText={text => setEmail(text)}
+                    type={'email-address'}
+                    name={'email'}
+                    labelText={'E-post'}></InputField>
+
+                <InputField
+                    onChangeText={text => setPassword(text)}
+                    secureTextEntry={true}
+                    name={'password'}
+                    labelText={'Lösenord'}></InputField>
+            </View>
+
+            <View style={styles.bottomContainer}>
+                <Button
+                    shadow={true}
+                    onPress={() => login()}
+                    text={'Logga in!'}></Button>
+                {goToRegistration && (
+                    <Text
+                        style={{
+                            textDecorationLine: 'underline',
+                            textAlign: 'center',
+                            paddingTop: 20,
+                        }}
+                        onPress={() => goToRegistration()}>
+                        Har du inget konto? Registrera dig här.
+                    </Text>
+                )}
+            </View>
+        </SafeAreaView>
+    );
+};
 
 const styles = StyleSheet.create({
     container: {

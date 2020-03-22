@@ -72,32 +72,35 @@ export async function googleLogin() {
     }
 }
 
-export async function emailSignUp(email, password) {
-    try {
-        firebase
-            .auth()
-            .createUserWithEmailAndPassword(email, password)
-            .then(user => {
-                console.log(user);
-                RootNavigation.replace(
-                    'Home',
-                    firebaseUserCredential.user.toJSON(),
-                );
-            });
-    } catch (error) {
-        console.log(error.toString(error));
-    }
+export function emailSignUp(email, password, username) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const userCredentials = await firebase
+                .auth()
+                .createUserWithEmailAndPassword(email, password);
+            if (userCredentials.user) {
+                await userCredentials.user.updateProfile({
+                    displayName: username,
+                });
+
+                resolve({user: userCredentials.user});
+            }
+        } catch (error) {
+            reject({error});
+        }
+    });
 }
 
-export async function emailLogin(email, password) {
-    try {
-        firebase
-            .auth()
-            .signInWithEmailAndPassword(email, password)
-            .then(res => {
-                console.log(res.user.email);
-            });
-    } catch (error) {
-        console.log(error.toString(error));
-    }
+export function emailLogin(email, password) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const userCredentials = firebase
+                .auth()
+                .signInWithEmailAndPassword(email, password);
+
+            resolve({user: userCredentials.user});
+        } catch (error) {
+            reject({error});
+        }
+    });
 }
