@@ -1,49 +1,62 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, ScrollView, FlatList} from 'react-native';
-import InputField from '../components/InputField';
+import {View, StyleSheet, FlatList} from 'react-native';
 import getProducts from '../api/getProducts';
-import COLORS from '../../assets/colors';
 import ProductItem from '../components/ProductItem';
+import ProductModal from '../views/ProductModal';
 
 export default ({productSkus, stores}) => {
     const [productDetails, setProductDetails] = useState([]);
-
+    const [aboutProduct, setAboutProduct] = useState(null);
     useEffect(() => {
         if (productSkus && productSkus.length > 0 && stores) {
             setProductDetails([]);
             getProducts({stores, productSkus}).then(result => {
-                setProductDetails(result);
+                var arr = [];
+                result.map(res => {
+                    res.status !== '400' && arr.push(res);
+                });
+                setProductDetails(arr);
             });
         }
     }, [stores, productSkus]); //När denna är tom körs det en gång
 
+    function showProductDetail(product) {
+        setAboutProduct(product);
+    }
     function renderProductItems({index}) {
-        if (productDetails[index].status !== 400) {
-            return (
-                <ProductItem
-                    productInfo={productDetails[index].data.productInformation}
-                    storeInfo={
-                        productDetails[index].data.storeInformation
-                    }></ProductItem>
-            );
-        }
+        return (
+            <ProductItem
+                productInfo={productDetails[index].data.productInformation}
+                storeInfo={productDetails[index].data.storeInformation}
+                onPress={showProductDetail}></ProductItem>
+        );
     }
 
     return (
         <View>
-            <Text>Visar sökresultat</Text>
-            <FlatList
-                data={productDetails}
-                style={styles.container}
-                renderItem={renderProductItems}
-                keyExtractor={(item, index) => index.toString()}
-                numColumns={2}></FlatList>
+            {aboutProduct && (
+                <View style={{height: '100%', width: '100%'}}>
+                    <ProductModal
+                        productInfo={aboutProduct.productInfo}
+                        storeInfo={aboutProduct.storeInfo}
+                        closeButton={() =>
+                            setAboutProduct(null)
+                        }></ProductModal>
+                </View>
+            )}
+
+            {!aboutProduct && (
+                <FlatList
+                    data={productDetails}
+                    style={styles.container}
+                    renderItem={renderProductItems}
+                    keyExtractor={(item, index) => index.toString()}
+                    numColumns={2}></FlatList>
+            )}
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        //flexDirection: 'row',
-    },
+    container: {},
 });

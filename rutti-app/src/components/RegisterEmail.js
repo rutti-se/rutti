@@ -7,7 +7,7 @@ import COLORS from '../../assets/colors';
 import getGeneratedUsername from '../api/getGeneratedUsername';
 import RoundButton from './RoundButton';
 
-export default ({onRegistrationComplete, goToLogin}) => {
+export default ({onRegistrationComplete, goToLogin, backPress}) => {
     let [username, setUsername] = useState('');
     let [email, setEmail] = useState('');
     let [password, setPassword] = useState('');
@@ -147,6 +147,9 @@ export default ({onRegistrationComplete, goToLogin}) => {
                         Har du redan ett konto? Logga in istället.
                     </Text>
                 )}
+                <View style={{marginTop: 30}}>
+                    <RoundButton onPress={backPress} icon={'arrow-left'} />
+                </View>
             </View>
         </SafeAreaView>
     );

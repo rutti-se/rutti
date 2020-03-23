@@ -14,7 +14,7 @@ export default class Button extends Component {
             return (
                 <Icon
                     name={icon}
-                    size={30}
+                    size={25}
                     color={iconColor ? iconColor : 'white'}></Icon>
             );
         } else {
@@ -36,7 +36,7 @@ export default class Button extends Component {
         return (
             <View style={styles.Box}>
                 <TouchableHighlight
-                    underlayColor={'white'}
+                    underlayColor={COLOR.PRIMARY}
                     style={[
                         styles.button,
                         {backgroundColor: color ? color : COLOR.PRIMARY},

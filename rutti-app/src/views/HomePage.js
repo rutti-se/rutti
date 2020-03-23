@@ -1,15 +1,16 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Animated} from 'react-native';
 import COLORS from '../../assets/colors';
 import {BottomDrawer} from '../components/BottomDrawer/BottomDrawer';
 import InputField from '../components/InputField';
 import findStores from '../api/findStores';
 import searchProducts from '../api/searchProducts';
-import {Dimensions} from 'react-native';
 import useDebounce from '../utilities/useDebounce';
 import SelectStorePage from './SelectStorePage';
 import ProductPage from './ProductPage';
+import FadeInView from '../components/animations/FadeInView';
 
+import {Dimensions} from 'react-native';
 const DEVICE = Dimensions.get('window');
 
 const stores = [
@@ -47,7 +48,7 @@ export default () => {
             searchProducts({q: debouncedSearchTerm, stores}).then(result => {
                 setIsSearching(false);
                 const {products, recipes} = result;
-                setProducts(products.reverse());
+                setProducts(products);
                 setRecipes(recipes);
             });
         } else {
@@ -55,15 +56,9 @@ export default () => {
         }
     }, [debouncedSearchTerm]);
 
-    function onTextChange(event) {
-        if (event.text && event.text.length > 2) {
-            setSearchTerm(event.text);
-        }
-    }
-
-    function onTextChange(event) {
-        if (event.text && event.text.length > 2) {
-            setSearchTerm(event.text);
+    function onTextChange(text) {
+        if (text && text.length > 2) {
+            setSearchTerm(text);
         }
     }
 
@@ -81,7 +76,7 @@ export default () => {
 
     return (
         <View style={styles.container}>
-            <InputField onChange={onTextChange}></InputField>
+            <InputField onChangeText={text => onTextChange(text)}></InputField>
             {/*  <SelectStorePage /> */}
             <View
                 style={[{marginBottom: DEVICE.height / 4.8}, {marginTop: 10}]}>

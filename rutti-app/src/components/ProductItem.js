@@ -2,45 +2,49 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, Image, TextInput} from 'react-native';
 import COLORS from '../../assets/colors';
 import RoundButton from './RoundButton';
-export default ({productInfo, storeInfo}) => {
+import FadeInView from '../components/animations/FadeInView';
+import calcBestPrice from '../utilities/calcBestPrice';
+export default ({productInfo, storeInfo, onPress}) => {
     const [lowestPrice, setLowestPrice] = useState(null);
 
     useEffect(() => {
-        let price = Number.MAX_SAFE_INTEGER;
-        storeInfo.map(store => {
-            if (
-                store.priceInformation.price < price &&
-                store.priceInformation.price !== null
-            ) {
-                price = store.priceInformation.price;
-            }
-        });
-        price < Number.MAX_SAFE_INTEGER && setLowestPrice(price);
+        setLowestPrice(calcBestPrice(storeInfo));
     }, [storeInfo]);
 
     return (
         <View style={styles.container}>
-            <Image style={styles.image} source={{uri: productInfo.imageUrl}} />
-            <Text style={styles.text}> {productInfo.name}</Text>
-            <View style={styles.bottom}>
-                <View style={{flexDirection: 'row'}}>
-                    <Text style={styles.priceText}>från</Text>
-                    <Text style={styles.price}>{lowestPrice}:-</Text>
+            <FadeInView>
+                <Image
+                    style={styles.image}
+                    source={{uri: productInfo.imageUrl}}
+                />
+                <Text style={styles.text}> {productInfo.name}</Text>
+                <View style={styles.bottom}>
+                    <View style={{flexDirection: 'row'}}>
+                        <Text style={styles.priceText}>från</Text>
+                        <Text style={styles.price}>{lowestPrice}:-</Text>
+                    </View>
+                    <RoundButton
+                        icon={'info'}
+                        onPress={() =>
+                            onPress({productInfo, storeInfo})
+                        }></RoundButton>
                 </View>
-                <RoundButton></RoundButton>
-            </View>
+            </FadeInView>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-        width: 180,
+        flex: 1 / 2,
         backgroundColor: COLORS.WHITE,
         padding: 5,
         margin: 5,
         flexDirection: 'column',
         justifyContent: 'space-between',
+        borderRadius: 10,
+        alignItems: 'center',
     },
     image: {
         width: 170,

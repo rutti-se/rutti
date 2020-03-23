@@ -4,8 +4,9 @@ import Button from './Button';
 import InputField from './InputField';
 import {emailLogin} from '../api/signInMethods';
 import COLORS from '../../assets/colors';
+import RoundButton from './RoundButton';
 
-export default ({onLoginComplete, goToRegistration}) => {
+export default ({onLoginComplete, goToRegistration, backPress}) => {
     let [email, setEmail] = useState('');
     let [password, setPassword] = useState('');
     let [faultyInputs, setFaultyInputs] = useState({});
@@ -77,6 +78,9 @@ export default ({onLoginComplete, goToRegistration}) => {
                         Har du inget konto? Registrera dig här.
                     </Text>
                 )}
+                <View style={{marginTop: 30}}>
+                    <RoundButton onPress={backPress} icon={'arrow-left'} />
+                </View>
             </View>
         </SafeAreaView>
     );

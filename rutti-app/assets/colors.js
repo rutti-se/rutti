@@ -14,4 +14,6 @@ export default {
     GREEN_DISABLED: '#B1EAA9',
     FACEBOOK: '#4267B2',
     TWITTER: '#1DA1F2',
+    ica: '#F1133A',
+    coop: '#409D36',
 };

@@ -64,6 +64,7 @@ export default () => {
                 <FadeInView>
                     <LoginEmail
                         onLoginComplete={() => setCurrentPage(WELCOME_PAGE)}
+                        backPress={() => setCurrentPage(WELCOME_PAGE)}
                         goToRegistration={() => setCurrentPage(SIGNUP_PAGE)}
                     />
                 </FadeInView>
@@ -74,6 +75,7 @@ export default () => {
                         onRegistrationComplete={() => {
                             setCurrentPage(WELCOME_PAGE);
                         }}
+                        backPress={() => setCurrentPage(WELCOME_PAGE)}
                         goToLogin={() => setCurrentPage(SIGNIN_PAGE)}
                     />
                 </FadeInView>
@@ -86,6 +88,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'flex-end',
+        backgroundColor: COLORS.SECONDARY,
     },
     topContainer: {
         flex: 5,

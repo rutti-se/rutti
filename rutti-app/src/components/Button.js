@@ -4,7 +4,17 @@ import {Icon} from '../../assets/icomoon';
 import COLOR from '../../assets/colors';
 
 export default (
-    {icon, iconColor, text, shadow, type, backgroundColor, children, onPress},
+    {
+        icon,
+        iconColor,
+        text,
+        shadow,
+        type,
+        backgroundColor,
+        children,
+        onPress,
+        small,
+    },
     props,
 ) => {
     return (
@@ -41,7 +51,12 @@ export default (
 
     function renderText() {
         return (
-            text && text.length > 0 && <Text style={styles.text}>{text}</Text>
+            text &&
+            text.length > 0 && (
+                <Text style={small ? styles.textSmall : styles.text}>
+                    {text}
+                </Text>
+            )
         );
     }
 
@@ -80,6 +95,13 @@ const styles = StyleSheet.create({
         color: COLOR.WHITE,
         margin: 15,
         marginLeft: 10,
+        textAlign: 'center',
+        fontFamily: 'Montserrat-Bold',
+    },
+    textSmall: {
+        fontSize: 15,
+        color: COLOR.WHITE,
+        margin: 5,
         textAlign: 'center',
         fontFamily: 'Montserrat-Bold',
     },

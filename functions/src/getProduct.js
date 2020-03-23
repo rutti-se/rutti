@@ -152,6 +152,10 @@ function getIcaProductInformation(data) {
     if (!data.product.brand) {
         data.product.brand = 'ICA';
     }
+    const nutritionalInfo = data.product.nutritionalInfo
+        ? data.product.nutritionalInfo
+        : '';
+
     const icaNames = formatIcaNames(data.product.name, data.product.brand);
     return {
         gtin: data.product.sku,
@@ -171,9 +175,7 @@ function getIcaProductInformation(data) {
             data.product.ingredientInfo &&
             data.product.ingredientInfo.replace('Ingredienser: ', ''),
         weight: data.product.grossWeight,
-        nutritionalInfo:
-            data.product.nutrientInformations &&
-            data.product.nutrientInformations.nutrientStatement,
+        nutritionalInfo,
     };
 }
 
