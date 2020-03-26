@@ -161,6 +161,7 @@ const styles = StyleSheet.create({
     storeContainer: {
         height: 40,
         flexDirection: 'row',
+        marginLeft: 10,
     },
     productInformation: {
         flex: 4.5,

@@ -1,17 +1,18 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, TextInput, Image} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import COLORS from '../../assets/colors';
 import RoundButton from './RoundButton';
-import FadeInView from '../components/animations/FadeInView';
 import calcBestPrice from '../utilities/calcBestPrice';
-import SkeletonItem from './SkeletonItem';
+import SkeletonContent from 'react-native-skeleton-content-nonexpo';
+import Img from './Img';
 
-export default ({productInfo, storeInfo, onPress, index}) => {
+export default ({productInfo, storeInfo, onPress, isLoading}) => {
     const [lowestPrice, setLowestPrice] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
+
+    console.log('loading: ', isLoading);
 
     useEffect(() => {
-        setLowestPrice(calcBestPrice(storeInfo));
+        storeInfo && setLowestPrice(calcBestPrice(storeInfo));
     }, [storeInfo]);
 
     const RenderBottom = () => {
@@ -29,21 +30,19 @@ export default ({productInfo, storeInfo, onPress, index}) => {
             </View>
         );
     };
+
     return (
-        <View style={styles.container}>
-            {/*             {isLoading && <SkeletonItem></SkeletonItem>} */}
-
-            <FadeInView index={index} duration={500}>
-                <Image
-                    style={styles.image}
-                    onLoadEnd={() => setIsLoading(false)}
-                    source={{uri: productInfo.imageUrl}}
-                />
-
-                <Text style={styles.text}> {productInfo.name}</Text>
-                <RenderBottom></RenderBottom>
-            </FadeInView>
-        </View>
+        <SkeletonContent
+            containerStyle={styles.container}
+            isLoading={isLoading}
+            layout={[
+                {key: 'image', width: 170, height: 170, marginBottom: 6},
+                {key: 'text', width: 120, height: 14, marginBottom: 6},
+            ]}>
+            <Img style={styles.image} source={productInfo?.imageUrl} />
+            <Text style={styles.text}> {productInfo?.name}</Text>
+            <RenderBottom></RenderBottom>
+        </SkeletonContent>
     );
 };
 

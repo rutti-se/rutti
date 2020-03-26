@@ -82,6 +82,7 @@ export default () => {
                 style={[{marginBottom: DEVICE.height / 4.8}, {marginTop: 10}]}>
                 {renderProductPage()}
             </View>
+
             <BottomDrawer
                 style={{borderTopEndRadius: 100}}
                 backgroundColor={COLORS.GRAY_2}

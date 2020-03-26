@@ -8,6 +8,6 @@ export default function(storeInfo) {
             price = store.priceInformation.price;
         }
     });
-
+    price = price.toFixed(2);
     return price < Number.MAX_SAFE_INTEGER ? price : null;
 }
