@@ -8,6 +8,7 @@ export default props => {
         Animated.timing(fadeAnim, {
             toValue: 1,
             duration: props.duration ? props.duration : 500,
+            delay: props.index ? (props.index * props.duration) / 8 : 0,
         }).start();
     }, []);
 

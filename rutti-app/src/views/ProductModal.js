@@ -12,8 +12,8 @@ import COLORS from '../../assets/colors';
 import RoundButton from '../components/RoundButton';
 import FadeInView from '../components/animations/FadeInView';
 import {Dimensions} from 'react-native';
-import calcBestPrice from '../utilities/calcBestPrice';
 const DEVICE = Dimensions.get('window');
+import calcBestPrice from '../utilities/calcBestPrice';
 import Button from '../components/Button';
 
 export default ({productInfo, storeInfo, onPress, closeButton}) => {
@@ -29,19 +29,25 @@ export default ({productInfo, storeInfo, onPress, closeButton}) => {
                 <View
                     style={{
                         flexDirection: 'row',
-                        justifyContent: 'flex-end',
-                        alignContent: 'flex-end',
+                        justifyContent: 'center',
                     }}>
                     <ImageBackground
                         style={styles.image}
-                        source={{uri: productInfo.imageUrl}}></ImageBackground>
-
-                    <RoundButton
-                        color="white"
-                        icon="cross"
-                        iconColor="black"
-                        style={{alignSelf: 'flex-end'}}
-                        onPress={closeButton}></RoundButton>
+                        source={{
+                            uri: productInfo.imageUrl,
+                        }}></ImageBackground>
+                    <View
+                        style={{
+                            position: 'absolute',
+                            right: 5,
+                            top: 5,
+                        }}>
+                        <RoundButton
+                            color="white"
+                            icon="cross"
+                            iconColor="black"
+                            onPress={closeButton}></RoundButton>
+                    </View>
                 </View>
                 <View style={styles.nameContainer}>
                     <Text style={styles.text}>{productInfo.name}</Text>
@@ -65,41 +71,40 @@ export default ({productInfo, storeInfo, onPress, closeButton}) => {
                         );
                     })}
                 </View>
-                <ScrollView>
-                    <View style={styles.productInformation}>
-                        <View style={{flexDirection: 'row'}}>
-                            <View style={{flexDirection: 'column', flex: 4}}>
+                <View style={styles.productInformation}>
+                    <View style={{flexDirection: 'row'}}>
+                        <View
+                            style={{
+                                flexDirection: 'column',
+                                flex: 4,
+                            }}>
+                            <ScrollView>
                                 <Text style={styles.titleText}>
                                     Ingredienser
                                 </Text>
                                 <Text style={styles.infoText}>
                                     {productInfo.ingredientInfo}
                                 </Text>
-                            </View>
-                            <View style={{flex: 1}}></View>
-                        </View>
 
-                        <View style={{flexDirection: 'row'}}>
-                            <View style={{flexDirection: 'column', flex: 4}}>
                                 <Text style={styles.titleText}>
                                     Näringsvärde per 100g
                                 </Text>
                                 <Text style={styles.infoText}>
                                     {productInfo.nutritionalInfo}
                                 </Text>
-                            </View>
-                            <View
-                                style={{
-                                    flex: 1,
-                                    justifyContent: 'center',
-                                    left: '10%',
-                                }}>
-                                <RoundButton
-                                    icon={'buy-online-add'}></RoundButton>
-                            </View>
+                            </ScrollView>
+                        </View>
+                        <View
+                            style={{
+                                flex: 1,
+                                justifyContent: 'flex-end',
+                                left: '10%',
+                                bottom: '10%',
+                            }}>
+                            <RoundButton icon={'buy-online-add'}></RoundButton>
                         </View>
                     </View>
-                </ScrollView>
+                </View>
             </FadeInView>
         </View>
     );
@@ -108,7 +113,7 @@ export default ({productInfo, storeInfo, onPress, closeButton}) => {
 const styles = StyleSheet.create({
     container: {
         borderRadius: 10,
-        height: '100%',
+        height: '80%',
         width: '100%',
         backgroundColor: COLORS.WHITE,
         padding: 5,
@@ -120,7 +125,6 @@ const styles = StyleSheet.create({
         width: DEVICE.width / 1.5,
         height: DEVICE.width / 1.5,
         alignSelf: 'center',
-        flexDirection: 'row',
     },
     text: {
         fontSize: 22,
