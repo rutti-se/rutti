@@ -83,15 +83,7 @@ export default () => {
                 {renderProductPage()}
             </View>
 
-            <BottomDrawer
-                style={{borderTopEndRadius: 100}}
-                backgroundColor={COLORS.GRAY_2}
-                containerHeight={DEVICE.height / 1.2}
-                downDisplay={DEVICE.height / 1.4}
-                roundedEdges={true}
-                shadow={true}
-                startUp={false}
-                dragBar={true}>
+            <BottomDrawer>
                 <Text>Hello</Text>
             </BottomDrawer>
         </View>

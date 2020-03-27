@@ -65,14 +65,17 @@ export class BottomDrawer extends Component {
 
     static defaultProps = {
         offset: 0,
-        startUp: true,
-        backgroundColor: '#ffffff',
+        startUp: false,
+        backgroundColor: COLORS.GRAY_1,
         roundedEdges: true,
         shadow: true,
+        dragBar: true,
+        containerHeight: SCREEN_HEIGHT / 1.2,
+        downDisplay: SCREEN_HEIGHT / 1.4,
+
         onExpanded: () => {},
         onCollapsed: () => {},
     };
-
     constructor(props) {
         super(props);
 
@@ -93,6 +96,7 @@ export class BottomDrawer extends Component {
             this.props.containerHeight,
             this.props.offset,
         );
+
         this.DOWN_POSITION = this._calculateDownPosition(
             this.UP_POSITION,
             this.DOWN_DISPLAY,
@@ -104,7 +108,6 @@ export class BottomDrawer extends Component {
                 : this.DOWN_POSITION,
         };
     }
-
     render() {
         return (
             <Animator
@@ -122,15 +125,7 @@ export class BottomDrawer extends Component {
                 backgroundColor={this.props.backgroundColor}
                 onExpanded={() => this.props.onExpanded()}
                 onCollapsed={() => this.props.onCollapsed()}>
-                <View
-                    style={{
-                        backgroundColor: COLORS.GRAY_4,
-                        width: 70,
-                        height: 5,
-                        borderRadius: 25,
-                        alignSelf: 'center',
-                        marginTop: 10,
-                    }}></View>
+                <View style={styles.dragBar(this.props.dragBar)}></View>
                 {this.props.children}
                 <View
                     style={{
@@ -258,8 +253,8 @@ const styles = {
     roundedEdges: rounded => {
         return (
             rounded == true && {
-                borderTopLeftRadius: 10,
-                borderTopRightRadius: 10,
+                borderTopLeftRadius: 20,
+                borderTopRightRadius: 20,
             }
         );
     },
@@ -269,6 +264,18 @@ const styles = {
                 shadowColor: '#CECDCD',
                 shadowRadius: 3,
                 shadowOpacity: 5,
+            }
+        );
+    },
+    dragBar: dragBar => {
+        return (
+            dragBar == true && {
+                backgroundColor: COLORS.GRAY_4,
+                width: 70,
+                height: 5,
+                borderRadius: 25,
+                alignSelf: 'center',
+                marginTop: 10,
             }
         );
     },
