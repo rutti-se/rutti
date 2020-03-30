@@ -9,8 +9,6 @@ import Img from './Img';
 export default ({productInfo, storeInfo, onPress, isLoading}) => {
     const [lowestPrice, setLowestPrice] = useState(null);
 
-    console.log('loading: ', isLoading);
-
     useEffect(() => {
         storeInfo && setLowestPrice(calcBestPrice(storeInfo));
     }, [storeInfo]);
@@ -71,6 +69,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
         flexDirection: 'row',
         justifyContent: 'space-around',
+        width: '100%',
     },
 
     price: {

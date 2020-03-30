@@ -7,6 +7,33 @@ import {Dimensions} from 'react-native';
 
 const DEVICE = Dimensions.get('window');
 
+const storeInfo = [
+    {
+        store: {
+            retailer: 'ica',
+            storeId: '09808',
+        },
+        priceInformation: {
+            price: 11.95,
+            isPromotion: false,
+            currentPromotions: [],
+        },
+    },
+    {
+        store: {
+            retailer: 'coop',
+            storeId: '257300',
+        },
+        priceInformation: {
+            price: 8.95,
+            comparePrice: '319.64',
+            comparePriceUnit: 'kr/kg',
+            isPromotion: false,
+            currentPromotions: [],
+        },
+    },
+];
+
 export default ({productSkus, stores}) => {
     const [productDetails, setProductDetails] = useState([]);
     const [aboutProduct, setAboutProduct] = useState(null);

@@ -4,18 +4,17 @@ import {
     Text,
     StyleSheet,
     ImageBackground,
-    TextInput,
-    BackHandler,
     ScrollView,
 } from 'react-native';
+
 import COLORS from '../../assets/colors';
 import RoundButton from '../components/RoundButton';
 import FadeInView from '../components/animations/FadeInView';
-import {Dimensions} from 'react-native';
-const DEVICE = Dimensions.get('window');
 import calcBestPrice from '../utilities/calcBestPrice';
 import Button from '../components/Button';
-
+import CollapsibleView from '../components/CollapsibleView';
+import {Dimensions} from 'react-native';
+const DEVICE = Dimensions.get('window');
 export default ({productInfo, storeInfo, onPress, closeButton}) => {
     const [lowestPrice, setLowestPrice] = useState(null);
 
@@ -23,88 +22,113 @@ export default ({productInfo, storeInfo, onPress, closeButton}) => {
         setLowestPrice(calcBestPrice(storeInfo));
     }, [storeInfo]);
 
+    function renderTop() {
+        return (
+            <View
+                style={{
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                }}>
+                <ImageBackground
+                    style={styles.image}
+                    source={{
+                        uri: productInfo.imageUrl,
+                    }}></ImageBackground>
+                <View
+                    style={{
+                        position: 'absolute',
+                        right: 5,
+                        top: 5,
+                    }}>
+                    <RoundButton
+                        color="white"
+                        icon="cross"
+                        iconColor="black"
+                        onPress={closeButton}></RoundButton>
+                </View>
+            </View>
+        );
+    }
+
+    function renderNameAndPrice() {
+        return (
+            <View style={styles.nameContainer}>
+                <Text style={styles.text}>{productInfo.name}</Text>
+                <View style={{flexDirection: 'row'}}>
+                    <Text style={styles.priceText}>från</Text>
+                    <Text style={styles.price}>{lowestPrice}:-</Text>
+                </View>
+            </View>
+        );
+    }
+
+    function renderMiddle() {
+        return (
+            <View style={{flexDirection: 'row'}}>
+                {renderStores()}
+                <View
+                    style={{
+                        flex: 1,
+                        marginRight: '5%',
+                        alignItems: 'flex-end',
+                    }}>
+                    <RoundButton icon={'buy-online-add'}></RoundButton>
+                </View>
+            </View>
+        );
+    }
+
+    function renderStores() {
+        return (
+            <View style={styles.storeContainer}>
+                {storeInfo.map(store => {
+                    return (
+                        <View style={{width: 75, marginRight: 10}}>
+                            <Button
+                                text={store.store.retailer}
+                                small={true}
+                                backgroundColor={
+                                    COLORS[store.store.retailer]
+                                }></Button>
+                        </View>
+                    );
+                })}
+            </View>
+        );
+    }
+
+    function renderProductDetails() {
+        return (
+            <View style={styles.productInformation}>
+                <View
+                    style={{
+                        flexDirection: 'column',
+                    }}>
+                    <ScrollView>
+                        <CollapsibleView title={'Ingredienser'}>
+                            <Text style={styles.infoText}>
+                                {productInfo.ingredientInfo}
+                            </Text>
+                        </CollapsibleView>
+
+                        <CollapsibleView title={'Näringsvärde per 100g'}>
+                            <Text style={styles.infoText}>
+                                {productInfo.nutritionalInfo}
+                            </Text>
+                        </CollapsibleView>
+                    </ScrollView>
+                </View>
+            </View>
+        );
+    }
+
     return (
         <View style={styles.container}>
             <FadeInView>
-                <View
-                    style={{
-                        flexDirection: 'row',
-                        justifyContent: 'center',
-                    }}>
-                    <ImageBackground
-                        style={styles.image}
-                        source={{
-                            uri: productInfo.imageUrl,
-                        }}></ImageBackground>
-                    <View
-                        style={{
-                            position: 'absolute',
-                            right: 5,
-                            top: 5,
-                        }}>
-                        <RoundButton
-                            color="white"
-                            icon="cross"
-                            iconColor="black"
-                            onPress={closeButton}></RoundButton>
-                    </View>
-                </View>
-                <View style={styles.nameContainer}>
-                    <Text style={styles.text}>{productInfo.name}</Text>
-                    <View style={{flexDirection: 'row'}}>
-                        <Text style={styles.priceText}>från</Text>
-                        <Text style={styles.price}>{lowestPrice}:-</Text>
-                    </View>
-                </View>
-
-                <View style={styles.storeContainer}>
-                    {storeInfo.map(store => {
-                        return (
-                            <View style={{width: 75, marginRight: 10}}>
-                                <Button
-                                    text={store.store.retailer}
-                                    small={true}
-                                    backgroundColor={
-                                        COLORS[store.store.retailer]
-                                    }></Button>
-                            </View>
-                        );
-                    })}
-                </View>
-                <View style={styles.productInformation}>
-                    <View style={{flexDirection: 'row'}}>
-                        <View
-                            style={{
-                                flexDirection: 'column',
-                                flex: 4,
-                            }}>
-                            <ScrollView>
-                                <Text style={styles.titleText}>
-                                    Ingredienser
-                                </Text>
-                                <Text style={styles.infoText}>
-                                    {productInfo.ingredientInfo}
-                                </Text>
-
-                                <Text style={styles.titleText}>
-                                    Näringsvärde per 100g
-                                </Text>
-                                <Text style={styles.infoText}>
-                                    {productInfo.nutritionalInfo}
-                                </Text>
-                            </ScrollView>
-                        </View>
-                        <View
-                            style={{
-                                flex: 1,
-                                justifyContent: 'flex-end',
-                                left: '10%',
-                                bottom: '10%',
-                            }}>
-                            <RoundButton icon={'buy-online-add'}></RoundButton>
-                        </View>
-                    </View>
-                </View>
+                {renderTop()}
+                {renderNameAndPrice()}
+                {renderMiddle()}
+                {renderProductDetails()}
             </FadeInView>
         </View>
     );
@@ -159,22 +183,18 @@ const styles = StyleSheet.create({
         marginBottom: 2,
     },
     storeContainer: {
-        height: 40,
         flexDirection: 'row',
         marginLeft: 10,
     },
     productInformation: {
         flex: 4.5,
-        margin: 10,
-        justifyContent: 'flex-start',
-    },
-    titleText: {
-        fontSize: 18,
-        textAlign: 'left',
-        fontFamily: 'Montserrat-Bold',
+        paddingTop: 20,
+        marginRight: '5%',
     },
     infoText: {
         fontFamily: 'Montserrat-Regular',
-        marginBottom: 20,
+        margin: 5,
+        marginTop: 0,
+        borderRadius: 50,
     },
 });
