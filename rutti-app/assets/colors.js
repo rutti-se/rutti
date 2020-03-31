@@ -16,4 +16,5 @@ export default {
     TWITTER: '#1DA1F2',
     ica: '#F1133A',
     coop: '#409D36',
+    citygross: '#1073B7',
 };

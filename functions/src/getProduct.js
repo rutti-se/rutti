@@ -63,7 +63,6 @@ async function getProduct({ productSku, stores }) {
             if (result) {
                 const store = requestMap.get(result.config.url);
                 let storeData;
-
                 switch (store.retailer) {
                     case 'ica':
                         if (result.data.length) {
@@ -162,7 +161,9 @@ function getIcaProductInformation(data) {
         name: icaNames.name,
         brand: icaNames.brand,
         imageUrl: `https://assets.icanet.se/t_product_large_v1,f_auto/${data.product.imageId}.jpg`,
-        description: data.product.longDescription,
+        description: data.product.longDescription
+            ? formatDescriptionText(data.product.longDescription)
+            : '',
         salesUnit: getUnit(data.product.salesUnit),
         originCountry: data.product.originCountryCode
             ? data.product.originCountryCode.name
@@ -352,6 +353,16 @@ function formatIcaNames(productName, brandName) {
         brand = productName.substr(index, productName.length);
     }
     return { name, brand };
+}
+
+function formatDescriptionText(text) {
+    //remove html tags
+    const description = text
+        .replace(/<\/?([a-z][a-z0-9]*)\b[^>]*>/gi, '')
+        .replace(/&amp;/g, '&')
+        .replace('Information från leverantör', '')
+        .replace(/([a-z])([A-Z])/g, '$1 $2');
+    return description;
 }
 
 app.get('*', (req, res) =>

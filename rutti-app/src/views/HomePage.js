@@ -24,7 +24,7 @@ const stores = [
     },
     {
         retailer: 'citygross',
-        storeId: '704',
+        storeId: '307',
     },
 ];
 

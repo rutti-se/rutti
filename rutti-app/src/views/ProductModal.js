@@ -85,7 +85,11 @@ export default ({productInfo, storeInfo, onPress, closeButton}) => {
                     return (
                         <View style={{width: 75, marginRight: 10}}>
                             <Button
-                                text={store.store.retailer}
+                                text={
+                                    store.store.retailer === 'citygross'
+                                        ? 'c.g'
+                                        : store.store.retailer
+                                }
                                 small={true}
                                 backgroundColor={
                                     COLORS[store.store.retailer]
@@ -105,6 +109,7 @@ export default ({productInfo, storeInfo, onPress, closeButton}) => {
                         flexDirection: 'column',
                     }}>
                     <ScrollView>
+                        <Text>{productInfo.description}</Text>
                         <CollapsibleView title={'Ingredienser'}>
                             <Text style={styles.infoText}>
                                 {productInfo.ingredientInfo}
