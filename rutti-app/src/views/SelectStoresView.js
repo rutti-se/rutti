@@ -1,7 +1,14 @@
 import React, {Component, useState, useEffect} from 'react';
 import COLORS from '../../assets/colors';
 import RuttiLogo from '../../assets/rutti_logo.svg';
-import {View, StyleSheet, Text, ScrollView, Dimensions} from 'react-native';
+import {
+    View,
+    StyleSheet,
+    Text,
+    FlatList,
+    Dimensions,
+    CheckBox,
+} from 'react-native';
 import InputField from '../components/InputField';
 import {firebase} from '@react-native-firebase/auth';
 import AuthView from './AuthView';
@@ -11,9 +18,13 @@ import findStores from '../api/findStores';
 const DEVICE = Dimensions.get('window');
 
 export default () => {
-    let {stores: selectedStores} = getStores();
+    let [selectedStores, setSelectedStores] = useState([]);
     let [zipCode, setZipCode] = useState('');
     let [storeResults, setStoreResults] = useState([]);
+
+    useEffect(() => {
+        getStores().then(stores => setSelectedStores(stores));
+    }, []);
 
     useEffect(() => {
         console.log(zipCode);
@@ -30,13 +41,16 @@ export default () => {
         }
     }, [zipCode]);
 
-    function getStoreList() {
-        return;
-    }
-
     return (
         <View style={styles.container}>
-            <View style={styles.topContainer}>
+            <View
+                style={{
+                    paddingTop: 20,
+                    paddingHorizontal: 20,
+                    shadowOffset: {width: 0, height: 5},
+                    shadowColor: COLORS.GRAY_4,
+                    shadowOpacity: 1.0,
+                }}>
                 <Text style={styles.text}>Välj butiker</Text>
 
                 <InputField
@@ -45,27 +59,53 @@ export default () => {
                     labelText={'Postnummer'}></InputField>
             </View>
 
-            {storeResults.map(store => {
-                return (
-                    <View>
-                        <Text
-                            style={{
-                                color: COLORS.PRIMARY,
-                                fontFamily: 'Montserrat-Bold',
-                            }}>
-                            {store.name}
-                        </Text>
-                        <Text
-                            style={{
-                                fontFamily: 'Montserrat',
-                            }}>
-                            {store.retailer}
-                        </Text>
-                    </View>
-                );
-            })}
+            <FlatList
+                style={{paddingTop: 20, paddingHorizontal: 20}}
+                data={storeResults}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({item}) => {
+                    return (
+                        <View style={{flexDirection: 'row'}}>
+                            <CheckBox
+                                checked={
+                                    selectedStores.filter(
+                                        e => e.storeId === item.storeId,
+                                    ).length > 0
+                                }
+                            />
+                            <View>
+                                <Text
+                                    style={{
+                                        color: COLORS.PRIMARY,
+                                        fontFamily: 'Montserrat-Bold',
+                                    }}>
+                                    {item.name}
+                                </Text>
+                                <Text
+                                    style={{
+                                        fontFamily: 'Montserrat',
+                                    }}>
+                                    {item.retailer}
+                                </Text>
+                            </View>
+                        </View>
+                    );
+                }}
+            />
 
-            <View style={styles.buttonContainer}></View>
+            <View style={styles.buttonContainer}>
+                <Button
+                    text={
+                        selectedStores.length > 0
+                            ? 'Fortsätt'
+                            : 'Välj minst en butik'
+                    }
+                    shadow={true}
+                    type={selectedStores.length > 0 ? 'primary' : 'secondary'}
+                    onPress={() => {
+                        console.log('fortsätt');
+                    }}></Button>
+            </View>
         </View>
     );
 };
@@ -74,21 +114,19 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'column',
-        justifyContent: 'flex-start',
+        justifyContent: 'flex-end',
     },
     resultsList: {
         padding: 20,
-    },
-    topContainer: {
-        flex: 2,
-        padding: 20,
+        marginBottom: 110,
     },
     buttonContainer: {
-        flex: 1.7,
+        height: 110,
         alignSelf: 'center',
-        width: '70%',
-        justifyContent: 'space-between',
-        marginBottom: '10%',
+        width: '100%',
+        justifyContent: 'flex-end',
+        backgroundColor: COLORS.PRIMARY,
+        padding: 20,
     },
     text: {
         fontSize: 48,
