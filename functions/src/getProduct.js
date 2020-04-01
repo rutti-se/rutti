@@ -218,7 +218,11 @@ function getCoopStoreData(data) {
             promoId: promotion.code,
             type: promotion.type,
             price: price,
-            comparePrice: price / (data.pickPrice.value / comparePrice),
+            comparePrice: (
+                price /
+                noOfItemsToDiscount /
+                (data.pickPrice.value / comparePrice)
+            ).toFixed(2),
             endDate: promotion.endDate,
             noOfItemsToDiscount: noOfItemsToDiscount,
             limitOfItems:
@@ -276,11 +280,24 @@ function getCityGrossStoreData(data) {
 
     if (isPromotion) {
         data.prices[0].promotions.forEach(promotion => {
+            let noOfItemsToDiscount, price, comparePrice;
+
+            if (promotion.name.includes('/')) {
+                noOfItemsToDiscount = promotion.numberOfItems;
+                price = promotion.effectAmount;
+            }
+            if (promotion.name.includes('KG' || 'ST')) {
+                noOfItemsToDiscount = 1;
+                price = promotion.price.price;
+            }
+            comparePrice =
+                (price / noOfItemsToDiscount / data.netContent.value) * 1000;
+
             currentPromotions.push({
                 promoId: promotion.promotionId,
                 type: promotion.effectType,
-                price: promotion.effectAmount,
-                comparePrice: promotion.price.comparisonPrice,
+                price: price,
+                comparePrice: comparePrice.toFixed(2),
                 endDate: promotion.endUsable,
                 noOfItemsToDiscount: promotion.numberOfItems,
                 limitOfItems:

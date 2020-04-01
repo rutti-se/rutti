@@ -53,8 +53,20 @@ export default ({productInfo, storeInfo, onPress, closeButton}) => {
     function renderNameAndPrice() {
         return (
             <View style={styles.nameContainer}>
-                <Text style={styles.text}>{productInfo.name}</Text>
-                <View style={{flexDirection: 'row'}}>
+                <View
+                    style={{
+                        flexDirection: 'column',
+                        flex: 2.5,
+                    }}>
+                    <Text style={styles.text}>{productInfo.name}</Text>
+                    <Text style={styles.infoText}>{productInfo.brand}</Text>
+                </View>
+
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        flex: 1,
+                    }}>
                     <Text style={styles.priceText}>från</Text>
                     <Text style={styles.price}>{lowestPrice}:-</Text>
                 </View>
@@ -109,18 +121,22 @@ export default ({productInfo, storeInfo, onPress, closeButton}) => {
                         flexDirection: 'column',
                     }}>
                     <ScrollView>
-                        <Text>{productInfo.description}</Text>
-                        <CollapsibleView title={'Ingredienser'}>
-                            <Text style={styles.infoText}>
-                                {productInfo.ingredientInfo}
-                            </Text>
-                        </CollapsibleView>
+                        <Text styles={styles.infoText}>
+                            {productInfo.description}
+                        </Text>
+                        <View style={{marginTop: 10}}>
+                            <CollapsibleView title={'Ingredienser'}>
+                                <Text style={styles.infoText}>
+                                    {productInfo.ingredientInfo}
+                                </Text>
+                            </CollapsibleView>
 
-                        <CollapsibleView title={'Näringsvärde per 100g'}>
-                            <Text style={styles.infoText}>
-                                {productInfo.nutritionalInfo}
-                            </Text>
-                        </CollapsibleView>
+                            <CollapsibleView title={'Näringsvärde per 100g'}>
+                                <Text style={styles.infoText}>
+                                    {productInfo.nutritionalInfo}
+                                </Text>
+                            </CollapsibleView>
+                        </View>
                     </ScrollView>
                 </View>
             </View>
@@ -145,7 +161,7 @@ const styles = StyleSheet.create({
         height: '80%',
         width: '100%',
         backgroundColor: COLORS.WHITE,
-        padding: 5,
+        padding: 10,
         margin: 5,
         flexDirection: 'column',
         alignSelf: 'center',
@@ -156,11 +172,10 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     text: {
-        fontSize: 22,
+        fontSize: 20,
         textAlign: 'left',
         fontFamily: 'Montserrat-Bold',
         color: 'black',
-        width: '60%',
     },
     bottom: {
         marginTop: 20,
@@ -168,7 +183,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
     },
     nameContainer: {
-        margin: 10,
+        marginTop: 10,
+        marginBottom: 10,
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
@@ -189,17 +205,17 @@ const styles = StyleSheet.create({
     },
     storeContainer: {
         flexDirection: 'row',
-        marginLeft: 10,
+        //marginLeft: 10,
     },
     productInformation: {
         flex: 4.5,
-        paddingTop: 20,
+        paddingTop: 10,
         marginRight: '5%',
     },
     infoText: {
         fontFamily: 'Montserrat-Regular',
-        margin: 5,
-        marginTop: 0,
+        //margin: 5,
+
         borderRadius: 50,
     },
 });
