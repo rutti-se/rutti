@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {TouchableHighlight, Text, StyleSheet, View} from 'react-native';
 import {Icon} from '../../assets/icomoon';
 import COLOR from '../../assets/colors';
@@ -17,6 +17,9 @@ export default (
     },
     props,
 ) => {
+    {
+        console.log(type);
+    }
     return (
         <View style={styles.Box}>
             <TouchableHighlight

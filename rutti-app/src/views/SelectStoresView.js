@@ -1,5 +1,6 @@
 import React, {Component, useState, useEffect} from 'react';
 import COLORS from '../../assets/colors';
+
 import RuttiLogo from '../../assets/rutti_logo.svg';
 import {
     View,
@@ -15,10 +16,13 @@ import AuthView from './AuthView';
 import Button from '../components/Button';
 import {getStores} from '../api/storageHelpers';
 import findStores from '../api/findStores';
+import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
+
 const DEVICE = Dimensions.get('window');
 
 export default () => {
     let [selectedStores, setSelectedStores] = useState([]);
+    let [amountSelected, setAmountSelected] = useState(0);
     let [zipCode, setZipCode] = useState('');
     let [storeResults, setStoreResults] = useState([]);
 
@@ -32,8 +36,6 @@ export default () => {
             findStores({zipCode})
                 .then(foundStores => {
                     setStoreResults(foundStores);
-
-                    foundStores.forEach(store => console.log(store.storeId));
                 })
                 .catch(error => {
                     console.log('zipCode error', error);
@@ -41,11 +43,24 @@ export default () => {
         }
     }, [zipCode]);
 
+    function onPressMarker(id) {
+        storeResults.map(store => {
+            if (store.storeId === id) {
+                store.isSelected
+                    ? selectedStores.pop(store)
+                    : selectedStores.push(store);
+                store.isSelected = !store.isSelected;
+                setAmountSelected(selectedStores.length);
+            }
+        });
+    }
+
     return (
         <View style={styles.container}>
             <View
                 style={{
-                    paddingTop: 20,
+                    paddingTop: 40,
+                    paddingBottom: 20,
                     paddingHorizontal: 20,
                     shadowOffset: {width: 0, height: 5},
                     shadowColor: COLORS.GRAY_4,
@@ -59,6 +74,38 @@ export default () => {
                     labelText={'Postnummer'}></InputField>
             </View>
 
+            <MapView
+                style={{flex: 1}}
+                provider={PROVIDER_GOOGLE}
+                initialRegion={{
+                    latitude: 61.383105,
+                    longitude: 15.085107,
+                    latitudeDelta: 12.0,
+                    longitudeDelta: 12.0,
+                }}
+                showsUserLocation={true}>
+                {storeResults &&
+                    storeResults.map(store => {
+                        return (
+                            <Marker
+                                coordinate={{
+                                    latitude: store.latitude,
+                                    longitude: store.longitude,
+                                }}
+                                title={store.name}
+                                key={store.storeId.toString()}
+                                pinColor={
+                                    store.isSelected && amountSelected
+                                        ? 'indigo'
+                                        : COLORS[store.retailer]
+                                }
+                                onPress={() =>
+                                    onPressMarker(store.storeId)
+                                }></Marker>
+                        );
+                    })}
+            </MapView>
+            {/* 
             <FlatList
                 style={{paddingTop: 20, paddingHorizontal: 20}}
                 data={storeResults}
@@ -91,12 +138,11 @@ export default () => {
                         </View>
                     );
                 }}
-            />
-
+            /> */}
             <View style={styles.buttonContainer}>
                 <Button
                     text={
-                        selectedStores.length > 0
+                        amountSelected && selectedStores.length > 0
                             ? 'Fortsätt'
                             : 'Välj minst en butik'
                     }
@@ -115,6 +161,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'flex-end',
+        backgroundColor: COLORS.SECONDARY,
     },
     resultsList: {
         padding: 20,
@@ -125,7 +172,6 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         width: '100%',
         justifyContent: 'flex-end',
-        backgroundColor: COLORS.PRIMARY,
         padding: 20,
     },
     text: {

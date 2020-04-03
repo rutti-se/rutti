@@ -17,3 +17,4 @@ rutti-app/ios/Rutti.xcodeproj/project.pbxproj
 
 rutti-app/android/google-services.json
 rutti-app/ios/GoogleService-Info.plist
+rutti-app/.env

@@ -12,6 +12,8 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 #import <RNHomeIndicator.h>
+#import <GoogleMaps/GoogleMaps.h>
+#import <ReactNativeConfig.h>
 
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 
@@ -19,6 +21,9 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+   
+ NSString *mapsApiKey = [ReactNativeConfig envFor:@"GOOGLE_API_KEY"];
+ [GMSServices provideAPIKey: mapsApiKey];
   
   [[FBSDKApplicationDelegate sharedInstance] application:application
       didFinishLaunchingWithOptions:launchOptions];

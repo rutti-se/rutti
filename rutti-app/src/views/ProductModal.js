@@ -205,7 +205,6 @@ const styles = StyleSheet.create({
     },
     storeContainer: {
         flexDirection: 'row',
-        //marginLeft: 10,
     },
     productInformation: {
         flex: 4.5,
@@ -214,8 +213,6 @@ const styles = StyleSheet.create({
     },
     infoText: {
         fontFamily: 'Montserrat-Regular',
-        //margin: 5,
-
         borderRadius: 50,
     },
 });

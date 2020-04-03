@@ -62,6 +62,7 @@ async function getNearbyStores({ zipCode }) {
                         zipCode: store.zipCode,
                         latitude: store.latitude,
                         longitude: store.longitude,
+                        isSelected: false,
                     });
                 });
                 break;
@@ -76,6 +77,7 @@ async function getNearbyStores({ zipCode }) {
                         zipCode: store.address.postalCode,
                         latitude: store.geoPoint.latitude,
                         longitude: store.geoPoint.longitude,
+                        isSelected: false,
                     });
                 });
                 break;
@@ -90,6 +92,7 @@ async function getNearbyStores({ zipCode }) {
                         zipCode: store.zipcode,
                         latitude: store.latitude,
                         longitude: store.longitude,
+                        isSelected: false,
                     });
                 });
                 break;
