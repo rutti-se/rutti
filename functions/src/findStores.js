@@ -35,9 +35,10 @@ async function getNearbyStores({ zipCode }) {
 
     requests.push(getNearbyCityGrossStores(zipCode));
 
-    const results = await axios
-        .all(requests)
-        .catch(error => ({ error: error }));
+    const results = await axios.all(requests).catch(error => {
+        console.log(error);
+        return { error: error };
+    });
 
     if (results.error) {
         return { status: 400, data: results };
@@ -86,10 +87,10 @@ async function getNearbyStores({ zipCode }) {
                     storesResults.push({
                         storeId: store.id,
                         retailer,
-                        name: store.name,
-                        city: store.city,
-                        street: store.streetAddress,
-                        zipCode: store.zipcode,
+                        name: store.storeName,
+                        city: store.address.city,
+                        street: store.address.streetAddress,
+                        zipCode: store.address.zipCode,
                         latitude: store.latitude,
                         longitude: store.longitude,
                         isSelected: false,

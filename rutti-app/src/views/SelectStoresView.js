@@ -16,7 +16,8 @@ import AuthView from './AuthView';
 import Button from '../components/Button';
 import {getStores} from '../api/storageHelpers';
 import findStores from '../api/findStores';
-import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
+import MapView from 'react-native-map-clustering';
+import {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 
 const DEVICE = Dimensions.get('window');
 
@@ -27,7 +28,10 @@ export default () => {
     let [storeResults, setStoreResults] = useState([]);
 
     useEffect(() => {
-        getStores().then(stores => setSelectedStores(stores));
+        getStores().then(stores => {
+            console.log(stores);
+            setSelectedStores(stores);
+        });
     }, []);
 
     useEffect(() => {
@@ -77,6 +81,7 @@ export default () => {
             <MapView
                 style={{flex: 1}}
                 provider={PROVIDER_GOOGLE}
+                clusterColor={COLORS.PRIMARY}
                 initialRegion={{
                     latitude: 61.383105,
                     longitude: 15.085107,
@@ -86,6 +91,10 @@ export default () => {
                 showsUserLocation={true}>
                 {storeResults &&
                     storeResults.map(store => {
+                        const color =
+                            store.isSelected && amountSelected
+                                ? 'indigo'
+                                : COLORS[store.retailer];
                         return (
                             <Marker
                                 coordinate={{
@@ -93,12 +102,9 @@ export default () => {
                                     longitude: store.longitude,
                                 }}
                                 title={store.name}
+                                tracksViewChanges={false}
                                 key={store.storeId.toString()}
-                                pinColor={
-                                    store.isSelected && amountSelected
-                                        ? 'indigo'
-                                        : COLORS[store.retailer]
-                                }
+                                pinColor={color}
                                 onPress={() =>
                                     onPressMarker(store.storeId)
                                 }></Marker>

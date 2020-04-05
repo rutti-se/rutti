@@ -34,53 +34,38 @@ module.exports = async zipCode => {
     const currentPosition = zips.filter(e => e.zip === zipCode)[0];
 
     let result = await axios.get(
-        'https://www.citygross.se/api/v1/sites?siteTypeId=3',
+        'https://www.citygross.se/api/v1/PageData/stores',
     );
 
-    const { sites } = result.data;
+    const sites = result.data;
 
     let nearbyStores = [];
 
+    let errorSites = 0;
+
     sites.forEach(site => {
-        let sitePosition = zips.filter(
-            e => e.zip === site.zipcode.substr(0, 3),
-        )[0];
+        if (!site || !site.data.storeLocation.coordinates) {
+            errorSites++;
+            return;
+        }
+        const sitePosition = site.data.storeLocation.coordinates.split(',');
 
         const dist = getDistanceFromLatLonInKm(
             currentPosition.lat,
             currentPosition.long,
-            sitePosition.lat,
-            sitePosition.long,
+            sitePosition[0],
+            sitePosition[1],
         );
 
-        site.latitude = parseFloat(sitePosition.lat);
-        site.longitude = parseFloat(sitePosition.long);
+        site.data.latitude = parseFloat(sitePosition[0]);
+        site.data.longitude = parseFloat(sitePosition[1]);
 
-        if (dist < 50) {
-            nearbyStores.push(site);
+        if (dist < 100) {
+            nearbyStores.push(site.data);
         }
     });
-    let requestMap = new Map();
-    let requests = [];
 
-    function addRequest(url, store) {
-        requestMap.set(url, store);
-        requests.push(axios.get(url));
-    }
-
-    nearbyStores.forEach(site => {
-        addRequest(
-            `https://www.citygross.se/api/v1/sites/${site.id}/storeNumber`,
-            site,
-        );
-    });
-
-    let storeNumberResults = await axios.all(requests);
-    storeNumberResults.forEach(storeNumberResult => {
-        let storeData = requestMap.get(storeNumberResult.config.url);
-        storeData.storeId = storeNumberResult.data.storeNumber;
-        nearbyStores.push(storeData);
-    });
+    console.log(errorSites + ' citygross stores lack lat-long');
 
     return nearbyStores;
 };
