@@ -2,7 +2,7 @@ import React, {Component, useState, useEffect} from 'react';
 import COLORS from '../../assets/colors';
 import RuttiLogo from '../../assets/rutti_logo.svg';
 import {View, StyleSheet} from 'react-native';
-
+import LottieView from 'lottie-react-native';
 import {firebase} from '@react-native-firebase/auth';
 import AuthView from './AuthView';
 import Button from '../components/Button';
@@ -31,6 +31,14 @@ export default () => {
                     <View style={styles.topContainer}>
                         <RuttiLogo height={250} width={250} />
                     </View>
+
+                    <LottieView
+                        source={require('../../assets/animations/shopping-loader.json')}
+                        color={'blue'}
+                        autoPlay
+                        loop
+                        style={{height: 250, width: 250, alignSelf: 'center'}}
+                    />
 
                     <View style={styles.buttonContainer}>
                         <Button
