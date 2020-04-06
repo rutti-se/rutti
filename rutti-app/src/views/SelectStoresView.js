@@ -1,7 +1,7 @@
 import React, {Component, useState, useEffect} from 'react';
 import COLORS from '../../assets/colors';
+import StoreMarker from '../components/StoreMarker';
 
-import RuttiLogo from '../../assets/rutti_logo.svg';
 import {
     View,
     StyleSheet,
@@ -91,10 +91,6 @@ export default () => {
                 showsUserLocation={true}>
                 {storeResults &&
                     storeResults.map(store => {
-                        const color =
-                            store.isSelected && amountSelected
-                                ? 'indigo'
-                                : COLORS[store.retailer];
                         return (
                             <Marker
                                 coordinate={{
@@ -102,12 +98,13 @@ export default () => {
                                     longitude: store.longitude,
                                 }}
                                 title={store.name}
-                                tracksViewChanges={false}
+                                //tracksViewChanges={false}
                                 key={store.storeId.toString()}
-                                pinColor={color}
-                                onPress={() =>
-                                    onPressMarker(store.storeId)
-                                }></Marker>
+                                onPress={() => onPressMarker(store.storeId)}>
+                                <StoreMarker
+                                    store={store.retailer}
+                                    selected={store.isSelected}></StoreMarker>
+                            </Marker>
                         );
                     })}
             </MapView>
