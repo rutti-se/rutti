@@ -83,7 +83,7 @@ export function emailSignUp(email, password, username) {
                     displayName: username,
                 });
 
-                resolve({user: userCredentials.user});
+                resolve({user: userCredentials});
             }
         } catch (error) {
             reject({error});

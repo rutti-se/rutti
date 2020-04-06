@@ -1,12 +1,5 @@
-import React, {useEffect, useState, useRef} from 'react';
-import {
-    View,
-    Text,
-    StyleSheet,
-    SafeAreaView,
-    ScrollView,
-    Alert,
-} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, Text, StyleSheet, ScrollView, Alert} from 'react-native';
 import Button from './Button';
 import InputField from './InputField';
 import {emailSignUp} from '../api/signInMethods';
@@ -46,13 +39,10 @@ export default ({onRegistrationComplete, goToLogin, backPress}) => {
 
         const matchingPassword = password === confirmedPassword;
 
-        console.log(password, confirmedPassword, matchingPassword);
-
         faultyInputs.email = !validEmail;
         faultyInputs.okPassword = !okPassword;
         faultyInputs.matchingPassword = !matchingPassword;
 
-        console.log(faultyInputs);
         setFaultyInputs(faultyInputs);
 
         if (
@@ -63,22 +53,12 @@ export default ({onRegistrationComplete, goToLogin, backPress}) => {
             //Register
             emailSignUp(email, password, username)
                 .then(signUpResult => {
-                    console.log('signupresult', signUpResult);
                     if (signUpResult.user) {
-                        console.log(
-                            'successfully registered user: ',
-                            signUpResult.user,
-                        );
-                    } else {
-                        console.log(
-                            'failed registration: ',
-                            signUpResult.error,
-                        );
+                        onRegistrationComplete(signInResult.user);
                     }
                 })
                 .catch(error => {
                     if (error.error.code === 'auth/email-already-in-use') {
-                        console.log('email already in use');
                         setEmailAlreadyExist(true);
                     } else {
                         Alert.alert('Något blev fel!', error.error.message);

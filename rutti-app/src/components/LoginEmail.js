@@ -12,7 +12,6 @@ export default ({onLoginComplete, goToRegistration, backPress}) => {
     let [faultyInputs, setFaultyInputs] = useState({});
 
     function login() {
-        console.log('email', email, 'password', password);
         faultyInputs = {};
 
         const validEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
@@ -26,7 +25,6 @@ export default ({onLoginComplete, goToRegistration, backPress}) => {
         faultyInputs.email = !validEmail;
         faultyInputs.okPassword = !okPassword;
 
-        console.log(faultyInputs);
         setFaultyInputs(faultyInputs);
 
         if (!faultyInputs.email && !faultyInputs.okPassword) {
@@ -34,12 +32,11 @@ export default ({onLoginComplete, goToRegistration, backPress}) => {
                 .then(signInResult => {
                     if (signInResult && signInResult.user) {
                         //Successful login
-                        console.log('inloggad');
                         onLoginComplete(signInResult.user);
                     }
                 })
                 .catch(error => {
-                    console.log('error signing in: ' + error);
+                    Alert.alert('Något blev fel!', error.error.message);
                 });
         }
     }
