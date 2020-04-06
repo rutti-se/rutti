@@ -14,10 +14,13 @@ import RuttiLogo from '../../assets/rutti_logo.svg';
 import RegisterEmail from '../components/RegisterEmail';
 import LoginEmail from '../components/LoginEmail';
 import FadeInView from '../components/animations/FadeInView';
+import SelectStoresView from './SelectStoresView';
+import * as RootNavigation from '../views/RootNavigation';
 
 const WELCOME_PAGE = 0;
 const SIGNIN_PAGE = 1;
 const SIGNUP_PAGE = 2;
+const SELECT_STORES_PAGE = 3;
 
 export default () => {
     let [currentPage, setCurrentPage] = useState(WELCOME_PAGE);
@@ -63,7 +66,7 @@ export default () => {
             {currentPage === SIGNIN_PAGE && (
                 <FadeInView>
                     <LoginEmail
-                        onLoginComplete={() => setCurrentPage(WELCOME_PAGE)}
+                        onLoginComplete={() => RootNavigation.replace('Home')}
                         backPress={() => setCurrentPage(WELCOME_PAGE)}
                         goToRegistration={() => setCurrentPage(SIGNUP_PAGE)}
                     />
@@ -73,10 +76,17 @@ export default () => {
                 <FadeInView>
                     <RegisterEmail
                         onRegistrationComplete={() => {
-                            setCurrentPage(WELCOME_PAGE);
+                            setCurrentPage(SELECT_STORES_PAGE);
                         }}
                         backPress={() => setCurrentPage(WELCOME_PAGE)}
                         goToLogin={() => setCurrentPage(SIGNIN_PAGE)}
+                    />
+                </FadeInView>
+            )}
+            {currentPage === SELECT_STORES_PAGE && (
+                <FadeInView>
+                    <SelectStoresView
+                        onStoresSelected={() => RootNavigation.replace('Home')}
                     />
                 </FadeInView>
             )}

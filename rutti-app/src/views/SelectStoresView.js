@@ -21,7 +21,7 @@ import {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 
 const DEVICE = Dimensions.get('window');
 
-export default () => {
+export default ({onStoresSelected}) => {
     let [selectedStores, setSelectedStores] = useState([]);
     let [amountSelected, setAmountSelected] = useState(0);
     let [zipCode, setZipCode] = useState('');
@@ -160,7 +160,8 @@ export default () => {
                     shadow={true}
                     type={selectedStores.length > 0 ? 'primary' : 'secondary'}
                     onPress={() => {
-                        console.log('fortsätt');
+                        // spara skiten
+                        onStoresSelected();
                     }}></Button>
             </View>
         </View>
