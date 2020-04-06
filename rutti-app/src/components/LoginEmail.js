@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, SafeAreaView} from 'react-native';
+import {View, Text, StyleSheet, SafeAreaView, ScrollView} from 'react-native';
 import Button from './Button';
 import InputField from './InputField';
 import {emailLogin} from '../api/signInMethods';
@@ -44,45 +44,47 @@ export default ({onLoginComplete, goToRegistration, backPress}) => {
     }
 
     return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.topContainer}>
-                <Text style={styles.text}>Logga in</Text>
-            </View>
-            <View style={styles.inputForm}>
-                <InputField
-                    onChangeText={text => setEmail(text)}
-                    type={'email-address'}
-                    name={'email'}
-                    labelText={'E-post'}></InputField>
+        <ScrollView>
+            <View style={styles.container}>
+                <View style={styles.topContainer}>
+                    <Text style={styles.text}>Logga in</Text>
+                </View>
+                <View style={styles.inputForm}>
+                    <InputField
+                        onChangeText={text => setEmail(text)}
+                        type={'email-address'}
+                        name={'email'}
+                        labelText={'E-post'}></InputField>
 
-                <InputField
-                    onChangeText={text => setPassword(text)}
-                    secureTextEntry={true}
-                    name={'password'}
-                    labelText={'Lösenord'}></InputField>
-            </View>
+                    <InputField
+                        onChangeText={text => setPassword(text)}
+                        secureTextEntry={true}
+                        name={'password'}
+                        labelText={'Lösenord'}></InputField>
+                </View>
 
-            <View style={styles.bottomContainer}>
-                <Button
-                    shadow={true}
-                    onPress={() => login()}
-                    text={'Logga in!'}></Button>
-                {goToRegistration && (
-                    <Text
-                        style={{
-                            textDecorationLine: 'underline',
-                            textAlign: 'center',
-                            paddingTop: 20,
-                        }}
-                        onPress={() => goToRegistration()}>
-                        Har du inget konto? Registrera dig här.
-                    </Text>
-                )}
-                <View style={{marginTop: 30}}>
-                    <RoundButton onPress={backPress} icon={'arrow-left'} />
+                <View style={styles.bottomContainer}>
+                    <Button
+                        shadow={true}
+                        onPress={() => login()}
+                        text={'Logga in!'}></Button>
+                    {goToRegistration && (
+                        <Text
+                            style={{
+                                textDecorationLine: 'underline',
+                                textAlign: 'center',
+                                paddingTop: 20,
+                            }}
+                            onPress={() => goToRegistration()}>
+                            Har du inget konto? Registrera dig här.
+                        </Text>
+                    )}
+                    <View style={{marginTop: 30, paddingBottom: 30}}>
+                        <RoundButton onPress={backPress} icon={'arrow-left'} />
+                    </View>
                 </View>
             </View>
-        </SafeAreaView>
+        </ScrollView>
     );
 };
 
@@ -110,6 +112,7 @@ const styles = StyleSheet.create({
     },
     bottomContainer: {
         width: '90%',
+        marginTop: 20,
         flex: 2,
         justifyContent: 'center',
         alignSelf: 'center',

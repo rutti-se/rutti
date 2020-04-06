@@ -26,9 +26,7 @@ export default () => {
 
     return (
         <View style={styles.container}>
-            <SelectStoresView />
-
-            {/* {loading ? (
+            {loading ? (
                 <>
                     <View style={styles.topContainer}>
                         <RuttiLogo height={250} width={250} />
@@ -49,7 +47,7 @@ export default () => {
                 </>
             ) : (
                 <AuthView />
-            )} */}
+            )}
         </View>
     );
 };

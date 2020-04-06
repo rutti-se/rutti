@@ -1,5 +1,12 @@
 import React, {useEffect, useState, useRef} from 'react';
-import {View, Text, StyleSheet, SafeAreaView} from 'react-native';
+import {
+    View,
+    Text,
+    StyleSheet,
+    SafeAreaView,
+    ScrollView,
+    Alert,
+} from 'react-native';
 import Button from './Button';
 import InputField from './InputField';
 import {emailSignUp} from '../api/signInMethods';
@@ -12,6 +19,7 @@ export default ({onRegistrationComplete, goToLogin, backPress}) => {
     let [email, setEmail] = useState('');
     let [password, setPassword] = useState('');
     let [confirmedPassword, setConfirmedPassword] = useState('');
+    let [emailAlreadyExist, setEmailAlreadyExist] = useState(false);
 
     let [faultyInputs, setFaultyInputs] = useState({});
 
@@ -68,90 +76,106 @@ export default ({onRegistrationComplete, goToLogin, backPress}) => {
                         );
                     }
                 })
-                .catch(error => console.log(error));
+                .catch(error => {
+                    if (error.error.code === 'auth/email-already-in-use') {
+                        console.log('email already in use');
+                        setEmailAlreadyExist(true);
+                    } else {
+                        Alert.alert('Något blev fel!', error.error.message);
+                    }
+                });
         }
     }
 
     return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.topContainer}>
-                <Text style={styles.text}>Registrera</Text>
-            </View>
-            <View style={styles.inputForm}>
-                <View>
-                    <Text
-                        style={{
-                            color: COLORS.PRIMARY,
-                            fontFamily: 'Montserrat-Bold',
-                            paddingBottom: 10,
-                            paddingTop: 10,
-                        }}>
-                        Användarnamn
-                    </Text>
-                    <View
-                        style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                        }}>
-                        <Text style={{fontSize: 20, fontWeight: 'bold'}}>
-                            {username}
+        <ScrollView>
+            <View style={styles.container}>
+                <View style={styles.topContainer}>
+                    <Text style={styles.text}>Registrera</Text>
+                </View>
+                <View style={styles.inputForm}>
+                    <View>
+                        <Text
+                            style={{
+                                color: COLORS.PRIMARY,
+                                fontFamily: 'Montserrat-Bold',
+                                paddingBottom: 10,
+                                paddingTop: 10,
+                            }}>
+                            Användarnamn
                         </Text>
-                        <RoundButton
-                            onPress={() => randomUsername()}
-                            icon={'arrow-left'}
-                        />
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                            }}>
+                            <Text style={{fontSize: 20, fontWeight: 'bold'}}>
+                                {username}
+                            </Text>
+                            <RoundButton
+                                onPress={() => randomUsername()}
+                                icon={'arrow-left'}
+                            />
+                        </View>
+                    </View>
+
+                    <InputField
+                        onChangeText={text => {
+                            setEmail(text);
+                            setEmailAlreadyExist(false);
+                        }}
+                        invalidInput={faultyInputs.email || emailAlreadyExist}
+                        invalidMessage={
+                            emailAlreadyExist
+                                ? 'Den e-postadressen används redan, prova logga in istället.'
+                                : 'Du måste ange en riktig e-post.'
+                        }
+                        type={'email-address'}
+                        name={'email'}
+                        labelText={'E-post'}></InputField>
+                    <InputField
+                        onChangeText={text => setPassword(text)}
+                        secureTextEntry={true}
+                        invalidInput={faultyInputs.okPassword}
+                        invalidMessage={
+                            'Lösenordet måste vara minst 6 tecken långt och innehålla minst en stor bokstav eller siffra.'
+                        }
+                        name={'password'}
+                        labelText={'Lösenord'}></InputField>
+                    <InputField
+                        onChangeText={text => setConfirmedPassword(text)}
+                        autoCorrect={false}
+                        invalidInput={faultyInputs.matchingPassword}
+                        invalidMessage={'Lösenorden stämmer inte överens.'}
+                        secureTextEntry={true}
+                        name={'confirmedPassword'}
+                        labelText={'Bekräfta lösenord'}></InputField>
+                </View>
+
+                <View style={styles.bottomContainer}>
+                    <Button
+                        shadow={true}
+                        onPress={() => signUp()}
+                        text={'Registrera mig!'}></Button>
+
+                    {goToLogin && (
+                        <Text
+                            style={{
+                                textDecorationLine: 'underline',
+                                textAlign: 'center',
+                                paddingTop: 20,
+                            }}
+                            onPress={() => goToLogin()}>
+                            Har du redan ett konto? Logga in istället.
+                        </Text>
+                    )}
+                    <View style={{marginTop: 30, paddingBottom: 30}}>
+                        <RoundButton onPress={backPress} icon={'arrow-left'} />
                     </View>
                 </View>
-
-                <InputField
-                    onChangeText={text => setEmail(text)}
-                    invalidInput={faultyInputs.email}
-                    invalidMessage={'Du måste ange en riktig e-post.'}
-                    type={'email-address'}
-                    name={'email'}
-                    labelText={'E-post'}></InputField>
-                <InputField
-                    onChangeText={text => setPassword(text)}
-                    secureTextEntry={true}
-                    invalidInput={faultyInputs.okPassword}
-                    invalidMessage={
-                        'Lösenordet måste vara minst 6 tecken långt och innehålla minst en stor bokstav eller siffra.'
-                    }
-                    name={'password'}
-                    labelText={'Lösenord'}></InputField>
-                <InputField
-                    onChangeText={text => setConfirmedPassword(text)}
-                    autoCorrect={false}
-                    invalidInput={faultyInputs.matchingPassword}
-                    invalidMessage={'Lösenorden stämmer inte överens.'}
-                    secureTextEntry={true}
-                    name={'confirmedPassword'}
-                    labelText={'Bekräfta lösenord'}></InputField>
             </View>
-
-            <View style={styles.bottomContainer}>
-                <Button
-                    shadow={true}
-                    onPress={() => signUp()}
-                    text={'Registrera mig!'}></Button>
-
-                {goToLogin && (
-                    <Text
-                        style={{
-                            textDecorationLine: 'underline',
-                            textAlign: 'center',
-                            paddingTop: 20,
-                        }}
-                        onPress={() => goToLogin()}>
-                        Har du redan ett konto? Logga in istället.
-                    </Text>
-                )}
-                <View style={{marginTop: 30}}>
-                    <RoundButton onPress={backPress} icon={'arrow-left'} />
-                </View>
-            </View>
-        </SafeAreaView>
+        </ScrollView>
     );
 };
 
@@ -179,6 +203,7 @@ const styles = StyleSheet.create({
     },
     bottomContainer: {
         width: '90%',
+        marginTop: 20,
         flex: 2,
         justifyContent: 'center',
         alignSelf: 'center',

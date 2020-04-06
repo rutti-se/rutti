@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     buttonContainer: {
-        flex: 1.7,
+        flex: 2,
         alignSelf: 'center',
         width: '70%',
         justifyContent: 'space-between',
