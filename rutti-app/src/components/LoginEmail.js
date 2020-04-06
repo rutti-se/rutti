@@ -30,16 +30,17 @@ export default ({onLoginComplete, goToRegistration, backPress}) => {
         setFaultyInputs(faultyInputs);
 
         if (!faultyInputs.email && !faultyInputs.okPassword) {
-            emailLogin(email, password).then(signInResult => {
-                if (signInResult && signInResult.user) {
-                    //Successful login
-                    onLoginComplete(signInResult.user);
-                } else {
-                    if (signInResult.error.includes('email-already-in-use')) {
-                        //E-mail already in use
+            emailLogin(email, password)
+                .then(signInResult => {
+                    if (signInResult && signInResult.user) {
+                        //Successful login
+                        console.log('inloggad');
+                        onLoginComplete(signInResult.user);
                     }
-                }
-            });
+                })
+                .catch(error => {
+                    console.log('error signing in: ' + error);
+                });
         }
     }
 
