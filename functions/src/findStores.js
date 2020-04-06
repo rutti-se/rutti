@@ -45,6 +45,7 @@ async function getNearbyStores({ zipCode }) {
     }
 
     let storesResults = [];
+    let bounds;
 
     results.map(result => {
         const retailer = result.config
@@ -68,6 +69,15 @@ async function getNearbyStores({ zipCode }) {
                 });
                 break;
             case 'COOP':
+                bounds = {
+                    eastLong: result.data.boundEastLongitude,
+                    westLong: result.data.boundWestLongitude,
+                    northLat: result.data.boundNorthLatitude,
+                    southLat: result.data.boundSouthLatitude,
+                    centerLong: result.data.sourceLongitude,
+                    centerLat: result.data.sourceLatitude,
+                };
+
                 result.data.stores.forEach(store => {
                     storesResults.push({
                         storeId: store.name,
@@ -100,7 +110,7 @@ async function getNearbyStores({ zipCode }) {
         }
     });
 
-    return { status: 200, data: storesResults };
+    return { status: 200, data: { stores: storesResults, mapBounds: bounds } };
 }
 
 app.get('*', (req, res) =>

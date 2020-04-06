@@ -26,6 +26,10 @@ export default () => {
     let [amountSelected, setAmountSelected] = useState(0);
     let [zipCode, setZipCode] = useState('');
     let [storeResults, setStoreResults] = useState([]);
+    let [mapBounds, setMapBounds] = useState({
+        latitude: 56.483105,
+        longitude: 13.585107,
+    });
 
     useEffect(() => {
         getStores().then(stores => {
@@ -38,8 +42,12 @@ export default () => {
         console.log(zipCode);
         if (zipCode.length === 5) {
             findStores({zipCode})
-                .then(foundStores => {
-                    setStoreResults(foundStores);
+                .then(result => {
+                    setStoreResults(result.stores);
+                    setMapBounds({
+                        latitude: result.stores.centerLat,
+                        longitude: result.stores.centerLong,
+                    });
                 })
                 .catch(error => {
                     console.log('zipCode error', error);
@@ -83,10 +91,10 @@ export default () => {
                 provider={PROVIDER_GOOGLE}
                 clusterColor={COLORS.PRIMARY}
                 initialRegion={{
-                    latitude: 61.383105,
-                    longitude: 15.085107,
-                    latitudeDelta: 12.0,
-                    longitudeDelta: 12.0,
+                    latitude: mapBounds.latitude,
+                    longitude: mapBounds.longitude,
+                    latitudeDelta: 2.4,
+                    longitudeDelta: 2.4,
                 }}
                 showsUserLocation={true}>
                 {storeResults &&
