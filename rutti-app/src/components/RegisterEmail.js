@@ -54,15 +54,19 @@ export default ({onRegistrationComplete, goToLogin, backPress}) => {
             emailSignUp(email, password, username)
                 .then(signUpResult => {
                     if (signUpResult.user) {
-                        onRegistrationComplete(signInResult.user);
+                        onRegistrationComplete(signUpResult.user);
                     }
                 })
                 .catch(error => {
-                    if (error.error.code === 'auth/email-already-in-use') {
+                    if (
+                        error.error.code &&
+                        error.error.code === 'auth/email-already-in-use'
+                    ) {
                         setEmailAlreadyExist(true);
                     } else {
-                        Alert.alert('Något blev fel!', error.error.message);
+                        Alert.alert('Något blev fel!', error.error);
                     }
+                    console.log(error);
                 });
         }
     }
