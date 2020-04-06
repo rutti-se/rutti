@@ -98,7 +98,7 @@ export function emailLogin(email, password) {
                 .auth()
                 .signInWithEmailAndPassword(email, password);
 
-            resolve({user: userCredentials.user});
+            resolve({user: userCredentials});
         } catch (error) {
             reject({error});
         }
