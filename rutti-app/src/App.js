@@ -4,6 +4,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import AuthView from './views/AuthView';
+import SelectStoresView from './views/SelectStoresView';
 import Splashscreen from './views/Splashscreen';
 import RegisterPage from './views/RegisterPage';
 import HomePage from './views/HomePage';

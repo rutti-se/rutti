@@ -120,24 +120,22 @@ export default ({productInfo, storeInfo, onPress, closeButton}) => {
                     style={{
                         flexDirection: 'column',
                     }}>
-                    <ScrollView>
-                        <Text styles={styles.infoText}>
-                            {productInfo.description}
-                        </Text>
-                        <View style={{marginTop: 10}}>
-                            <CollapsibleView title={'Ingredienser'}>
-                                <Text style={styles.infoText}>
-                                    {productInfo.ingredientInfo}
-                                </Text>
-                            </CollapsibleView>
+                    <Text styles={styles.infoText}>
+                        {productInfo.description}
+                    </Text>
+                    <View style={{marginTop: 10}}>
+                        <CollapsibleView title={'Ingredienser'}>
+                            <Text style={styles.infoText}>
+                                {productInfo.ingredientInfo}
+                            </Text>
+                        </CollapsibleView>
 
-                            <CollapsibleView title={'Näringsvärde per 100g'}>
-                                <Text style={styles.infoText}>
-                                    {productInfo.nutritionalInfo}
-                                </Text>
-                            </CollapsibleView>
-                        </View>
-                    </ScrollView>
+                        <CollapsibleView title={'Näringsvärde per 100g'}>
+                            <Text style={styles.infoText}>
+                                {productInfo.nutritionalInfo}
+                            </Text>
+                        </CollapsibleView>
+                    </View>
                 </View>
             </View>
         );
@@ -146,10 +144,12 @@ export default ({productInfo, storeInfo, onPress, closeButton}) => {
     return (
         <View style={styles.container}>
             <FadeInView>
-                {renderTop()}
-                {renderNameAndPrice()}
-                {renderMiddle()}
-                {renderProductDetails()}
+                <ScrollView>
+                    {renderTop()}
+                    {renderNameAndPrice()}
+                    {renderMiddle()}
+                    {renderProductDetails()}
+                </ScrollView>
             </FadeInView>
         </View>
     );

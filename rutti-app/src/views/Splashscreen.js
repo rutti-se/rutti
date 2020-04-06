@@ -64,6 +64,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'flex-end',
+        backgroundColor:COLORS.SECONDARY
     },
     topContainer: {
         flex: 5,
