@@ -60,13 +60,15 @@ export default () => {
                         </FadeInView>
                     </Animated.View>
                     <View style={styles.buttonContainer}>
-                        <Button
-                            text="Registrera mig"
-                            shadow={true}
-                            type={'primary'}
-                            onPress={() => {
-                                setCurrentPage(SIGNUP_PAGE);
-                            }}></Button>
+                        <View style={{paddingBottom: 20}}>
+                            <Button
+                                text="Registrera mig"
+                                shadow={true}
+                                type={'primary'}
+                                onPress={() => {
+                                    setCurrentPage(SIGNUP_PAGE);
+                                }}></Button>
+                        </View>
                         <Button
                             shadow={true}
                             text="Logga in"
@@ -120,10 +122,11 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     buttonContainer: {
-        flex: 1.5,
+        //flex: 1.5,
+        height: '33%',
         alignSelf: 'center',
         width: '70%',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         marginBottom: '10%',
     },
 
