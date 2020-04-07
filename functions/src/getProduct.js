@@ -260,7 +260,7 @@ function getCoopProductInformation(data) {
         name: data.name,
         brand: data.manufacturer,
         /* imageUrl: data.images[0].url, */
-        imageUrl: formatImageUrl(data.images[0].url),
+        imageUrl: formatCoopImageUrl(data.images[0].url),
         description: data.description,
         salesUnit: data.unit.name,
         originCountry: data.fromSweden && 'Sverige',
@@ -323,7 +323,7 @@ function getCityGrossProductInformation(data) {
         gtin: data.gtin,
         name: data.name,
         brand: data.brand,
-        imageUrl: data.images[0].url,
+        imageUrl: formatCityGrossImageUrl(data.images[0].url),
         description: data.description,
         salesUnit: '',
         originCountry: data.country,
@@ -350,10 +350,13 @@ function getUnit(unit) {
     // }
 }
 
-function formatImageUrl(url) {
+function formatCoopImageUrl(url) {
     var temp = url.replace('upload/', 'upload/h_300,w_300,c_pad/');
 
     return temp.replace('.tiff', '.jpg');
+}
+function formatCityGrossImageUrl(url) {
+    return 'https://www.citygross.se/images/products/' + url + '?w=300';
 }
 function formatIcaNames(productName, brandName) {
     let name = productName;

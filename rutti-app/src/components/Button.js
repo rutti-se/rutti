@@ -98,6 +98,7 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         height: 60,
         padding: 5,
+        justifyContent: 'center',
     },
     buttonContent: {
         flexDirection: 'column',
@@ -106,7 +107,7 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 20,
-        height: '100%',
+        // height: '100%',
         color: COLOR.WHITE,
         marginHorizontal: 10,
         textAlign: 'center',

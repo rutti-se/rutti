@@ -9,8 +9,11 @@ import useDebounce from '../utilities/useDebounce';
 import SelectStorePage from './SelectStorePage';
 import ProductPage from './ProductPage';
 import FadeInView from '../components/animations/FadeInView';
-
+import LottieView from 'lottie-react-native';
+import Button from '../components/Button';
+import {firebase} from '@react-native-firebase/auth';
 import {Dimensions} from 'react-native';
+import * as RootNavigation from '../views/RootNavigation';
 const DEVICE = Dimensions.get('window');
 
 const stores = [
@@ -74,6 +77,13 @@ export default () => {
         );
     }
 
+    function logout() {
+        firebase
+            .auth()
+            .signOut()
+            .then(() => RootNavigation.replace('SignIn'));
+    }
+
     return (
         <View style={styles.container}>
             <InputField onChangeText={text => onTextChange(text)}></InputField>
@@ -82,9 +92,27 @@ export default () => {
                 style={[{marginBottom: DEVICE.height / 4.8}, {marginTop: 10}]}>
                 {renderProductPage()}
             </View>
+            {!results.length > 0 && (
+                <LottieView
+                    source={require('../../assets/animations/search.json')}
+                    autoPlay
+                    loop
+                    style={{
+                        height: 250,
+                        width: 250,
+                    }}
+                />
+            )}
 
             <BottomDrawer>
                 <Text>Hello</Text>
+                <Button
+                    text="Logga ut"
+                    shadow={true}
+                    type={'secondary'}
+                    onPress={() => {
+                        logout();
+                    }}></Button>
             </BottomDrawer>
         </View>
     );
