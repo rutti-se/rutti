@@ -13,8 +13,8 @@ export default ({onRegistrationComplete, goToLogin, backPress}) => {
     let [password, setPassword] = useState('');
     let [confirmedPassword, setConfirmedPassword] = useState('');
     let [emailAlreadyExist, setEmailAlreadyExist] = useState(false);
-
     let [faultyInputs, setFaultyInputs] = useState({});
+    let [loading, setLoading] = useState(false);
 
     useEffect(() => {
         randomUsername();
@@ -51,6 +51,7 @@ export default ({onRegistrationComplete, goToLogin, backPress}) => {
             !faultyInputs.matchingPassword
         ) {
             //Register
+            setLoading(true);
             emailSignUp(email, password, username)
                 .then(signUpResult => {
                     if (signUpResult.user) {
@@ -67,7 +68,8 @@ export default ({onRegistrationComplete, goToLogin, backPress}) => {
                         Alert.alert('Något blev fel!', error.error);
                     }
                     console.log(error);
-                });
+                })
+                .finally(() => setLoading(false));
         }
     }
 
@@ -141,6 +143,7 @@ export default ({onRegistrationComplete, goToLogin, backPress}) => {
                     <Button
                         shadow={true}
                         onPress={() => signUp()}
+                        isLoading={loading}
                         text={'Registrera mig!'}></Button>
 
                     {goToLogin && (
