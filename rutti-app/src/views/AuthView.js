@@ -10,11 +10,12 @@ import {
 } from 'react-native';
 import Button from '../components/Button';
 import COLORS from '../../assets/colors';
-import RuttiLogo from '../../assets/rutti_logo.svg';
+import RuttiLogo from '../../assets/rutti_nologo.svg';
 import RegisterEmail from '../components/RegisterEmail';
 import LoginEmail from '../components/LoginEmail';
 import FadeInView from '../components/animations/FadeInView';
 import SelectStoresView from './SelectStoresView';
+import LottieView from 'lottie-react-native';
 import * as RootNavigation from '../views/RootNavigation';
 
 const WELCOME_PAGE = 0;
@@ -42,7 +43,20 @@ export default () => {
                 <>
                     <Animated.View style={styles.topContainer}>
                         <FadeInView>
-                            <RuttiLogo height={250} width={250} />
+                            <View>
+                                <RuttiLogo height={250} width={250} />
+                                <LottieView
+                                    source={require('../../assets/animations/shopping-loader-white.json')}
+                                    autoPlay
+                                    loop
+                                    style={{
+                                        height: 168,
+                                        width: 250,
+                                        top: 0,
+                                        position: 'absolute',
+                                    }}
+                                />
+                            </View>
                         </FadeInView>
                     </Animated.View>
                     <View style={styles.buttonContainer}>
@@ -106,7 +120,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     buttonContainer: {
-        flex: 2,
+        flex: 1.5,
         alignSelf: 'center',
         width: '70%',
         justifyContent: 'space-between',
