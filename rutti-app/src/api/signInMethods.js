@@ -94,7 +94,7 @@ export function emailSignUp(email, password, username) {
 export function emailLogin(email, password) {
     return new Promise(async (resolve, reject) => {
         try {
-            const userCredentials = firebase
+            const userCredentials = await firebase
                 .auth()
                 .signInWithEmailAndPassword(email, password);
 

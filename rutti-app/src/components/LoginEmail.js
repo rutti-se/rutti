@@ -1,5 +1,12 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, SafeAreaView, ScrollView} from 'react-native';
+import {
+    View,
+    Text,
+    StyleSheet,
+    SafeAreaView,
+    ScrollView,
+    Alert,
+} from 'react-native';
 import Button from './Button';
 import InputField from './InputField';
 import {emailLogin} from '../api/signInMethods';
@@ -10,6 +17,7 @@ export default ({onLoginComplete, goToRegistration, backPress}) => {
     let [email, setEmail] = useState('');
     let [password, setPassword] = useState('');
     let [faultyInputs, setFaultyInputs] = useState({});
+    let [loading, setLoading] = useState(false);
 
     function login() {
         faultyInputs = {};
@@ -28,16 +36,19 @@ export default ({onLoginComplete, goToRegistration, backPress}) => {
         setFaultyInputs(faultyInputs);
 
         if (!faultyInputs.email && !faultyInputs.okPassword) {
+            setLoading(true);
             emailLogin(email, password)
                 .then(signInResult => {
                     if (signInResult && signInResult.user) {
                         //Successful login
+                        console.log('logged in ', signInResult.user);
                         onLoginComplete(signInResult.user);
                     }
                 })
                 .catch(error => {
                     Alert.alert('Något blev fel!', error.error.message);
-                });
+                })
+                .finally(() => setLoading(false));
         }
     }
 
@@ -65,6 +76,7 @@ export default ({onLoginComplete, goToRegistration, backPress}) => {
                     <Button
                         shadow={true}
                         onPress={() => login()}
+                        isLoading={loading}
                         text={'Logga in!'}></Button>
                     {goToRegistration && (
                         <Text

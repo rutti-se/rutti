@@ -28,7 +28,6 @@ export default () => {
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', function() {
-            console.log('back');
             if (currentPage !== WELCOME_PAGE) {
                 setCurrentPage(WELCOME_PAGE);
                 return true;

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Alert} from 'react-native';
 import COLORS from '../../assets/colors';
 import RoundButton from './RoundButton';
 import calcBestPrice from '../utilities/calcBestPrice';

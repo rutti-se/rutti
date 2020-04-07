@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {TouchableHighlight, Text, StyleSheet, View} from 'react-native';
 import {Icon} from '../../assets/icomoon';
 import COLOR from '../../assets/colors';
+import LottieView from 'lottie-react-native';
 
 export default (
     {
@@ -14,12 +15,10 @@ export default (
         children,
         onPress,
         small,
+        isLoading,
     },
     props,
 ) => {
-    {
-        console.log(type);
-    }
     return (
         <View style={styles.Box}>
             <TouchableHighlight
@@ -33,9 +32,20 @@ export default (
                 ]}
                 {...props}>
                 <View style={styles.buttonContent}>
-                    {renderIcon()}
-                    {renderText()}
-                    {children}
+                    {isLoading ? (
+                        <LottieView
+                            source={require('../../assets/animations/button-loading.json')}
+                            autoPlay
+                            loop
+                            style={{height: 60}}
+                        />
+                    ) : (
+                        <>
+                            {icon && renderIcon()}
+                            {text && renderText()}
+                            {children}
+                        </>
+                    )}
                 </View>
             </TouchableHighlight>
         </View>
@@ -86,25 +96,27 @@ const styles = StyleSheet.create({
     button: {
         width: '100%',
         borderRadius: 50,
+        height: 60,
         padding: 5,
     },
     buttonContent: {
-        flexDirection: 'row',
-        justifyContent: 'center',
+        flexDirection: 'column',
+        justifyContent: 'space-around',
         alignItems: 'center',
     },
     text: {
         fontSize: 20,
+        height: '100%',
         color: COLOR.WHITE,
-        margin: 15,
-        marginLeft: 10,
+        marginHorizontal: 10,
         textAlign: 'center',
+        textAlignVertical: 'center',
         fontFamily: 'Montserrat-Bold',
     },
     textSmall: {
         fontSize: 15,
         color: COLOR.WHITE,
-        margin: 5,
+        marginHorizontal: 5,
         textAlign: 'center',
         fontFamily: 'Montserrat-Bold',
     },

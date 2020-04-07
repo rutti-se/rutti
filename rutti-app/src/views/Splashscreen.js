@@ -5,17 +5,18 @@ import {View, StyleSheet} from 'react-native';
 import {firebase} from '@react-native-firebase/auth';
 import AuthView from './AuthView';
 import Button from '../components/Button';
-import SelectStoresView from './SelectStoresView';
+import * as RootNavigation from '../views/RootNavigation';
+import FadeInView from '../components/animations/FadeInView';
+import LottieView from 'lottie-react-native';
 
 export default () => {
     let [loading, setLoading] = useState(true);
 
     useEffect(() => {
         firebase.auth().onAuthStateChanged(user => {
-            console.log('auth changed');
             if (user) {
                 //Användare finns redan
-                console.log(user.displayName);
+                RootNavigation.replace('Home');
             } else {
                 //Ingen användare
                 setLoading(false);
@@ -26,24 +27,24 @@ export default () => {
     return (
         <View style={styles.container}>
             {loading ? (
-                <>
-                    <View style={styles.topContainer}>
-                        <RuttiLogo height={250} width={250}></RuttiLogo>
-                    </View>
-
-                    <View style={styles.buttonContainer}>
-                        <Button
-                            text="Logga ut"
-                            shadow={true}
-                            type={'secondary'}
-                            onPress={() => {
-                                firebase
-                                    .auth()
-                                    .signOut()
-                                    .then(() => console.log('logged out'));
-                            }}></Button>
-                    </View>
-                </>
+                <View style={styles.topContainer}>
+                    <FadeInView>
+                        <View>
+                            <RuttiLogo height={250} width={250} />
+                            <LottieView
+                                source={require('../../assets/animations/shopping-loader-white.json')}
+                                autoPlay
+                                loop
+                                style={{
+                                    height: 168,
+                                    width: 250,
+                                    top: 0,
+                                    position: 'absolute',
+                                }}
+                            />
+                        </View>
+                    </FadeInView>
+                </View>
             ) : (
                 <AuthView />
             )}
