@@ -34,7 +34,7 @@ const storeInfo = [
     },
 ];
 
-export default ({productSkus, stores}) => {
+export default ({productSkus, stores, selectProduct}) => {
     const [productDetails, setProductDetails] = useState([]);
     const [aboutProduct, setAboutProduct] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -71,12 +71,14 @@ export default ({productSkus, stores}) => {
     function addToCart(product) {
         console.log(product);
     }
+
     function renderProductItems({item, index}) {
         return (
             <ProductItem
                 productInfo={item?.productInformation}
                 storeInfo={item?.storeInformation}
-                onPress={showProductDetail}
+                /* onPress={showProductDetail} */
+                onPress={e => selectProduct(e)}
                 addToCart={addToCart}
                 isLoading={isLoading}
                 index={index}></ProductItem>

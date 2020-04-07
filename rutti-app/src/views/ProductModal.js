@@ -58,8 +58,14 @@ export default ({productInfo, storeInfo, onPress, closeButton}) => {
                         flexDirection: 'column',
                         flex: 2.5,
                     }}>
-                    <Text style={styles.text}>{productInfo.name}</Text>
-                    <Text style={styles.infoText}>{productInfo.brand}</Text>
+                    <Text style={styles.text}>
+                        {productInfo.name.length > 0
+                            ? productInfo.name
+                            : productInfo.brand}
+                    </Text>
+                    <Text style={styles.infoText}>
+                        {productInfo.name.length > 0 ? productInfo.brand : ''}
+                    </Text>
                 </View>
 
                 <View
@@ -76,7 +82,11 @@ export default ({productInfo, storeInfo, onPress, closeButton}) => {
 
     function renderMiddle() {
         return (
-            <View style={{flexDirection: 'row'}}>
+            <View
+                style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                }}>
                 {renderStores()}
                 <View
                     style={{

@@ -21,7 +21,7 @@ export default ({productInfo, storeInfo, onPress, isLoading}) => {
                     <Text style={styles.price}>{lowestPrice}:-</Text>
                 </View>
                 <RoundButton
-                    icon={'info'}
+                    icon={'buy-online-add'}
                     onPress={() =>
                         onPress({productInfo, storeInfo})
                     }></RoundButton>
@@ -38,7 +38,12 @@ export default ({productInfo, storeInfo, onPress, isLoading}) => {
                 {key: 'text', width: 120, height: 14, marginBottom: 6},
             ]}>
             <Img style={styles.image} source={productInfo?.imageUrl} />
-            <Text style={styles.text}> {productInfo?.name}</Text>
+            <Text style={styles.text}>
+                {' '}
+                {productInfo?.name.length > 0
+                    ? productInfo?.name
+                    : productInfo?.brand}
+            </Text>
             <RenderBottom></RenderBottom>
         </SkeletonContent>
     );

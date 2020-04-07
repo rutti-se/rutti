@@ -24,7 +24,7 @@ export default (
             <TouchableHighlight
                 onPress={onPress}
                 style={[
-                    styles.button,
+                    small ? styles.buttonSmall : styles.button,
                     shadow ? styles.shadow : '',
                     {
                         backgroundColor: getBackgroundColor(),
@@ -100,6 +100,12 @@ const styles = StyleSheet.create({
         padding: 5,
         justifyContent: 'center',
     },
+    buttonSmall: {
+        width: '100%',
+        borderRadius: 50,
+        height: 30,
+        justifyContent: 'center',
+    },
     buttonContent: {
         flexDirection: 'column',
         justifyContent: 'space-around',
@@ -107,7 +113,6 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 20,
-        // height: '100%',
         color: COLOR.WHITE,
         marginHorizontal: 10,
         textAlign: 'center',

@@ -14,6 +14,7 @@ import Button from '../components/Button';
 import {firebase} from '@react-native-firebase/auth';
 import {Dimensions} from 'react-native';
 import * as RootNavigation from '../views/RootNavigation';
+import AddItemView from '../components/AddItemView';
 const DEVICE = Dimensions.get('window');
 
 const stores = [
@@ -44,6 +45,8 @@ export default () => {
 
     const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
+    const [selectedProduct, setSelectedProduct] = useState(null);
+
     useEffect(() => {
         if (debouncedSearchTerm) {
             setIsSearching(true);
@@ -72,7 +75,8 @@ export default () => {
             stores && (
                 <ProductPage
                     stores={stores}
-                    productSkus={products}></ProductPage>
+                    productSkus={products}
+                    selectProduct={e => setSelectedProduct(e)}></ProductPage>
             )
         );
     }
@@ -83,6 +87,8 @@ export default () => {
             .signOut()
             .then(() => RootNavigation.replace('SignIn'));
     }
+
+    function selectProduct(e) {}
 
     return (
         <View style={styles.container}>
@@ -105,14 +111,16 @@ export default () => {
             )}
 
             <BottomDrawer>
-                <Text>Hello</Text>
-                <Button
-                    text="Logga ut"
-                    shadow={true}
-                    type={'secondary'}
-                    onPress={() => {
-                        logout();
-                    }}></Button>
+                <View style={{flexDirection: 'column', marginTop: '8%'}}>
+                    <AddItemView product={selectedProduct}></AddItemView>
+                    <Button
+                        text="Logga ut"
+                        shadow={true}
+                        type={'secondary'}
+                        onPress={() => {
+                            logout();
+                        }}></Button>
+                </View>
             </BottomDrawer>
         </View>
     );
