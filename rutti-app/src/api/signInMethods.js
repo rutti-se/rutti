@@ -83,6 +83,11 @@ export function emailSignUp(email, password, username) {
                     displayName: username,
                 });
 
+                await firestore()
+                    .collection('users')
+                    .doc(username)
+                    .set();
+
                 resolve({user: userCredentials});
             }
         } catch (error) {
