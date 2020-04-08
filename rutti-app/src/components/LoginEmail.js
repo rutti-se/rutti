@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import Button from './Button';
 import InputField from './InputField';
-import {emailLogin} from '../api/signInMethods';
+import {emailLogin} from '../api/firebaseHelpers';
 import COLORS from '../../assets/colors';
 import RoundButton from './RoundButton';
 
@@ -63,13 +63,15 @@ export default ({onLoginComplete, goToRegistration, backPress}) => {
                         onChangeText={text => setEmail(text)}
                         type={'email-address'}
                         name={'email'}
-                        labelText={'E-post'}></InputField>
+                        labelText={'E-post'}
+                    />
 
                     <InputField
                         onChangeText={text => setPassword(text)}
                         secureTextEntry={true}
                         name={'password'}
-                        labelText={'Lösenord'}></InputField>
+                        labelText={'Lösenord'}
+                    />
                 </View>
 
                 <View style={styles.bottomContainer}>
@@ -77,7 +79,8 @@ export default ({onLoginComplete, goToRegistration, backPress}) => {
                         shadow={true}
                         onPress={() => login()}
                         isLoading={loading}
-                        text={'Logga in!'}></Button>
+                        text={'Logga in!'}
+                    />
                     {goToRegistration && (
                         <Text
                             style={{

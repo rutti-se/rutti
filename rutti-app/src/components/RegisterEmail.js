@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, ScrollView, Alert} from 'react-native';
 import Button from './Button';
 import InputField from './InputField';
-import {emailSignUp} from '../api/signInMethods';
+import {emailSignUp} from '../api/firebaseHelpers';
 import COLORS from '../../assets/colors';
 import getGeneratedUsername from '../api/getGeneratedUsername';
 import RoundButton from './RoundButton';

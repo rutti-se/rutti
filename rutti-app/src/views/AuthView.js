@@ -1,13 +1,5 @@
-import React, {Component, useState, useEffect} from 'react';
-import {
-    Animated,
-    View,
-    Text,
-    StyleSheet,
-    SafeAreaView,
-    Image,
-    BackHandler,
-} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {Animated, View, StyleSheet, BackHandler} from 'react-native';
 import Button from '../components/Button';
 import COLORS from '../../assets/colors';
 import RuttiLogo from '../../assets/rutti_nologo.svg';
@@ -25,6 +17,7 @@ const SELECT_STORES_PAGE = 3;
 
 export default () => {
     let [currentPage, setCurrentPage] = useState(WELCOME_PAGE);
+    let [username, setUsername] = useState(null);
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', function() {
@@ -66,15 +59,15 @@ export default () => {
                                 type={'primary'}
                                 onPress={() => {
                                     setCurrentPage(SIGNUP_PAGE);
-                                }}></Button>
+                                }}
+                            />
                         </View>
                         <Button
                             shadow={true}
                             text="Logga in"
                             type={'secondary'}
-                            onPress={() =>
-                                setCurrentPage(SIGNIN_PAGE)
-                            }></Button>
+                            onPress={() => setCurrentPage(SIGNIN_PAGE)}
+                        />
                     </View>
                 </>
             )}
@@ -90,7 +83,8 @@ export default () => {
             {currentPage === SIGNUP_PAGE && (
                 <FadeInView>
                     <RegisterEmail
-                        onRegistrationComplete={() => {
+                        onRegistrationComplete={user => {
+                            setUsername(user.displayName);
                             setCurrentPage(SELECT_STORES_PAGE);
                         }}
                         backPress={() => setCurrentPage(WELCOME_PAGE)}
@@ -101,7 +95,10 @@ export default () => {
             {currentPage === SELECT_STORES_PAGE && (
                 <FadeInView>
                     <SelectStoresView
-                        onStoresSelected={() => RootNavigation.replace('Home')}
+                        username={username}
+                        onStoresSelected={() => {
+                            RootNavigation.replace('Home');
+                        }}
                     />
                 </FadeInView>
             )}

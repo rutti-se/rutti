@@ -1,25 +1,28 @@
-import React, {Component, useState, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import COLORS from '../../assets/colors';
 import RuttiLogo from '../../assets/rutti_logo.svg';
 import {View, StyleSheet} from 'react-native';
 import {firebase} from '@react-native-firebase/auth';
 import AuthView from './AuthView';
-import Button from '../components/Button';
 import * as RootNavigation from '../views/RootNavigation';
 import FadeInView from '../components/animations/FadeInView';
 import LottieView from 'lottie-react-native';
 
 export default () => {
     let [loading, setLoading] = useState(true);
+    let [initializing, setInitializing] = useState(true);
 
     useEffect(() => {
-        firebase.auth().onAuthStateChanged(user => {
-            if (user) {
-                //Användare finns redan
-                RootNavigation.replace('Home');
-            } else {
-                //Ingen användare
-                setLoading(false);
+        let unsubscribe = firebase.auth().onAuthStateChanged(user => {
+            if (initializing) {
+                if (user) {
+                    //Användare finns redan
+                    RootNavigation.replace('Home');
+                } else {
+                    //Ingen användare
+                    setLoading(false);
+                }
+                unsubscribe();
             }
         });
     }, []);

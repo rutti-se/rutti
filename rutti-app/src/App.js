@@ -3,12 +3,8 @@ import 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
-import AuthView from './views/AuthView';
-import SelectStoresView from './views/SelectStoresView';
 import Splashscreen from './views/Splashscreen';
-import RegisterPage from './views/RegisterPage';
 import HomePage from './views/HomePage';
-import RegisterEmail from './components/RegisterEmail';
 import {navigationRef} from './views/RootNavigation';
 
 export default class App extends React.Component {
@@ -43,8 +39,6 @@ function SignIn() {
                 headerShown: false,
             }}>
             <AuthStack.Screen name="SplashScreen" component={Splashscreen} />
-            <AuthStack.Screen name="RegisterPage" component={RegisterPage} />
-            <AuthStack.Screen name="RegisterEmail" component={RegisterEmail} />
         </AuthStack.Navigator>
     );
 }

@@ -1,45 +1,32 @@
-import React, {Component, useState, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import COLORS from '../../assets/colors';
 import StoreMarker from '../components/StoreMarker';
-
-import {
-    View,
-    StyleSheet,
-    Text,
-    FlatList,
-    Dimensions,
-    CheckBox,
-} from 'react-native';
+import {View, StyleSheet, Text, Alert} from 'react-native';
 import InputField from '../components/InputField';
-import {firebase} from '@react-native-firebase/auth';
-import AuthView from './AuthView';
 import Button from '../components/Button';
-import {getStores} from '../api/storageHelpers';
 import findStores from '../api/findStores';
 import MapView from 'react-native-map-clustering';
 import {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
+import {saveStores, getStores} from '../api/firebaseHelpers';
 
-const DEVICE = Dimensions.get('window');
-
-export default ({onStoresSelected}) => {
+export default ({username, onStoresSelected}) => {
     let [selectedStores, setSelectedStores] = useState([]);
     let [amountSelected, setAmountSelected] = useState(0);
     let [zipCode, setZipCode] = useState('');
     let [storeResults, setStoreResults] = useState([]);
+    let [loading, setLoading] = useState(false);
     let [mapBounds, setMapBounds] = useState({
         latitude: 56.483105,
         longitude: 13.585107,
     });
 
     useEffect(() => {
-        getStores().then(stores => {
-            console.log(stores);
+        getStores(username).then(stores => {
             setSelectedStores(stores);
         });
     }, []);
 
     useEffect(() => {
-        console.log(zipCode);
         if (zipCode.length === 5) {
             findStores({zipCode})
                 .then(result => {
@@ -50,7 +37,7 @@ export default ({onStoresSelected}) => {
                     });
                 })
                 .catch(error => {
-                    console.log('zipCode error', error);
+                    Alert.alert('Något gick fel!', error.toString());
                 });
         }
     }, [zipCode]);
@@ -65,6 +52,16 @@ export default ({onStoresSelected}) => {
                 setAmountSelected(selectedStores.length);
             }
         });
+    }
+
+    function onPress() {
+        setLoading(true);
+
+        saveStores(username, selectedStores)
+            .then(() => onStoresSelected())
+            .catch(error =>
+                Alert.alert('Något gick fel!', error.error.message),
+            );
     }
 
     return (
@@ -83,7 +80,8 @@ export default ({onStoresSelected}) => {
                 <InputField
                     onChangeText={text => setZipCode(text)}
                     name={'zipCode'}
-                    labelText={'Postnummer'}></InputField>
+                    labelText={'Postnummer'}
+                />
             </View>
 
             <MapView
@@ -111,45 +109,12 @@ export default ({onStoresSelected}) => {
                                 onPress={() => onPressMarker(store.storeId)}>
                                 <StoreMarker
                                     store={store.retailer}
-                                    selected={store.isSelected}></StoreMarker>
+                                    selected={store.isSelected}
+                                />
                             </Marker>
                         );
                     })}
             </MapView>
-            {/* 
-            <FlatList
-                style={{paddingTop: 20, paddingHorizontal: 20}}
-                data={storeResults}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={({item}) => {
-                    return (
-                        <View style={{flexDirection: 'row'}}>
-                            <CheckBox
-                                checked={
-                                    selectedStores.filter(
-                                        e => e.storeId === item.storeId,
-                                    ).length > 0
-                                }
-                            />
-                            <View>
-                                <Text
-                                    style={{
-                                        color: COLORS.PRIMARY,
-                                        fontFamily: 'Montserrat-Bold',
-                                    }}>
-                                    {item.name}
-                                </Text>
-                                <Text
-                                    style={{
-                                        fontFamily: 'Montserrat',
-                                    }}>
-                                    {item.retailer}
-                                </Text>
-                            </View>
-                        </View>
-                    );
-                }}
-            /> */}
             <View style={styles.buttonContainer}>
                 <Button
                     text={
@@ -158,11 +123,10 @@ export default ({onStoresSelected}) => {
                             : 'Välj minst en butik'
                     }
                     shadow={true}
+                    loading={loading}
                     type={selectedStores.length > 0 ? 'primary' : 'secondary'}
-                    onPress={() => {
-                        // spara skiten
-                        onStoresSelected();
-                    }}></Button>
+                    onPress={onPress}
+                />
             </View>
         </View>
     );

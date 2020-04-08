@@ -16,36 +16,50 @@ import {Dimensions} from 'react-native';
 import * as RootNavigation from '../views/RootNavigation';
 import AddItemView from '../components/AddItemView';
 const DEVICE = Dimensions.get('window');
+import {getStores} from '../api/firebaseHelpers';
 
-const stores = [
-    {
-        retailer: 'ica',
-        storeId: '09808',
-    },
-    {
-        retailer: 'coop',
-        storeId: '257300',
-    },
-    {
-        retailer: 'citygross',
-        storeId: '307',
-    },
-];
+// const stores = [
+//     {
+//         retailer: 'ica',
+//         storeId: '09808',
+//     },
+//     {
+//         retailer: 'coop',
+//         storeId: '257300',
+//     },
+//     {
+//         retailer: 'citygross',
+//         storeId: '307',
+//     },
+// ];
 
 export default () => {
     const [searchTerm, setSearchTerm] = useState('');
-
     const [results, setResults] = useState([]);
-
     const [isSearching, setIsSearching] = useState(false);
-
     const [products, setProducts] = useState([]);
-
     const [recipes, setRecipes] = useState([]);
-
     const debouncedSearchTerm = useDebounce(searchTerm, 500);
-
     const [selectedProduct, setSelectedProduct] = useState(null);
+    let [user, setUser] = useState(null);
+
+    useEffect(() => {
+        let unsubscribe = firebase.auth().onAuthStateChanged(user => {
+            if (user) {
+                setUser(user);
+            }
+            unsubscribe();
+        });
+    }, []);
+
+    useEffect(() => {
+        if (user) {
+            console.log(user.displayName);
+            getStores(user.displayName)
+                .then(stores => console.log('stores', stores))
+                .catch(error => console.log(error));
+        }
+    }, [user]);
 
     useEffect(() => {
         if (debouncedSearchTerm) {
@@ -76,7 +90,8 @@ export default () => {
                 <ProductPage
                     stores={stores}
                     productSkus={products}
-                    selectProduct={e => setSelectedProduct(e)}></ProductPage>
+                    selectProduct={e => setSelectedProduct(e)}
+                />
             )
         );
     }
@@ -90,7 +105,7 @@ export default () => {
 
     return (
         <View style={styles.container}>
-            <InputField onChangeText={text => onTextChange(text)}></InputField>
+            <InputField onChangeText={text => onTextChange(text)} />
             {/*  <SelectStorePage /> */}
             <View
                 style={[{marginBottom: DEVICE.height / 4.8}, {marginTop: 10}]}>
@@ -110,14 +125,15 @@ export default () => {
 
             <BottomDrawer>
                 <View style={{flexDirection: 'column', marginTop: 10}}>
-                    <AddItemView product={selectedProduct}></AddItemView>
+                    <AddItemView product={selectedProduct} />
                     <Button
                         text="Logga ut"
                         shadow={true}
                         type={'primary'}
                         onPress={() => {
                             logout();
-                        }}></Button>
+                        }}
+                    />
                 </View>
             </BottomDrawer>
         </View>
