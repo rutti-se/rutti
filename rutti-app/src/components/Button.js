@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import {TouchableHighlight, Text, StyleSheet, View} from 'react-native';
+import {Text, StyleSheet, View} from 'react-native';
 import {Icon} from '../../assets/icomoon';
 import COLOR from '../../assets/colors';
 import LottieView from 'lottie-react-native';
-
+import {TouchableHighlight} from 'react-native-gesture-handler';
 export default (
     {
         icon,
@@ -91,7 +91,7 @@ export default (
 
 const styles = StyleSheet.create({
     Box: {
-        flexWrap: 'wrap',
+        //flexWrap: 'wrap',
     },
     button: {
         width: '100%',
