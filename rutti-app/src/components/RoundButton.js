@@ -1,8 +1,8 @@
 import React, {Component, useEffect, useState} from 'react';
-import {TouchableOpacity, Text, StyleSheet, View} from 'react-native';
+import {Text, StyleSheet, View} from 'react-native';
 import {Icon} from '../../assets/icomoon';
 import COLOR from '../../assets/colors';
-import {TouchableHighlight} from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 export default (
     {
         text,
@@ -16,12 +16,6 @@ export default (
     },
     props,
 ) => {
-    const [isAndroid, setIsAndroid] = useState(false);
-
-    useEffect(() => {
-        setIsAndroid(Platform.OS === 'android');
-    }, []);
-
     function renderContent() {
         if (icon) {
             return (
@@ -34,41 +28,19 @@ export default (
             return <Text style={styles.text}>{text}</Text>;
         }
     }
-
-    function renderAndroidButton() {
-        return (
-            <TouchableHighlight
-                underlayColor={COLOR.PRIMARY}
-                style={[
-                    styles.button,
-                    {backgroundColor: color ? color : COLOR.PRIMARY},
-                ]}
-                onPress={onPress}
-                onLongPress={onLongPress}
-                disabled={disabled}>
-                <View style={styles.buttonContent}>{renderContent()}</View>
-            </TouchableHighlight>
-        );
-    }
-
-    function renderIOSButton() {
-        return (
+    return (
+        <View style={styles.Box}>
             <TouchableOpacity
                 underlayColor={COLOR.PRIMARY}
                 style={[
                     styles.button,
                     {backgroundColor: color ? color : COLOR.PRIMARY},
                 ]}
-                onPress={onPress}
+                onPressOut={onPress}
                 onLongPress={onLongPress}
                 disabled={disabled}>
                 <View style={styles.buttonContent}>{renderContent()}</View>
             </TouchableOpacity>
-        );
-    }
-    return (
-        <View style={styles.Box}>
-            {isAndroid ? renderAndroidButton() : renderIOSButton()}
         </View>
     );
 };
