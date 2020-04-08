@@ -65,12 +65,7 @@ export default ({productSkus, stores, selectProduct}) => {
     }, [stores, productSkus]); //När denna är tom körs det en gång
 
     function showProductDetail(product) {
-        console.log('LongPress:', product);
         setAboutProduct(product);
-    }
-
-    function addToCart(product) {
-        console.log(product);
     }
 
     function renderProductItems({item, index}) {
@@ -80,7 +75,6 @@ export default ({productSkus, stores, selectProduct}) => {
                 storeInfo={item?.storeInformation}
                 onLongPress={showProductDetail}
                 onPress={e => selectProduct(e)}
-                addToCart={addToCart}
                 isLoading={isLoading}
                 index={index}></ProductItem>
         );

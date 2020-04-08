@@ -15,7 +15,6 @@ export default ({product}, props) => {
         setSelectedProduct(product);
         let name = '';
         product && (name = product.productInfo.name);
-        console.log('Name:', name);
         if (name.length > 15) {
             name = name.substring(0, 15) + '...';
         }
