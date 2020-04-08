@@ -1,15 +1,29 @@
-import React, {Component} from 'react';
-import {Text, StyleSheet, View} from 'react-native';
+import React, {Component, useEffect, useState} from 'react';
+import {TouchableOpacity, Text, StyleSheet, View} from 'react-native';
 import {Icon} from '../../assets/icomoon';
 import COLOR from '../../assets/colors';
 import {TouchableHighlight} from 'react-native-gesture-handler';
-export default class Button extends Component {
-    constructor() {
-        super();
-        this.state = {};
-    }
+export default (
+    {
+        text,
+        onPress,
+        onLongPress,
+        icon,
+        color,
+        underlayColor,
+        iconColor,
+        disabled,
+    },
+    props,
+) => {
+    const [isAndroid, setIsAndroid] = useState(false);
 
-    renderContent(icon, iconColor, text) {
+    useEffect(() => {
+        console.log('Tjena', Platform.OS === 'android');
+        setIsAndroid(Platform.OS === 'android');
+    }, []);
+
+    function renderContent() {
         if (icon) {
             return (
                 <Icon
@@ -22,37 +36,43 @@ export default class Button extends Component {
         }
     }
 
-    render() {
-        const {
-            text,
-            onPress,
-            onLongPress,
-            icon,
-            color,
-            underlayColor,
-            iconColor,
-            disabled,
-        } = this.props;
-
+    function renderAndroidButton() {
         return (
-            <View style={styles.Box}>
-                <TouchableHighlight
-                    underlayColor={COLOR.PRIMARY}
-                    style={[
-                        styles.button,
-                        {backgroundColor: color ? color : COLOR.PRIMARY},
-                    ]}
-                    onPress={onPress}
-                    onLongPress={onLongPress}
-                    disabled={disabled}>
-                    <View style={styles.buttonContent}>
-                        {this.renderContent(icon, iconColor, text)}
-                    </View>
-                </TouchableHighlight>
-            </View>
+            <TouchableHighlight
+                underlayColor={COLOR.PRIMARY}
+                style={[
+                    styles.button,
+                    {backgroundColor: color ? color : COLOR.PRIMARY},
+                ]}
+                onPress={onPress}
+                onLongPress={onLongPress}
+                disabled={disabled}>
+                <View style={styles.buttonContent}>{renderContent()}</View>
+            </TouchableHighlight>
         );
     }
-}
+
+    function renderIOSButton() {
+        return (
+            <TouchableOpacity
+                underlayColor={COLOR.PRIMARY}
+                style={[
+                    styles.button,
+                    {backgroundColor: color ? color : COLOR.PRIMARY},
+                ]}
+                onPress={onPress}
+                onLongPress={onLongPress}
+                disabled={disabled}>
+                <View style={styles.buttonContent}>{renderContent()}</View>
+            </TouchableOpacity>
+        );
+    }
+    return (
+        <View style={styles.Box}>
+            {isAndroid ? renderAndroidButton() : renderIOSButton()}
+        </View>
+    );
+};
 
 const styles = StyleSheet.create({
     button: {

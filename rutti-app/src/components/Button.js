@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import {Text, StyleSheet, View} from 'react-native';
+import {TouchableOpacity, Text, StyleSheet, View} from 'react-native';
 import {Icon} from '../../assets/icomoon';
 import COLOR from '../../assets/colors';
 import LottieView from 'lottie-react-native';
 import {TouchableHighlight} from 'react-native-gesture-handler';
+
 export default (
     {
         icon,
@@ -19,8 +20,15 @@ export default (
     },
     props,
 ) => {
-    return (
-        <View style={styles.Box}>
+    const [isAndroid, setIsAndroid] = useState(false);
+
+    useEffect(() => {
+        console.log(Platform.OS === 'android');
+        setIsAndroid(Platform.OS === 'android');
+    }, []);
+
+    function renderAndroidButton() {
+        return (
             <TouchableHighlight
                 onPress={onPress}
                 style={[
@@ -48,6 +56,42 @@ export default (
                     )}
                 </View>
             </TouchableHighlight>
+        );
+    }
+    function renderIOSButton() {
+        return (
+            <TouchableOpacity
+                onPress={onPress}
+                style={[
+                    small ? styles.buttonSmall : styles.button,
+                    shadow ? styles.shadow : '',
+                    {
+                        backgroundColor: getBackgroundColor(),
+                    },
+                ]}
+                {...props}>
+                <View style={styles.buttonContent}>
+                    {isLoading ? (
+                        <LottieView
+                            source={require('../../assets/animations/button-loading.json')}
+                            autoPlay
+                            loop
+                            style={{height: 60}}
+                        />
+                    ) : (
+                        <>
+                            {icon && renderIcon()}
+                            {text && renderText()}
+                            {children}
+                        </>
+                    )}
+                </View>
+            </TouchableOpacity>
+        );
+    }
+    return (
+        <View style={styles.Box}>
+            {isAndroid ? renderAndroidButton() : renderIOSButton()}
         </View>
     );
 
