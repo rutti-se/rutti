@@ -23,7 +23,6 @@ export default (
     const [isAndroid, setIsAndroid] = useState(false);
 
     useEffect(() => {
-        console.log(Platform.OS === 'android');
         setIsAndroid(Platform.OS === 'android');
     }, []);
 
