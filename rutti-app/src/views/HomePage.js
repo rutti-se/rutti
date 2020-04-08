@@ -18,21 +18,6 @@ import AddItemView from '../components/AddItemView';
 const DEVICE = Dimensions.get('window');
 import {getStores} from '../api/firebaseHelpers';
 
-// const stores = [
-//     {
-//         retailer: 'ica',
-//         storeId: '09808',
-//     },
-//     {
-//         retailer: 'coop',
-//         storeId: '257300',
-//     },
-//     {
-//         retailer: 'citygross',
-//         storeId: '307',
-//     },
-// ];
-
 export default () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [results, setResults] = useState([]);
@@ -42,6 +27,7 @@ export default () => {
     const debouncedSearchTerm = useDebounce(searchTerm, 500);
     const [selectedProduct, setSelectedProduct] = useState(null);
     let [user, setUser] = useState(null);
+    let [stores, setStores] = useState([]);
 
     useEffect(() => {
         let unsubscribe = firebase.auth().onAuthStateChanged(user => {
@@ -56,7 +42,7 @@ export default () => {
         if (user) {
             console.log(user.displayName);
             getStores(user.displayName)
-                .then(stores => console.log('stores', stores))
+                .then(stores => setStores(stores))
                 .catch(error => console.log(error));
         }
     }, [user]);
