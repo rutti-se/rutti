@@ -88,8 +88,6 @@ export default () => {
             .then(() => RootNavigation.replace('SignIn'));
     }
 
-    function selectProduct(e) {}
-
     return (
         <View style={styles.container}>
             <InputField onChangeText={text => onTextChange(text)}></InputField>
@@ -116,7 +114,7 @@ export default () => {
                     <Button
                         text="Logga ut"
                         shadow={true}
-                        type={'secondary'}
+                        type={'primary'}
                         onPress={() => {
                             logout();
                         }}></Button>

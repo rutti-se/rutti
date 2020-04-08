@@ -65,6 +65,7 @@ export default ({productSkus, stores, selectProduct}) => {
     }, [stores, productSkus]); //När denna är tom körs det en gång
 
     function showProductDetail(product) {
+        console.log('LongPress:', product);
         setAboutProduct(product);
     }
 
@@ -77,7 +78,7 @@ export default ({productSkus, stores, selectProduct}) => {
             <ProductItem
                 productInfo={item?.productInformation}
                 storeInfo={item?.storeInformation}
-                /* onPress={showProductDetail} */
+                onLongPress={showProductDetail}
                 onPress={e => selectProduct(e)}
                 addToCart={addToCart}
                 isLoading={isLoading}

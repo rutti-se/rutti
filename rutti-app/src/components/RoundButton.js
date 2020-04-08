@@ -26,6 +26,7 @@ export default class Button extends Component {
         const {
             text,
             onPress,
+            onLongPress,
             icon,
             color,
             underlayColor,
@@ -42,6 +43,7 @@ export default class Button extends Component {
                         {backgroundColor: color ? color : COLOR.PRIMARY},
                     ]}
                     onPress={onPress}
+                    onLongPress={onLongPress}
                     disabled={disabled}>
                     <View style={styles.buttonContent}>
                         {this.renderContent(icon, iconColor, text)}

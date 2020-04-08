@@ -6,7 +6,7 @@ import calcBestPrice from '../utilities/calcBestPrice';
 import SkeletonContent from 'react-native-skeleton-content-nonexpo';
 import Img from './Img';
 
-export default ({productInfo, storeInfo, onPress, isLoading}) => {
+export default ({productInfo, storeInfo, onPress, onLongPress, isLoading}) => {
     const [lowestPrice, setLowestPrice] = useState(null);
 
     useEffect(() => {
@@ -22,8 +22,9 @@ export default ({productInfo, storeInfo, onPress, isLoading}) => {
                 </View>
                 <RoundButton
                     icon={'buy-online-add'}
-                    onPress={() =>
-                        onPress({productInfo, storeInfo})
+                    onPress={() => onPress({productInfo, storeInfo})}
+                    onLongPress={() =>
+                        onLongPress({productInfo, storeInfo})
                     }></RoundButton>
             </View>
         );
@@ -31,15 +32,18 @@ export default ({productInfo, storeInfo, onPress, isLoading}) => {
 
     return (
         <SkeletonContent
-            containerStyle={styles.container}
+            containerStyle={styles.skeletonContent}
             isLoading={isLoading}
             layout={[
                 {key: 'image', width: 170, height: 170, marginBottom: 6},
                 {key: 'text', width: 120, height: 14, marginBottom: 6},
             ]}>
-            <Img style={styles.image} source={productInfo?.imageUrl} />
+            <Img
+                style={styles.image}
+                resizeMode="contain"
+                source={productInfo?.imageUrl}
+            />
             <Text style={styles.text}>
-                {' '}
                 {productInfo?.name.length > 0
                     ? productInfo?.name
                     : productInfo?.brand}
@@ -51,13 +55,18 @@ export default ({productInfo, storeInfo, onPress, isLoading}) => {
 
 const styles = StyleSheet.create({
     container: {
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    skeletonContent: {
         flex: 1 / 2,
         backgroundColor: COLORS.WHITE,
         padding: 5,
         margin: 5,
+        borderRadius: 10,
         flexDirection: 'column',
         justifyContent: 'space-between',
-        borderRadius: 10,
         alignItems: 'center',
     },
     image: {
