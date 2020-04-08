@@ -109,7 +109,7 @@ export default () => {
             )}
 
             <BottomDrawer>
-                <View style={{flexDirection: 'column', marginTop: '8%'}}>
+                <View style={{flexDirection: 'column', marginTop: 10}}>
                     <AddItemView product={selectedProduct}></AddItemView>
                     <Button
                         text="Logga ut"

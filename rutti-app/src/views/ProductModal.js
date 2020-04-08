@@ -12,6 +12,7 @@ import RoundButton from '../components/RoundButton';
 import FadeInView from '../components/animations/FadeInView';
 import calcBestPrice from '../utilities/calcBestPrice';
 import Button from '../components/Button';
+import Img from '../components/Img';
 import CollapsibleView from '../components/CollapsibleView';
 import {Dimensions} from 'react-native';
 const DEVICE = Dimensions.get('window');
@@ -29,11 +30,7 @@ export default ({productInfo, storeInfo, onPress, closeButton}) => {
                     flexDirection: 'row',
                     justifyContent: 'center',
                 }}>
-                <ImageBackground
-                    style={styles.image}
-                    source={{
-                        uri: productInfo.imageUrl,
-                    }}></ImageBackground>
+                <Img style={styles.image} source={productInfo.imageUrl} />
                 <View
                     style={{
                         position: 'absolute',

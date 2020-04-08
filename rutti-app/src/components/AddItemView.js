@@ -6,6 +6,7 @@ import COLOR from '../../assets/colors';
 import InputSpinner from 'react-native-input-spinner';
 import RoundButton from './RoundButton';
 import FadeInView from '../components/animations/FadeInView';
+import Img from './Img';
 export default ({product}, props) => {
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [productName, setProductName] = useState(null);
@@ -25,6 +26,16 @@ export default ({product}, props) => {
         return (
             <FadeInView duration={500}>
                 <View style={styles.contentContainer}>
+                    <Img
+                        style={{
+                            width: 40,
+                            height: 40,
+                            borderRadius: 50,
+                            backgroundColor: 'white',
+                        }}
+                        source={selectedProduct.productInfo.imageUrl}
+                    />
+
                     <Text
                         style={{
                             color: 'white',
@@ -65,11 +76,7 @@ export default ({product}, props) => {
         );
     }
     return (
-        <View
-            style={{
-                padding: 5,
-                marginBottom: 50,
-            }}>
+        <View style={styles.container}>
             {selectedProduct && renderSelectedItemView()}
             {!selectedProduct && renderUserView()}
         </View>
@@ -77,18 +84,25 @@ export default ({product}, props) => {
 };
 
 const styles = StyleSheet.create({
-    contentContainer: {
+    container: {
         backgroundColor: COLOR.GRAY_2,
-        flexDirection: 'row',
-        width: '90%',
-        height: 50,
-        justifyContent: 'space-around',
-        alignSelf: 'center',
-        alignItems: 'center',
+        width: '95%',
         borderRadius: 25,
+        height: 50,
+        alignSelf: 'center',
+        padding: 5,
+        marginBottom: 50,
+    },
+    contentContainer: {
+        width: '100%',
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+
+        alignItems: 'center',
     },
     text: {
         color: 'white',
         fontFamily: 'Montserrat-Bold',
+        fontSize: 18,
     },
 });

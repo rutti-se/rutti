@@ -24,7 +24,7 @@ export default ({source, style, resizeMode}) => {
                         duration: 1000,
                     }).start();
                 }}
-                resizeMode={'contain'}
+                resizeMode={resizeMode ? resizeMode : 'contain'}
                 style={
                     loading
                         ? {height: 1, width: 1}
