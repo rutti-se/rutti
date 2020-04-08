@@ -125,7 +125,7 @@ export class BottomDrawer extends Component {
                 backgroundColor={this.props.backgroundColor}
                 onExpanded={() => this.props.onExpanded()}
                 onCollapsed={() => this.props.onCollapsed()}>
-                <View style={styles.dragBar(this.props.dragBar)}></View>
+                <View style={styles.dragBar(this.props.dragBar)} />
 
                 <View
                     style={{

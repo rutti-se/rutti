@@ -65,7 +65,7 @@ export default ({onRegistrationComplete, goToLogin, backPress}) => {
                     ) {
                         setEmailAlreadyExist(true);
                     } else {
-                        Alert.alert('Något blev fel!', error.error);
+                        Alert.alert('Något blev fel!', error.error.message);
                     }
                     console.log(error);
                 })
@@ -119,7 +119,8 @@ export default ({onRegistrationComplete, goToLogin, backPress}) => {
                         }
                         type={'email-address'}
                         name={'email'}
-                        labelText={'E-post'}></InputField>
+                        labelText={'E-post'}
+                    />
                     <InputField
                         onChangeText={text => setPassword(text)}
                         secureTextEntry={true}
@@ -128,7 +129,8 @@ export default ({onRegistrationComplete, goToLogin, backPress}) => {
                             'Lösenordet måste vara minst 6 tecken långt och innehålla minst en stor bokstav eller siffra.'
                         }
                         name={'password'}
-                        labelText={'Lösenord'}></InputField>
+                        labelText={'Lösenord'}
+                    />
                     <InputField
                         onChangeText={text => setConfirmedPassword(text)}
                         autoCorrect={false}
@@ -136,7 +138,8 @@ export default ({onRegistrationComplete, goToLogin, backPress}) => {
                         invalidMessage={'Lösenorden stämmer inte överens.'}
                         secureTextEntry={true}
                         name={'confirmedPassword'}
-                        labelText={'Bekräfta lösenord'}></InputField>
+                        labelText={'Bekräfta lösenord'}
+                    />
                 </View>
 
                 <View style={styles.bottomContainer}>
@@ -144,7 +147,8 @@ export default ({onRegistrationComplete, goToLogin, backPress}) => {
                         shadow={true}
                         onPress={() => signUp()}
                         isLoading={loading}
-                        text={'Registrera mig!'}></Button>
+                        text={'Registrera mig!'}
+                    />
 
                     {goToLogin && (
                         <Text

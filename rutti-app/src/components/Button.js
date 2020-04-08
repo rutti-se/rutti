@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import {TouchableOpacity, Text, StyleSheet, View} from 'react-native';
+import {Text, StyleSheet, View} from 'react-native';
 import {Icon} from '../../assets/icomoon';
 import COLOR from '../../assets/colors';
 import LottieView from 'lottie-react-native';
-import {TouchableHighlight} from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 export default (
     {
@@ -20,47 +20,10 @@ export default (
     },
     props,
 ) => {
-    const [isAndroid, setIsAndroid] = useState(false);
-
-    useEffect(() => {
-        setIsAndroid(Platform.OS === 'android');
-    }, []);
-
-    function renderAndroidButton() {
-        return (
-            <TouchableHighlight
-                onPress={onPress}
-                style={[
-                    small ? styles.buttonSmall : styles.button,
-                    shadow ? styles.shadow : '',
-                    {
-                        backgroundColor: getBackgroundColor(),
-                    },
-                ]}
-                {...props}>
-                <View style={styles.buttonContent}>
-                    {isLoading ? (
-                        <LottieView
-                            source={require('../../assets/animations/button-loading.json')}
-                            autoPlay
-                            loop
-                            style={{height: 60}}
-                        />
-                    ) : (
-                        <>
-                            {icon && renderIcon()}
-                            {text && renderText()}
-                            {children}
-                        </>
-                    )}
-                </View>
-            </TouchableHighlight>
-        );
-    }
-    function renderIOSButton() {
-        return (
+    return (
+        <View style={styles.Box}>
             <TouchableOpacity
-                onPress={onPress}
+                onPressOut={onPress}
                 style={[
                     small ? styles.buttonSmall : styles.button,
                     shadow ? styles.shadow : '',
@@ -86,11 +49,6 @@ export default (
                     )}
                 </View>
             </TouchableOpacity>
-        );
-    }
-    return (
-        <View style={styles.Box}>
-            {isAndroid ? renderAndroidButton() : renderIOSButton()}
         </View>
     );
 
@@ -100,7 +58,8 @@ export default (
                 <Icon
                     name={icon}
                     size={30}
-                    color={iconColor ? iconColor : COLOR.WHITE}></Icon>
+                    color={iconColor ? iconColor : COLOR.WHITE}
+                />
             )
         );
     }

@@ -2,6 +2,7 @@ import {AccessToken, LoginManager} from 'react-native-fbsdk';
 import {GoogleSignin} from 'react-native-google-signin';
 import {firebase} from '@react-native-firebase/auth';
 import * as RootNavigation from '../views/RootNavigation';
+import firestore from '@react-native-firebase/firestore';
 
 // Calling the following function will open the FB login dialogue:
 export async function facebookLogin() {
@@ -78,15 +79,21 @@ export function emailSignUp(email, password, username) {
             const userCredentials = await firebase
                 .auth()
                 .createUserWithEmailAndPassword(email, password);
+
             if (userCredentials.user) {
                 await userCredentials.user.updateProfile({
                     displayName: username,
                 });
 
-                await firestore()
+                let user = firestore()
                     .collection('users')
-                    .doc(username)
-                    .set();
+                    .doc(username);
+
+                let firstList = await firestore()
+                    .collection('lists')
+                    .add({name: 'Inköpslista', author: user, users: []});
+
+                await user.set({lists: [firstList], stores: []});
 
                 resolve({user: userCredentials});
             }
