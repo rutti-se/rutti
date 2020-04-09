@@ -59,12 +59,13 @@ export default ({addToList, product}, props) => {
                         icon={'check'}
                         color={COLOR.COOP}
                         small={'true'}
-                        onPress={() =>
+                        onPress={() => {
                             addToList({
                                 amount: amount,
                                 sku: selectedProduct.productInfo.gtin,
-                            })
-                        }
+                            });
+                            setSelectedProduct(null);
+                        }}
                     />
                 </View>
             </FadeInView>
