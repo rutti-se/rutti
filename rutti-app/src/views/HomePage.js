@@ -15,6 +15,7 @@ import {firebase} from '@react-native-firebase/auth';
 import {Dimensions} from 'react-native';
 import * as RootNavigation from '../views/RootNavigation';
 import AddItemView from '../components/AddItemView';
+import BottomDrawerContent from '../views/BottomDrawerContent';
 const DEVICE = Dimensions.get('window');
 import {getStores} from '../api/firebaseHelpers';
 
@@ -118,20 +119,10 @@ export default () => {
             )}
 
             <BottomDrawer>
-                <View style={{flexDirection: 'column', marginTop: 10}}>
-                    <AddItemView
-                        addToList={e => console.log('Add:', e)}
-                        product={selectedProduct}
-                    />
-                    <Button
-                        text="Logga ut"
-                        shadow={true}
-                        type={'primary'}
-                        onPress={() => {
-                            logout();
-                        }}
-                    />
-                </View>
+                <BottomDrawerContent
+                    logout={() => logout()}
+                    selectedProduct={selectedProduct}
+                />
             </BottomDrawer>
         </View>
     );
