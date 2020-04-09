@@ -17,7 +17,7 @@ import * as RootNavigation from '../views/RootNavigation';
 import AddItemView from '../components/AddItemView';
 import BottomDrawerContent from '../views/BottomDrawerContent';
 const DEVICE = Dimensions.get('window');
-import {getStores} from '../api/firebaseHelpers';
+import {getStores, getLists} from '../api/firebaseHelpers';
 
 export default () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -29,6 +29,7 @@ export default () => {
     const [selectedProduct, setSelectedProduct] = useState(null);
     let [user, setUser] = useState(null);
     let [stores, setStores] = useState([]);
+    let [lists, setLists] = useState([]);
 
     useEffect(() => {
         let unsubscribe = firebase.auth().onAuthStateChanged(user => {
@@ -44,28 +45,32 @@ export default () => {
             console.log(user.displayName);
             getStores(user.displayName)
                 .then(stores => {
-                    let arr = [];
-                    stores.map(store => {
-                        arr.push({
-                            retailer: store.retailer.toLowerCase(),
-                            storeId: store.storeId,
-                        });
-                    });
-                    setStores(arr);
+                    setStores(stores);
+                })
+                .catch(error => console.log(error));
+            getLists(user.displayName)
+                .then(stores => {
+                    setStores(stores);
                 })
                 .catch(error => console.log(error));
         }
     }, [user]);
 
+    console.log(stores);
+
     useEffect(() => {
         if (debouncedSearchTerm) {
             setIsSearching(true);
-            searchProducts({q: debouncedSearchTerm, stores}).then(result => {
-                setIsSearching(false);
-                const {products, recipes} = result;
-                setProducts(products);
-                setRecipes(recipes);
-            });
+            console.log('searching');
+            searchProducts({q: debouncedSearchTerm, stores})
+                .then(result => {
+                    console.log(result);
+                    setIsSearching(false);
+                    const {products, recipes} = result;
+                    setProducts(products);
+                    setRecipes(recipes);
+                })
+                .catch(error => console.log(error));
         } else {
             setResults([]);
         }

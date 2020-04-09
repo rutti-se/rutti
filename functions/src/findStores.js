@@ -25,17 +25,17 @@ async function getNearbyStores({ zipCode }) {
 
     addRequest(
         `https://handla.ica.se/api/store/v1?zip=${zipCode}&customertype=B2C`,
-        'ICA',
+        'ica',
     );
 
     addRequest(
         `https://www.coop.se/ws/v2/coop/pointofservices?query=${zipCode}`,
-        'COOP',
+        'coop',
     );
 
     requests.push(getNearbyCityGrossStores(zipCode));
 
-    const results = await axios.all(requests).catch(error => {
+    const results = await axios.all(requests).catch((error) => {
         console.log(error);
         return { error: error };
     });
@@ -47,14 +47,14 @@ async function getNearbyStores({ zipCode }) {
     let storesResults = [];
     let bounds;
 
-    results.map(result => {
+    results.map((result) => {
         const retailer = result.config
             ? requestMap.get(result.config.url)
-            : 'CITYGROSS';
+            : 'citygross';
 
         switch (retailer) {
-            case 'ICA':
-                result.data.forPickupDelivery.forEach(store => {
+            case 'ica':
+                result.data.forPickupDelivery.forEach((store) => {
                     storesResults.push({
                         storeId: store.id,
                         retailer,
@@ -68,7 +68,7 @@ async function getNearbyStores({ zipCode }) {
                     });
                 });
                 break;
-            case 'COOP':
+            case 'coop':
                 bounds = {
                     eastLong: result.data.boundEastLongitude,
                     westLong: result.data.boundWestLongitude,
@@ -78,7 +78,7 @@ async function getNearbyStores({ zipCode }) {
                     centerLat: result.data.sourceLatitude,
                 };
 
-                result.data.stores.forEach(store => {
+                result.data.stores.forEach((store) => {
                     storesResults.push({
                         storeId: store.name,
                         retailer,
@@ -92,8 +92,8 @@ async function getNearbyStores({ zipCode }) {
                     });
                 });
                 break;
-            case 'CITYGROSS':
-                result.forEach(store => {
+            case 'citygross':
+                result.forEach((store) => {
                     storesResults.push({
                         storeId: store.id,
                         retailer,
