@@ -71,7 +71,7 @@ export class BottomDrawer extends Component {
         shadow: true,
         dragBar: true,
         containerHeight: SCREEN_HEIGHT / 1.2,
-        downDisplay: SCREEN_HEIGHT / 1.4,
+        downDisplay: SCREEN_HEIGHT - 255,
 
         onExpanded: () => {},
         onCollapsed: () => {},

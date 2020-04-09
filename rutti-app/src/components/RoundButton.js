@@ -11,6 +11,7 @@ export default (
         icon,
         color,
         underlayColor,
+        small,
         iconColor,
         disabled,
     },
@@ -22,7 +23,8 @@ export default (
                 <Icon
                     name={icon}
                     size={25}
-                    color={iconColor ? iconColor : 'white'}></Icon>
+                    color={iconColor ? iconColor : 'white'}
+                />
             );
         } else {
             return <Text style={styles.text}>{text}</Text>;
@@ -33,7 +35,7 @@ export default (
             <TouchableOpacity
                 underlayColor={COLOR.PRIMARY}
                 style={[
-                    styles.button,
+                    small ? styles.buttonSmall : styles.button,
                     {backgroundColor: color ? color : COLOR.PRIMARY},
                 ]}
                 onPressOut={onPress}
@@ -50,6 +52,13 @@ const styles = StyleSheet.create({
         height: 40,
         width: 40,
         borderRadius: 400,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    buttonSmall: {
+        height: 30,
+        width: 30,
+        borderRadius: 20,
         justifyContent: 'center',
         alignItems: 'center',
     },

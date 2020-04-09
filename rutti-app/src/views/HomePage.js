@@ -42,7 +42,16 @@ export default () => {
         if (user) {
             console.log(user.displayName);
             getStores(user.displayName)
-                .then(stores => setStores(stores))
+                .then(stores => {
+                    let arr = [];
+                    stores.map(store => {
+                        arr.push({
+                            retailer: store.retailer.toLowerCase(),
+                            storeId: store.storeId,
+                        });
+                    });
+                    setStores(arr);
+                })
                 .catch(error => console.log(error));
         }
     }, [user]);
@@ -50,7 +59,6 @@ export default () => {
     useEffect(() => {
         if (debouncedSearchTerm) {
             setIsSearching(true);
-
             searchProducts({q: debouncedSearchTerm, stores}).then(result => {
                 setIsSearching(false);
                 const {products, recipes} = result;
@@ -111,7 +119,10 @@ export default () => {
 
             <BottomDrawer>
                 <View style={{flexDirection: 'column', marginTop: 10}}>
-                    <AddItemView product={selectedProduct} />
+                    <AddItemView
+                        addToList={e => console.log('Add:', e)}
+                        product={selectedProduct}
+                    />
                     <Button
                         text="Logga ut"
                         shadow={true}

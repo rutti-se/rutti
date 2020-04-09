@@ -1,15 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import {Text, View, StyleSheet} from 'react-native';
-import {Icon} from '../../assets/icomoon';
 import COLOR from '../../assets/colors';
-
-import InputSpinner from 'react-native-input-spinner';
 import RoundButton from './RoundButton';
 import FadeInView from '../components/animations/FadeInView';
+import Spinner from './Spinner';
 import Img from './Img';
-export default ({product}, props) => {
+export default ({addToList, product}, props) => {
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [productName, setProductName] = useState(null);
+    const [amount, setAmount] = useState(1);
 
     useEffect(() => {
         setSelectedProduct(null);
@@ -25,7 +24,18 @@ export default ({product}, props) => {
     function renderSelectedItemView() {
         return (
             <FadeInView duration={500}>
-                <View style={styles.contentContainer}>
+                <View
+                    style={[
+                        styles.contentContainer,
+                        {backgroundColor: COLOR.WHITE},
+                    ]}>
+                    <RoundButton
+                        style={{alignSelf: 'flex-end'}}
+                        icon={'cross'}
+                        color={COLOR.GRAY_2}
+                        small={true}
+                        onPress={() => setSelectedProduct(null)}
+                    />
                     <Img
                         style={{
                             width: 40,
@@ -38,25 +48,23 @@ export default ({product}, props) => {
 
                     <Text
                         style={{
-                            color: 'white',
+                            color: 'black',
                             fontFamily: 'Montserrat-Bold',
                         }}>
                         {productName}
                     </Text>
-                    <InputSpinner
-                        style={{alignSelf: 'center'}}
-                        height={30}
-                        width={100}
-                        max={10}
-                        min={1}
-                        textColor={'white'}
-                        editable={false}
-                        color={COLOR.PRIMARY}
-                        value={1}></InputSpinner>
+                    <Spinner onValueChange={value => setAmount(value)} />
                     <RoundButton
                         style={{alignSelf: 'flex-end'}}
-                        icon={'buy-online-add'}
-                        onPress={() => setSelectedProduct(null)}
+                        icon={'check'}
+                        color={COLOR.COOP}
+                        small={'true'}
+                        onPress={() =>
+                            addToList({
+                                amount: amount,
+                                sku: selectedProduct.productInfo.gtin,
+                            })
+                        }
                     />
                 </View>
             </FadeInView>
@@ -67,10 +75,9 @@ export default ({product}, props) => {
         return (
             <FadeInView duration={500}>
                 <View style={styles.contentContainer}>
-                    {/* <FadeInView duration={500}> */}
                     <Text style={styles.text}>MotiveradBroccoli66</Text>
+
                     <RoundButton style={{alignSelf: 'flex-end'}} text={1} />
-                    {/* </FadeInView> */}
                 </View>
             </FadeInView>
         );
@@ -85,15 +92,15 @@ export default ({product}, props) => {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: COLOR.GRAY_2,
         width: '95%',
-        borderRadius: 25,
         height: 50,
         alignSelf: 'center',
-        padding: 5,
         marginBottom: 50,
     },
     contentContainer: {
+        padding: 5,
+        borderRadius: 25,
+        backgroundColor: COLOR.GRAY_2,
         width: '100%',
         flexDirection: 'row',
         justifyContent: 'space-around',
