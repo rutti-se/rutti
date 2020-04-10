@@ -71,7 +71,7 @@ export class BottomDrawer extends Component {
         shadow: true,
         dragBar: true,
         containerHeight: SCREEN_HEIGHT / 1.2,
-        downDisplay: SCREEN_HEIGHT - 255,
+        downDisplay: SCREEN_HEIGHT / 1.4,
 
         onExpanded: () => {},
         onCollapsed: () => {},
@@ -164,7 +164,9 @@ export class Animator extends Component {
         this.position = new Animated.ValueXY(this.props.currentPosition);
 
         this._panResponder = PanResponder.create({
-            onStartShouldSetPanResponder: () => true,
+            onStartShouldSetPanResponder: (e, gesture) => {
+                return e.nativeEvent.locationY < 100;
+            },
             onPanResponderMove: this._handlePanResponderMove,
             onPanResponderRelease: this._handlePanResponderRelease,
         });
@@ -251,7 +253,6 @@ const styles = {
         position: 'absolute',
         height: height + Math.sqrt(SCREEN_HEIGHT),
         backgroundColor: color,
-        zIndex: 1001,
     }),
     roundedEdges: rounded => {
         return (

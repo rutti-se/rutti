@@ -1,7 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, TouchableWithoutFeedback} from 'react-native';
+import {View, Text} from 'react-native';
+import {
+    TouchableWithoutFeedback,
+    ScrollView,
+    TouchableOpacity,
+} from 'react-native-gesture-handler';
 import ShoppingListItem from './ShoppingListItem';
-import {ScrollView} from 'react-native-gesture-handler';
 export default ({selectedProduct, user, logout}, props) => {
     const product = {
         productInformation: {
@@ -59,16 +63,14 @@ export default ({selectedProduct, user, logout}, props) => {
             }}>
             <View style={{height: '100%'}}>
                 <ScrollView>
-                    <TouchableWithoutFeedback>
-                        <View>
-                            <ShoppingListItem product={product} />
-                            <ShoppingListItem product={product} />
-                            <ShoppingListItem product={product} />
-                            <ShoppingListItem product={product} />
-                            <ShoppingListItem product={product} />
-                            <ShoppingListItem product={product} />
-                        </View>
-                    </TouchableWithoutFeedback>
+                    <View>
+                        <ShoppingListItem product={product} />
+                        <ShoppingListItem product={product} />
+                        <ShoppingListItem product={product} />
+                        <ShoppingListItem product={product} />
+                        <ShoppingListItem product={product} />
+                        <ShoppingListItem product={product} />
+                    </View>
                 </ScrollView>
             </View>
         </View>
