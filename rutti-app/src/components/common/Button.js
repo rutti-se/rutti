@@ -18,12 +18,14 @@ export default (
         small,
         extraSmall,
         isLoading,
+        disabled,
     },
     props,
 ) => {
     return (
         <View style={styles.Box}>
             <TouchableOpacity
+                disabled={disabled}
                 onPressOut={onPress}
                 style={[
                     small

@@ -10,12 +10,17 @@ import calcBestPrice from '../../utilities/calcBestPrice';
 
 export default ({product, removeItem}, props) => {
     const [lowestPrice, setLowestPrice] = useState(null);
+    const [productName, setProductName] = useState(null);
 
     useEffect(() => {
+        let name = '';
+        product.data && (name = product.data.productInformation.name);
+
+        setProductName(name);
         if (product.data) {
             setLowestPrice(calcBestPrice(product.data.storeInformation));
         }
-    }, [product]);
+    }, [product.data]);
 
     function renderStores() {
         return (
@@ -24,6 +29,7 @@ export default ({product, removeItem}, props) => {
                     return (
                         <View style={{width: 60, marginRight: 5}}>
                             <Button
+                                disabled={true}
                                 text={
                                     store.store.retailer === 'citygross'
                                         ? 'c.g'
@@ -51,9 +57,7 @@ export default ({product, removeItem}, props) => {
             <View style={styles.leftContainer}>
                 {product.data && (
                     <>
-                        <Text style={styles.text}>
-                            {product.data.productInformation.name}
-                        </Text>
+                        <Text style={styles.text}>{productName}</Text>
                         {renderStores()}
                     </>
                 )}
@@ -70,15 +74,14 @@ export default ({product, removeItem}, props) => {
                         }
                     }}
                 />
+
                 {product.data && (
                     <View
                         style={{
                             flexDirection: 'row',
                         }}>
                         <Text style={styles.priceText}>från</Text>
-                        <Text style={styles.price}>
-                            {calcBestPrice(product.data.storeInformation)}:-
-                        </Text>
+                        <Text style={styles.price}>{lowestPrice}:-</Text>
                     </View>
                 )}
             </View>
@@ -133,9 +136,8 @@ const styles = StyleSheet.create({
     priceText: {
         fontFamily: 'Montserrat-regular',
         fontSize: 12,
-        marginBottom: 2,
-        marginTop: 5,
+        marginBottom: 3,
         color: COLORS.WHITE,
-        alignSelf: 'flex-start',
+        alignSelf: 'flex-end',
     },
 });
