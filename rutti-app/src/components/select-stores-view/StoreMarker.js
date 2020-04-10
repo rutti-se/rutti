@@ -1,11 +1,11 @@
 import React, {Component, useState, useEffect} from 'react';
 import {View} from 'react-native';
-import Ica_unselected from '../../assets/markers/ica_unselected.svg';
-import Coop_unselected from '../../assets/markers/coop_unselected.svg';
-import Citygross_unselected from '../../assets/markers/citygross_unselected.svg';
-import Ica_selected from '../../assets/markers/ica_selected.svg';
-import Coop_selected from '../../assets/markers/coop_selected.svg';
-import Citygross_selected from '../../assets/markers/citygross_selected.svg';
+import Ica_unselected from '../../../assets/markers/ica_unselected.svg';
+import Coop_unselected from '../../../assets/markers/coop_unselected.svg';
+import Citygross_unselected from '../../../assets/markers/citygross_unselected.svg';
+import Ica_selected from '../../../assets/markers/ica_selected.svg';
+import Coop_selected from '../../../assets/markers/coop_selected.svg';
+import Citygross_selected from '../../../assets/markers/citygross_selected.svg';
 
 export default ({store, selected}) => {
     function renderMarker() {

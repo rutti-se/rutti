@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import {Animated, View, StyleSheet, BackHandler} from 'react-native';
-import Button from '../components/Button';
+import Button from '../components/common/Button';
 import COLORS from '../../assets/colors';
 import RuttiLogo from '../../assets/rutti_nologo.svg';
-import RegisterEmail from '../components/RegisterEmail';
-import LoginEmail from '../components/LoginEmail';
+import RegisterEmail from '../components/auth-view/RegisterEmail';
+import LoginEmail from '../components/auth-view/LoginEmail';
 import FadeInView from '../components/animations/FadeInView';
 import SelectStoresView from './SelectStoresView';
 import LottieView from 'lottie-react-native';

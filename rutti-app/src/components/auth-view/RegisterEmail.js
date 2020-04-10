@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, ScrollView, Alert} from 'react-native';
-import Button from './Button';
-import InputField from './InputField';
-import {emailSignUp} from '../api/firebaseHelpers';
-import COLORS from '../../assets/colors';
-import getGeneratedUsername from '../api/getGeneratedUsername';
-import RoundButton from './RoundButton';
+import Button from '../common/Button';
+import InputField from '../common/InputField';
+import {emailSignUp} from '../../api/firebaseHelpers';
+import COLORS from '../../../assets/colors';
+import getGeneratedUsername from '../../api/getGeneratedUsername';
+import RoundButton from '../common/RoundButton';
 
 export default ({onRegistrationComplete, goToLogin, backPress}) => {
     let [username, setUsername] = useState('');

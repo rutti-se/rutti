@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import COLORS from '../../assets/colors';
-import StoreMarker from '../components/StoreMarker';
+import StoreMarker from '../components/select-stores-view/StoreMarker';
 import {View, StyleSheet, Text, Alert} from 'react-native';
-import InputField from '../components/InputField';
-import Button from '../components/Button';
+import InputField from '../components/common/InputField';
+import Button from '../components/common/Button';
 import findStores from '../api/findStores';
 import MapView from 'react-native-map-clustering';
 import {PROVIDER_GOOGLE, Marker} from 'react-native-maps';

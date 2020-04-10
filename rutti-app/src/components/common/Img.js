@@ -10,7 +10,7 @@ export default ({source, style, resizeMode}) => {
         <>
             {loading && (
                 <SkeletonContent isLoading={loading}>
-                    <View style={style}></View>
+                    <View style={style} />
                 </SkeletonContent>
             )}
 

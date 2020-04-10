@@ -7,11 +7,11 @@ import {
     ScrollView,
     Alert,
 } from 'react-native';
-import Button from './Button';
-import InputField from './InputField';
-import {emailLogin} from '../api/firebaseHelpers';
-import COLORS from '../../assets/colors';
-import RoundButton from './RoundButton';
+import Button from '../common/Button';
+import InputField from '../common/InputField';
+import {emailLogin} from '../../api/firebaseHelpers';
+import COLORS from '../../../assets/colors';
+import RoundButton from '../common/RoundButton';
 
 export default ({onLoginComplete, goToRegistration, backPress}) => {
     let [email, setEmail] = useState('');

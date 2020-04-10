@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import COLORS from '../../assets/colors';
-import Img from './Img';
-import Button from './Button';
+import COLORS from '../../../assets/colors';
+import Img from '../common/Img';
+import Button from '../common/Button';
 export default ({product}, props) => {
     function renderStores() {
         return (
