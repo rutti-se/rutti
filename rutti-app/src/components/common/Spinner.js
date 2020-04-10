@@ -8,6 +8,7 @@ export default ({defaultValue, onValueChange, textColor}, props) => {
     useEffect(() => {
         onValueChange(quantity);
     }, [quantity]);
+
     function addValue() {
         setQuantity(quantity + 1);
     }
@@ -19,7 +20,12 @@ export default ({defaultValue, onValueChange, textColor}, props) => {
     }
     return (
         <View style={styles.container}>
-            <RoundButton onPress={() => subValue()} small="true" text="-" />
+            <RoundButton
+                onPress={() => subValue()}
+                inAnimatedView={true}
+                small="true"
+                text="-"
+            />
             <Text
                 style={[
                     styles.value,
@@ -27,7 +33,12 @@ export default ({defaultValue, onValueChange, textColor}, props) => {
                 ]}>
                 {quantity}
             </Text>
-            <RoundButton onPress={() => addValue()} small="true" text="+" />
+            <RoundButton
+                onPress={() => addValue()}
+                inAnimatedView={true}
+                small="true"
+                text="+"
+            />
         </View>
     );
 };

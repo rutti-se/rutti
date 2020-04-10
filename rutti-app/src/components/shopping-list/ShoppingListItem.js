@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Picker} from 'react-native';
 import COLORS from '../../../assets/colors';
 import Img from '../common/Img';
 import Button from '../common/Button';
@@ -7,15 +7,14 @@ import RoundButton from '../common/RoundButton';
 import AddItemView from '../../components/shopping-list/AddItemView';
 import Spinner from '../common/Spinner';
 import calcBestPrice from '../../utilities/calcBestPrice';
+import Popup from '../common/Popup';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {Icon} from '../../../assets/icomoon';
 
 export default ({product, removeItem}, props) => {
-    const [lowestPrice, setLowestPrice] = useState(null);
+    const [pickedUp, setPickedUp] = useState(false);
 
-    useEffect(() => {
-        if (product.data) {
-            setLowestPrice(calcBestPrice(product.data.storeInformation));
-        }
-    }, [product]);
+    const [popupVisible, setPopupVisible] = useState(false);
 
     function renderStores() {
         return (
@@ -40,14 +39,22 @@ export default ({product, removeItem}, props) => {
     }
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, {opacity: pickedUp ? 0.4 : 1}]}>
             <RoundButton
+                text={product.quantity}
+                iconColor={'white'}
+                color={COLORS.GRAY_1}
+                inAnimatedView={true}
+                onPress={() => setPopupVisible(true)}
+            />
+            {/* <RoundButton
                 icon={'cross'}
                 iconColor={'black'}
                 small={true}
                 color={COLORS.WHITE}
+                inAnimatedView={true}
                 onPress={() => removeItem(product)}
-            />
+            /> */}
             <View style={styles.leftContainer}>
                 {product.data && (
                     <>
@@ -59,17 +66,6 @@ export default ({product, removeItem}, props) => {
                 )}
             </View>
             <View style={styles.rightContainer}>
-                <Spinner
-                    defaultValue={product.quantity}
-                    textColor={'white'}
-                    onValueChange={value => {
-                        if (value > product.quantity) {
-                            console.log('value increased');
-                        } else {
-                            console.log('value decreased');
-                        }
-                    }}
-                />
                 {product.data && (
                     <View
                         style={{
@@ -82,6 +78,36 @@ export default ({product, removeItem}, props) => {
                     </View>
                 )}
             </View>
+            <View
+                style={[
+                    styles.checkBox,
+                    {
+                        backgroundColor: pickedUp
+                            ? COLORS.GREEN
+                            : COLORS.GRAY_4,
+                    },
+                ]}>
+                <TouchableOpacity
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}
+                    onPressOut={() => setPickedUp(!pickedUp)}>
+                    <Icon name={'check'} size={40} color={'white'} />
+                </TouchableOpacity>
+            </View>
+            <Popup
+                isVisible={popupVisible}
+                close={() => {
+                    console.log('close');
+                    setPopupVisible(false);
+                }}>
+                <View
+                    style={{width: 100, height: 100, backgroundColor: 'black'}}
+                />
+            </Popup>
         </View>
     );
 };
@@ -92,17 +118,17 @@ const styles = StyleSheet.create({
         width: '100%',
         backgroundColor: COLORS.GRAY_2,
         flexDirection: 'row',
-        marginBottom: 2,
+        marginBottom: 5,
         borderRadius: 10,
         padding: 10,
         alignItems: 'center',
+        paddingRight: 40,
     },
     leftContainer: {
         flex: 1,
         marginLeft: 10,
         alignSelf: 'flex-start',
         flexDirection: 'column',
-        alignSelf: 'center',
         alignContent: 'space-between',
     },
     rightContainer: {
@@ -137,5 +163,14 @@ const styles = StyleSheet.create({
         marginTop: 5,
         color: COLORS.WHITE,
         alignSelf: 'flex-start',
+    },
+    checkBox: {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        right: 0,
+        width: 40,
+        borderTopRightRadius: 10,
+        borderBottomRightRadius: 10,
     },
 });
