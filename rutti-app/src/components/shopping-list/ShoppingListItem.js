@@ -7,9 +7,10 @@ import RoundButton from '../common/RoundButton';
 import AddItemView from '../../components/shopping-list/AddItemView';
 import Spinner from '../common/Spinner';
 import calcBestPrice from '../../utilities/calcBestPrice';
-export default ({product}, props) => {
+export default ({product, removeItem}, props) => {
     const [amount, setAmount] = useState(1);
     const [lowestPrice, setLowestPrice] = useState(null);
+
     useEffect(() => {
         setLowestPrice(calcBestPrice(product.storeInformation));
     }, [product]);
@@ -35,26 +36,35 @@ export default ({product}, props) => {
             </View>
         );
     }
+
     return (
         <View style={styles.container}>
+            <RoundButton
+                icon={'cross'}
+                iconColor={'black'}
+                small={true}
+                color={COLORS.WHITE}
+                onPress={() => console.log('remove')}
+            />
             <View style={styles.leftContainer}>
                 <Text style={styles.text}>{product.productInfo.name}</Text>
                 {renderStores()}
             </View>
             <View style={styles.rightContainer}>
-                <Spinner
-                    textColor={'white'}
-                    onValueChange={value => {
-                        setAmount(value);
-                    }}
-                />
+                <View style={{padding: 5}}>
+                    <Spinner
+                        textColor={'white'}
+                        onValueChange={value => {
+                            setAmount(value);
+                        }}
+                    />
+                </View>
                 <View
                     style={{
                         flexDirection: 'row',
-                        flex: 1,
                     }}>
                     <Text style={styles.priceText}>från</Text>
-                    <Text style={styles.price}>{lowestPrice}:-</Text>
+                    <Text style={styles.price}>{lowestPrice * amount}:-</Text>
                 </View>
             </View>
         </View>
@@ -68,7 +78,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginBottom: 2,
         borderRadius: 10,
-        padding: 15,
+        padding: 10,
         alignItems: 'center',
     },
     leftContainer: {
@@ -81,8 +91,8 @@ const styles = StyleSheet.create({
     rightContainer: {
         flex: 1,
         marginLeft: 10,
+        alignSelf: 'center',
         alignItems: 'center',
-        justifyContent: 'center',
         flexDirection: 'column',
     },
     text: {
@@ -99,15 +109,16 @@ const styles = StyleSheet.create({
         color: COLORS.WHITE,
         fontFamily: 'Montserrat-Bold',
         fontSize: 20,
-        alignSelf: 'flex-end',
         marginLeft: 5,
         textAlign: 'center',
+        alignSelf: 'flex-start',
     },
     priceText: {
         fontFamily: 'Montserrat-regular',
         fontSize: 12,
-        alignSelf: 'flex-end',
         marginBottom: 2,
+        marginTop: 5,
         color: COLORS.WHITE,
+        alignSelf: 'flex-start',
     },
 });
