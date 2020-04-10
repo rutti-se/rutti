@@ -123,7 +123,7 @@ export default () => {
                 />
             )}
 
-            <BottomDrawer startUp={true}>
+            <BottomDrawer>
                 <BottomDrawerContent
                     list={list}
                     stores={stores}

@@ -64,7 +64,7 @@ export default ({selectedProduct, user, logout, list, stores}, props) => {
                 </View>
             )}
 
-            <View style={{flex: 1 / 2}}>
+            <View style={{flex: 3}}>
                 <ShoppingList list={list} stores={stores} />
             </View>
             <View style={{flex: 1 / 2, justifyContent: 'flex-end'}}>
