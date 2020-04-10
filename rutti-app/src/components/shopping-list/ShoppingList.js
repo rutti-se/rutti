@@ -52,11 +52,17 @@ export default ({list, stores}, props) => {
         <View
             style={{
                 height: '100%',
+                width: '100%',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
                 zIndex: 1000,
             }}>
-            <View style={{height: '100%'}}>
+            <View
+                style={{
+                    height: '100%',
+                    width: '95%',
+                    alignSelf: 'center',
+                }}>
                 <ScrollView>
                     <TouchableWithoutFeedback>
                         <View>

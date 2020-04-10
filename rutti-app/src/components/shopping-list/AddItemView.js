@@ -34,6 +34,7 @@ export default ({addToList, product, cancel}, props) => {
                         icon={'cross'}
                         color={COLOR.GRAY_2}
                         small={true}
+                        inAnimatedView={true}
                         onPress={() => cancel()}
                     />
                     <Img
@@ -59,6 +60,7 @@ export default ({addToList, product, cancel}, props) => {
                         icon={'check'}
                         color={COLOR.COOP}
                         small={'true'}
+                        inAnimatedView={true}
                         onPress={() => {
                             addToList({
                                 quantity: quantity,

@@ -92,7 +92,8 @@ const styles = StyleSheet.create({
         backgroundColor: COLOR.GRAY_2,
         width: '100%',
         flexDirection: 'row',
-        justifyContent: 'space-around',
+        paddingHorizontal: 25,
+        justifyContent: 'space-between',
 
         alignItems: 'center',
     },
