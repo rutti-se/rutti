@@ -9,21 +9,21 @@ import Citygross_selected from '../../assets/markers/citygross_selected.svg';
 
 export default ({store, selected}) => {
     function renderMarker() {
-        if (store === 'ICA') {
+        if (store === 'ica') {
             return selected ? (
                 <Ica_selected height={50} width={50} />
             ) : (
                 <Ica_unselected height={50} width={50} />
             );
         }
-        if (store === 'COOP') {
+        if (store === 'coop') {
             return selected ? (
                 <Coop_selected height={50} width={50} />
             ) : (
                 <Coop_unselected height={50} width={50} />
             );
         }
-        if (store === 'CITYGROSS') {
+        if (store === 'citygross') {
             return selected ? (
                 <Citygross_selected height={50} width={50} />
             ) : (

@@ -54,6 +54,7 @@ export default ({productSkus, stores, selectProduct}) => {
             getProducts({stores, productSkus}).then(result => {
                 result.map(res => {
                     if (res.status !== '400') {
+                        console.log('Respons', res.data);
                         newDetails[res.data.productInformation.gtin] = res.data;
                     }
                 });
@@ -76,7 +77,8 @@ export default ({productSkus, stores, selectProduct}) => {
                 onLongPress={showProductDetail}
                 onPress={e => selectProduct(e)}
                 isLoading={isLoading}
-                index={index}></ProductItem>
+                index={index}
+            />
         );
     }
 
@@ -87,9 +89,8 @@ export default ({productSkus, stores, selectProduct}) => {
                     <ProductModal
                         productInfo={aboutProduct.productInfo}
                         storeInfo={aboutProduct.storeInfo}
-                        closeButton={() =>
-                            setAboutProduct(null)
-                        }></ProductModal>
+                        closeButton={() => setAboutProduct(null)}
+                    />
                 </View>
             )}
 
@@ -98,7 +99,8 @@ export default ({productSkus, stores, selectProduct}) => {
                 style={styles.container}
                 renderItem={renderProductItems}
                 keyExtractor={(item, index) => index.toString()}
-                numColumns={2}></FlatList>
+                numColumns={2}
+            />
         </View>
     );
 };

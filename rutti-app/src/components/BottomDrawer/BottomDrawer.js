@@ -251,6 +251,7 @@ const styles = {
         position: 'absolute',
         height: height + Math.sqrt(SCREEN_HEIGHT),
         backgroundColor: color,
+        zIndex: 1001,
     }),
     roundedEdges: rounded => {
         return (
