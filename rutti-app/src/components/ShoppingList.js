@@ -2,9 +2,9 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, TouchableWithoutFeedback} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import ShoppingListItem from './ShoppingListItem';
-export default ({selectedProduct, user, logout}, props) => {
+export default ({selectedProduct, user, logout, editItem}, props) => {
     const product = {
-        productInformation: {
+        productInfo: {
             gtin: '7310867541046',
             name: 'Färskost Crème Svensk Karaktär 125g',
             brand: 'Allerum',
@@ -61,7 +61,10 @@ export default ({selectedProduct, user, logout}, props) => {
                 <ScrollView>
                     <TouchableWithoutFeedback>
                         <View>
-                            <ShoppingListItem product={product} />
+                            <ShoppingListItem
+                                onPress={editItem}
+                                product={product}
+                            />
                             <ShoppingListItem product={product} />
                             <ShoppingListItem product={product} />
                             <ShoppingListItem product={product} />

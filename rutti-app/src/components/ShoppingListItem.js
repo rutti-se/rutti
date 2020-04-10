@@ -3,7 +3,17 @@ import {View, Text, StyleSheet} from 'react-native';
 import COLORS from '../../assets/colors';
 import Img from './Img';
 import Button from './Button';
-export default ({product, amount}, props) => {
+import RoundButton from './RoundButton';
+import AddItemView from './AddItemView';
+import Spinner from './Spinner';
+import calcBestPrice from '../utilities/calcBestPrice';
+export default ({product}, props) => {
+    const [amount, setAmount] = useState(1);
+    const [lowestPrice, setLowestPrice] = useState(null);
+    useEffect(() => {
+        setLowestPrice(calcBestPrice(product.storeInformation));
+    }, [product]);
+
     function renderStores() {
         return (
             <View style={styles.storeContainer}>
@@ -27,11 +37,25 @@ export default ({product, amount}, props) => {
     }
     return (
         <View style={styles.container}>
-            <View style={styles.rightContainer}>
-                <Text style={styles.text}>
-                    {product.productInformation.name}
-                </Text>
+            <View style={styles.leftContainer}>
+                <Text style={styles.text}>{product.productInfo.name}</Text>
                 {renderStores()}
+            </View>
+            <View style={styles.rightContainer}>
+                <Spinner
+                    textColor={'white'}
+                    onValueChange={value => {
+                        setAmount(value);
+                    }}
+                />
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        flex: 1,
+                    }}>
+                    <Text style={styles.priceText}>från</Text>
+                    <Text style={styles.price}>{lowestPrice}:-</Text>
+                </View>
             </View>
         </View>
     );
@@ -47,12 +71,19 @@ const styles = StyleSheet.create({
         padding: 15,
         alignItems: 'center',
     },
-    rightContainer: {
+    leftContainer: {
         flex: 1,
         marginLeft: 10,
         alignSelf: 'flex-start',
         flexDirection: 'column',
         alignContent: 'space-between',
+    },
+    rightContainer: {
+        flex: 1,
+        marginLeft: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'column',
     },
     text: {
         fontFamily: 'Montserrat-bold',
@@ -63,5 +94,20 @@ const styles = StyleSheet.create({
     storeContainer: {
         marginTop: 5,
         flexDirection: 'row',
+    },
+    price: {
+        color: COLORS.WHITE,
+        fontFamily: 'Montserrat-Bold',
+        fontSize: 20,
+        alignSelf: 'flex-end',
+        marginLeft: 5,
+        textAlign: 'center',
+    },
+    priceText: {
+        fontFamily: 'Montserrat-regular',
+        fontSize: 12,
+        alignSelf: 'flex-end',
+        marginBottom: 2,
+        color: COLORS.WHITE,
     },
 });

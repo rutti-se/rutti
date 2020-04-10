@@ -7,7 +7,13 @@ const SCREEN_HEIGHT = Dimensions.get('window').height;
 const containerHeight = SCREEN_HEIGHT / 1.3;
 
 export default ({selectedProduct, user, logout}, props) => {
+    const [product, setProduct] = useState(null);
+
     useEffect(() => {}, [user]);
+
+    useEffect(() => {
+        setProduct(selectedProduct);
+    }, [selectedProduct]);
 
     return (
         <View
@@ -18,10 +24,10 @@ export default ({selectedProduct, user, logout}, props) => {
             }}>
             <AddItemView
                 addToList={e => console.log('Add:', e)}
-                product={selectedProduct}
+                product={product}
             />
             <View style={{flex: 1 / 2}}>
-                <ShoppingList />
+                <ShoppingList editItem={e => setProduct(e)} />
             </View>
             <View style={{flex: 1 / 2, justifyContent: 'flex-end'}}>
                 <Button
