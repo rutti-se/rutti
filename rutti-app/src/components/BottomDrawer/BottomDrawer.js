@@ -7,6 +7,7 @@ import {
     Dimensions,
     View,
     StyleSheet,
+    Platform,
 } from 'react-native';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -165,7 +166,7 @@ export class Animator extends Component {
 
         this._panResponder = PanResponder.create({
             onStartShouldSetPanResponder: (e, gesture) => {
-                return e.nativeEvent.locationY < 100;
+                return Platform.OS === 'ios' || e.nativeEvent.locationY < 100;
             },
             onPanResponderMove: this._handlePanResponderMove,
             onPanResponderRelease: this._handlePanResponderRelease,

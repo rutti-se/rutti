@@ -63,14 +63,16 @@ export default ({selectedProduct, user, logout}, props) => {
             }}>
             <View style={{height: '100%'}}>
                 <ScrollView>
-                    <View>
-                        <ShoppingListItem product={product} />
-                        <ShoppingListItem product={product} />
-                        <ShoppingListItem product={product} />
-                        <ShoppingListItem product={product} />
-                        <ShoppingListItem product={product} />
-                        <ShoppingListItem product={product} />
-                    </View>
+                    <TouchableWithoutFeedback>
+                        <View>
+                            <ShoppingListItem product={product} />
+                            <ShoppingListItem product={product} />
+                            <ShoppingListItem product={product} />
+                            <ShoppingListItem product={product} />
+                            <ShoppingListItem product={product} />
+                            <ShoppingListItem product={product} />
+                        </View>
+                    </TouchableWithoutFeedback>
                 </ScrollView>
             </View>
         </View>
