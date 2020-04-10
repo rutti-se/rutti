@@ -172,7 +172,7 @@ export function removeProductFromList(listId, sku, quantity) {
                 if (index >= 0 && products[index].quantity - quantity > 0) {
                     products[index].quantity -= quantity;
                 } else {
-                    products.splice(index);
+                    products.splice(index, 1);
                 }
 
                 await listRef.update({products});
