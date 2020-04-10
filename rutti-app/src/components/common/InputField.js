@@ -1,7 +1,7 @@
 import React, {useRef} from 'react';
 import {TextInput, View, Text, StyleSheet, SafeAreaView} from 'react-native';
-import COLORS from '../../assets/colors';
-import FadeInView from './animations/FadeInView';
+import COLORS from '../../../assets/colors';
+import FadeInView from '../animations/FadeInView';
 
 export default props => {
     return (
@@ -34,7 +34,8 @@ export default props => {
                     borderWidth: props.invalidInput ? 2 : 0,
                     borderColor: props.invalidInput ? 'red' : 'green',
                 }}
-                {...props}></TextInput>
+                {...props}
+            />
         </View>
     );
 };

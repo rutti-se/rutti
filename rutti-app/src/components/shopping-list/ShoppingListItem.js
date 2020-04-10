@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import COLORS from '../../assets/colors';
-import Img from './Img';
-import Button from './Button';
-import RoundButton from './RoundButton';
-import AddItemView from './AddItemView';
-import Spinner from './Spinner';
-import calcBestPrice from '../utilities/calcBestPrice';
+import COLORS from '../../../assets/colors';
+import Img from '../common/Img';
+import Button from '../common/Button';
+import RoundButton from '../common/RoundButton';
+import AddItemView from '../../components/shopping-list/AddItemView';
+import Spinner from '../common/Spinner';
+import calcBestPrice from '../../utilities/calcBestPrice';
 export default ({product}, props) => {
     const [amount, setAmount] = useState(1);
     const [lowestPrice, setLowestPrice] = useState(null);

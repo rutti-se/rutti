@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {Text, View, StyleSheet} from 'react-native';
-import COLOR from '../../assets/colors';
-import RoundButton from './RoundButton';
-import FadeInView from '../components/animations/FadeInView';
-import Spinner from './Spinner';
-import Img from './Img';
+import COLOR from '../../../assets/colors';
+import RoundButton from '../common/RoundButton';
+import FadeInView from '../animations/FadeInView';
+import Spinner from '../common/Spinner';
+import Img from '../common/Img';
 export default ({addToList, product}, props) => {
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [productName, setProductName] = useState(null);

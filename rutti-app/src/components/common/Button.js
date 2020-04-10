@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Text, StyleSheet, View} from 'react-native';
-import {Icon} from '../../assets/icomoon';
-import COLOR from '../../assets/colors';
+import {Icon} from '../../../assets/icomoon';
+import COLOR from '../../../assets/colors';
 import LottieView from 'lottie-react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
@@ -35,7 +35,7 @@ export default (
                 <View style={styles.buttonContent}>
                     {isLoading ? (
                         <LottieView
-                            source={require('../../assets/animations/button-loading.json')}
+                            source={require('../../../assets/animations/button-loading.json')}
                             autoPlay
                             loop
                             style={{height: 60}}

@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {View, Dimensions} from 'react-native';
-import AddItemView from '../components/AddItemView';
-import Button from '../components/Button';
-import ShoppingList from '../components/ShoppingList';
+import AddItemView from '../components/shopping-list/AddItemView';
+import Button from '../components/common/Button';
+import ShoppingList from '../components/shopping-list/ShoppingList';
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const containerHeight = SCREEN_HEIGHT / 1.3;
 

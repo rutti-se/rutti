@@ -8,11 +8,11 @@ import {
 } from 'react-native';
 
 import COLORS from '../../assets/colors';
-import RoundButton from '../components/RoundButton';
+import RoundButton from '../components/common/RoundButton';
 import FadeInView from '../components/animations/FadeInView';
 import calcBestPrice from '../utilities/calcBestPrice';
-import Button from '../components/Button';
-import Img from '../components/Img';
+import Button from '../components/common/Button';
+import Img from '../components/common/Img';
 import CollapsibleView from '../components/CollapsibleView';
 import {Dimensions} from 'react-native';
 const DEVICE = Dimensions.get('window');
@@ -41,7 +41,8 @@ export default ({productInfo, storeInfo, onPress, closeButton}) => {
                         color="white"
                         icon="cross"
                         iconColor="black"
-                        onPress={closeButton}></RoundButton>
+                        onPress={closeButton}
+                    />
                 </View>
             </View>
         );
@@ -91,7 +92,7 @@ export default ({productInfo, storeInfo, onPress, closeButton}) => {
                         marginRight: '5%',
                         alignItems: 'flex-end',
                     }}>
-                    <RoundButton icon={'buy-online-add'}></RoundButton>
+                    <RoundButton icon={'buy-online-add'} />
                 </View>
             </View>
         );
@@ -110,9 +111,8 @@ export default ({productInfo, storeInfo, onPress, closeButton}) => {
                                         : store.store.retailer
                                 }
                                 small={true}
-                                backgroundColor={
-                                    COLORS[store.store.retailer]
-                                }></Button>
+                                backgroundColor={COLORS[store.store.retailer]}
+                            />
                         </View>
                     );
                 })}

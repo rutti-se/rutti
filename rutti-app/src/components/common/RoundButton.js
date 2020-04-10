@@ -1,7 +1,7 @@
 import React, {Component, useEffect, useState} from 'react';
 import {Text, StyleSheet, View} from 'react-native';
-import {Icon} from '../../assets/icomoon';
-import COLOR from '../../assets/colors';
+import {Icon} from '../../../assets/icomoon';
+import COLOR from '../../../assets/colors';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 export default (
     {

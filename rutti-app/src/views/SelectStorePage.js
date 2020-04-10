@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import InputField from '../components/InputField';
+import InputField from '../components/common/InputField';
 import findStores from '../api/findStores';
 import COLORS from '../../assets/colors';
 
@@ -22,7 +22,7 @@ export default () => {
     }
     return (
         <View>
-            <InputField onChange={onTextChange}></InputField>
+            <InputField onChange={onTextChange} />
             <View>
                 {stores.map(store => (
                     <>

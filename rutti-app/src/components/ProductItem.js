@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, Alert} from 'react-native';
 import COLORS from '../../assets/colors';
-import RoundButton from './RoundButton';
+import RoundButton from './common/RoundButton';
 import calcBestPrice from '../utilities/calcBestPrice';
 import SkeletonContent from 'react-native-skeleton-content-nonexpo';
-import Img from './Img';
+import Img from './common/Img';
 
 export default ({productInfo, storeInfo, onPress, onLongPress, isLoading}) => {
     const [lowestPrice, setLowestPrice] = useState(null);
@@ -23,9 +23,8 @@ export default ({productInfo, storeInfo, onPress, onLongPress, isLoading}) => {
                 <RoundButton
                     icon={'buy-online-add'}
                     onPress={() => onPress({productInfo, storeInfo})}
-                    onLongPress={() =>
-                        onLongPress({productInfo, storeInfo})
-                    }></RoundButton>
+                    onLongPress={() => onLongPress({productInfo, storeInfo})}
+                />
             </View>
         );
     };
@@ -48,7 +47,7 @@ export default ({productInfo, storeInfo, onPress, onLongPress, isLoading}) => {
                     ? productInfo?.name
                     : productInfo?.brand}
             </Text>
-            <RenderBottom></RenderBottom>
+            <RenderBottom />
         </SkeletonContent>
     );
 };
