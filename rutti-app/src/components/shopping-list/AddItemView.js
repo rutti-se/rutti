@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
         width: '95%',
         height: 50,
         alignSelf: 'center',
-        marginBottom: 50,
+        marginBottom: 40,
     },
     contentContainer: {
         padding: 5,

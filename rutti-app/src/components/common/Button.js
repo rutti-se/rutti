@@ -100,12 +100,14 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         height: 60,
         padding: 5,
+        marginBottom: 6,
         justifyContent: 'center',
     },
     buttonSmall: {
         width: '100%',
         borderRadius: 50,
         height: 30,
+        marginBottom: 6,
         justifyContent: 'center',
     },
     buttonContent: {
