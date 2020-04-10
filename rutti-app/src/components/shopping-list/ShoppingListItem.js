@@ -8,7 +8,7 @@ import AddItemView from '../../components/shopping-list/AddItemView';
 import Spinner from '../common/Spinner';
 import calcBestPrice from '../../utilities/calcBestPrice';
 
-export default ({product}, props) => {
+export default ({product, removeItem}, props) => {
     const [lowestPrice, setLowestPrice] = useState(null);
 
     useEffect(() => {
@@ -22,14 +22,14 @@ export default ({product}, props) => {
             <View style={styles.storeContainer}>
                 {product.data.storeInformation.map(store => {
                     return (
-                        <View style={{width: 75, marginRight: 10}}>
+                        <View style={{width: 60, marginRight: 5}}>
                             <Button
                                 text={
                                     store.store.retailer === 'citygross'
                                         ? 'c.g'
                                         : store.store.retailer
                                 }
-                                small={true}
+                                extraSmall={true}
                                 backgroundColor={COLORS[store.store.retailer]}
                             />
                         </View>
@@ -46,7 +46,7 @@ export default ({product}, props) => {
                 iconColor={'black'}
                 small={true}
                 color={COLORS.WHITE}
-                onPress={() => console.log('remove')}
+                onPress={() => removeItem(product)}
             />
             <View style={styles.leftContainer}>
                 {product.data && (
@@ -70,13 +70,17 @@ export default ({product}, props) => {
                         }
                     }}
                 />
-                <View
-                    style={{
-                        flexDirection: 'row',
-                    }}>
-                    <Text style={styles.priceText}>från</Text>
-                    <Text style={styles.price}>{lowestPrice}:-</Text>
-                </View>
+                {product.data && (
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                        }}>
+                        <Text style={styles.priceText}>från</Text>
+                        <Text style={styles.price}>
+                            {calcBestPrice(product.data.storeInformation)}:-
+                        </Text>
+                    </View>
+                )}
             </View>
         </View>
     );
@@ -98,6 +102,7 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         alignSelf: 'flex-start',
         flexDirection: 'column',
+        alignSelf: 'center',
         alignContent: 'space-between',
     },
     rightContainer: {

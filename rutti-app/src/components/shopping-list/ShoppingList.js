@@ -3,6 +3,7 @@ import {View, Text, TouchableWithoutFeedback} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import ShoppingListItem from './ShoppingListItem';
 import getProducts from '../../api/getProducts';
+import {removeProductFromList} from '../../api/firebaseHelpers';
 let cacheMap = new Map();
 
 export default ({list, stores}, props) => {
@@ -43,6 +44,10 @@ export default ({list, stores}, props) => {
         }
     }, [list]);
 
+    function removeListItem(product) {
+        removeProductFromList(list.id, product.sku, product.quantity);
+    }
+
     return (
         <View
             style={{
@@ -56,7 +61,10 @@ export default ({list, stores}, props) => {
                     <TouchableWithoutFeedback>
                         <View>
                             {products.map(product => (
-                                <ShoppingListItem product={product} />
+                                <ShoppingListItem
+                                    removeItem={e => removeListItem(e)}
+                                    product={product}
+                                />
                             ))}
                         </View>
                     </TouchableWithoutFeedback>

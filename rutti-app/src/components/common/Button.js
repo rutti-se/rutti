@@ -16,6 +16,7 @@ export default (
         children,
         onPress,
         small,
+        extraSmall,
         isLoading,
     },
     props,
@@ -25,7 +26,11 @@ export default (
             <TouchableOpacity
                 onPressOut={onPress}
                 style={[
-                    small ? styles.buttonSmall : styles.button,
+                    small
+                        ? styles.buttonSmall
+                        : extraSmall
+                        ? styles.buttonExtraSmall
+                        : styles.button,
                     shadow ? styles.shadow : '',
                     {
                         backgroundColor: getBackgroundColor(),
@@ -68,7 +73,14 @@ export default (
         return (
             text &&
             text.length > 0 && (
-                <Text style={small ? styles.textSmall : styles.text}>
+                <Text
+                    style={
+                        small
+                            ? styles.textSmall
+                            : extraSmall
+                            ? styles.textExtraSmall
+                            : styles.text
+                    }>
                     {text}
                 </Text>
             )
@@ -103,6 +115,13 @@ const styles = StyleSheet.create({
         marginBottom: 6,
         justifyContent: 'center',
     },
+    buttonExtraSmall: {
+        width: '100%',
+        borderRadius: 50,
+        height: 20,
+        marginBottom: 6,
+        justifyContent: 'center',
+    },
     buttonSmall: {
         width: '100%',
         borderRadius: 50,
@@ -127,6 +146,13 @@ const styles = StyleSheet.create({
         fontSize: 15,
         color: COLOR.WHITE,
         marginHorizontal: 5,
+        textAlign: 'center',
+        fontFamily: 'Montserrat-Bold',
+    },
+    textExtraSmall: {
+        fontSize: 15,
+        color: COLOR.WHITE,
+        //marginHorizontal: 5,
         textAlign: 'center',
         fontFamily: 'Montserrat-Bold',
     },
