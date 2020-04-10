@@ -2,19 +2,19 @@ import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import RoundButton from './RoundButton';
 
-export default ({onValueChange, textColor}, props) => {
-    const [amount, setAmount] = useState(1);
+export default ({defaultValue, onValueChange, textColor}, props) => {
+    const [quantity, setQuantity] = useState(defaultValue || 1);
 
     useEffect(() => {
-        onValueChange(amount);
-    }, [amount]);
+        onValueChange(quantity);
+    }, [quantity]);
     function addValue() {
-        setAmount(amount + 1);
+        setQuantity(quantity + 1);
     }
 
     function subValue() {
-        if (amount > 1) {
-            setAmount(amount - 1);
+        if (quantity > 1) {
+            setQuantity(quantity - 1);
         }
     }
     return (
@@ -25,7 +25,7 @@ export default ({onValueChange, textColor}, props) => {
                     styles.value,
                     {color: textColor ? textColor : 'black'},
                 ]}>
-                {amount}
+                {quantity}
             </Text>
             <RoundButton onPress={() => addValue()} small="true" text="+" />
         </View>

@@ -5,10 +5,10 @@ import RoundButton from '../common/RoundButton';
 import FadeInView from '../animations/FadeInView';
 import Spinner from '../common/Spinner';
 import Img from '../common/Img';
-export default ({addToList, product}, props) => {
+export default ({addToList, product, cancel}, props) => {
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [productName, setProductName] = useState(null);
-    const [amount, setAmount] = useState(1);
+    const [quantity, setQuantity] = useState(1);
 
     useEffect(() => {
         setSelectedProduct(null);
@@ -34,7 +34,7 @@ export default ({addToList, product}, props) => {
                         icon={'cross'}
                         color={COLOR.GRAY_2}
                         small={true}
-                        onPress={() => setSelectedProduct(null)}
+                        onPress={() => cancel()}
                     />
                     <Img
                         style={{
@@ -53,7 +53,7 @@ export default ({addToList, product}, props) => {
                         }}>
                         {productName}
                     </Text>
-                    <Spinner onValueChange={value => setAmount(value)} />
+                    <Spinner onValueChange={value => setQuantity(value)} />
                     <RoundButton
                         style={{alignSelf: 'flex-end'}}
                         icon={'check'}
@@ -61,7 +61,7 @@ export default ({addToList, product}, props) => {
                         small={'true'}
                         onPress={() => {
                             addToList({
-                                amount: amount,
+                                quantity: quantity,
                                 sku: selectedProduct.productInfo.gtin,
                             });
                             setSelectedProduct(null);
@@ -72,21 +72,9 @@ export default ({addToList, product}, props) => {
         );
     }
 
-    function renderUserView() {
-        return (
-            <FadeInView duration={500}>
-                <View style={styles.contentContainer}>
-                    <Text style={styles.text}>MotiveradBroccoli66</Text>
-
-                    <RoundButton style={{alignSelf: 'flex-end'}} text={1} />
-                </View>
-            </FadeInView>
-        );
-    }
     return (
         <View style={styles.container}>
             {selectedProduct && renderSelectedItemView()}
-            {!selectedProduct && renderUserView()}
         </View>
     );
 };

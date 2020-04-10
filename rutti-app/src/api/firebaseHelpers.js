@@ -23,7 +23,7 @@ export function emailSignUp(email, password, username) {
                         name: 'Inköpslista',
                         author: user,
                         users: [],
-                        products: {},
+                        products: [],
                     });
 
                 await user.set({lists: [firstList], stores: []});
@@ -123,27 +123,27 @@ export function getLists(username) {
     });
 }
 
-export function addProductToList(listId, product, quantity) {
+export function addProductToList(listId, sku, quantity) {
     return new Promise(async (resolve, reject) => {
         try {
             let listRef = firestore()
                 .collection('lists')
                 .doc(listId);
 
-            let list = listRef.get();
+            let list = await listRef.get();
 
             if (list.exists) {
                 let {products} = list.data();
 
-                let index = products.findIndex(e => e.sku === product);
+                let index = products.findIndex(e => e.sku === sku);
 
-                if (hasProduct >= 0) {
+                if (index >= 0) {
                     products[index].quantity += quantity;
                 } else {
-                    products.push({product, quantity});
+                    products.push({sku, quantity});
                 }
 
-                listRef.update({products});
+                await listRef.update({products});
 
                 resolve(products);
             } else {
@@ -155,34 +155,52 @@ export function addProductToList(listId, product, quantity) {
     });
 }
 
-export function removeProductFromList(listId, product, quantity) {
+export function removeProductFromList(listId, sku, quantity) {
     return new Promise(async (resolve, reject) => {
         try {
             let listRef = firestore()
                 .collection('lists')
                 .doc(listId);
 
-            let list = listRef.get();
+            let list = await listRef.get();
 
             if (list.exists) {
                 let {products} = list.data();
 
-                let index = products.findIndex(e => e.sku === product);
+                let index = products.findIndex(e => e.sku === sku);
 
-                if (
-                    hasProduct >= 0 &&
-                    products[index].quantity - quantity > 0
-                ) {
+                if (index >= 0 && products[index].quantity - quantity > 0) {
                     products[index].quantity -= quantity;
                 } else {
                     products.splice(index);
                 }
 
-                listRef.update({products});
+                await listRef.update({products});
 
                 resolve(products);
             } else {
                 throw new Error('No list found.');
+            }
+        } catch (error) {
+            reject({error});
+        }
+    });
+}
+
+export function getCurrentListRef(username) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let user = await firestore()
+                .collection('users')
+                .doc(username)
+                .get();
+
+            if (user.exists) {
+                let data = user.data();
+
+                resolve(data.lists[0]);
+            } else {
+                throw new Error('No user found!');
             }
         } catch (error) {
             reject({error});

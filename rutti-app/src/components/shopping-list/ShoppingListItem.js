@@ -7,18 +7,20 @@ import RoundButton from '../common/RoundButton';
 import AddItemView from '../../components/shopping-list/AddItemView';
 import Spinner from '../common/Spinner';
 import calcBestPrice from '../../utilities/calcBestPrice';
-export default ({product, removeItem}, props) => {
-    const [amount, setAmount] = useState(1);
+
+export default ({product}, props) => {
     const [lowestPrice, setLowestPrice] = useState(null);
 
     useEffect(() => {
-        setLowestPrice(calcBestPrice(product.storeInformation));
+        if (product.data) {
+            setLowestPrice(calcBestPrice(product.data.storeInformation));
+        }
     }, [product]);
 
     function renderStores() {
         return (
             <View style={styles.storeContainer}>
-                {product.storeInformation.map(store => {
+                {product.data.storeInformation.map(store => {
                     return (
                         <View style={{width: 75, marginRight: 10}}>
                             <Button
@@ -47,29 +49,39 @@ export default ({product, removeItem}, props) => {
                 onPress={() => console.log('remove')}
             />
             <View style={styles.leftContainer}>
-                <Text style={styles.text}>{product.productInfo.name}</Text>
-                {renderStores()}
+                {product.data && (
+                    <>
+                        <Text style={styles.text}>
+                            {product.data.productInformation.name}
+                        </Text>
+                        {renderStores()}
+                    </>
+                )}
             </View>
             <View style={styles.rightContainer}>
-                <View style={{padding: 5}}>
-                    <Spinner
-                        textColor={'white'}
-                        onValueChange={value => {
-                            setAmount(value);
-                        }}
-                    />
-                </View>
+                <Spinner
+                    defaultValue={product.quantity}
+                    textColor={'white'}
+                    onValueChange={value => {
+                        if (value > product.quantity) {
+                            console.log('value increased');
+                        } else {
+                            console.log('value decreased');
+                        }
+                    }}
+                />
                 <View
                     style={{
                         flexDirection: 'row',
                     }}>
                     <Text style={styles.priceText}>från</Text>
-                    <Text style={styles.price}>{lowestPrice * amount}:-</Text>
+                    <Text style={styles.price}>{lowestPrice}:-</Text>
                 </View>
             </View>
         </View>
     );
 };
+
 const styles = StyleSheet.create({
     container: {
         height: 100,
