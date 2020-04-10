@@ -1,10 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text} from 'react-native';
-import {
-    TouchableWithoutFeedback,
-    ScrollView,
-    TouchableOpacity,
-} from 'react-native-gesture-handler';
+import {View, Text, TouchableWithoutFeedback} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
 import ShoppingListItem from './ShoppingListItem';
 export default ({selectedProduct, user, logout}, props) => {
     const product = {

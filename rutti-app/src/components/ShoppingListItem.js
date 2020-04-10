@@ -3,7 +3,7 @@ import {View, Text, StyleSheet} from 'react-native';
 import COLORS from '../../assets/colors';
 import Img from './Img';
 import Button from './Button';
-export default ({product}, props) => {
+export default ({product, amount}, props) => {
     function renderStores() {
         return (
             <View style={styles.storeContainer}>
@@ -38,11 +38,12 @@ export default ({product}, props) => {
 };
 const styles = StyleSheet.create({
     container: {
-        height: 130,
+        height: 100,
         width: '100%',
         backgroundColor: COLORS.GRAY_2,
         flexDirection: 'row',
-        marginBottom: 10,
+        marginBottom: 2,
+        borderRadius: 10,
         padding: 15,
         alignItems: 'center',
     },
