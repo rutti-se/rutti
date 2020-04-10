@@ -17,7 +17,7 @@ import * as RootNavigation from '../views/RootNavigation';
 import AddItemView from '../components/shopping-list/AddItemView';
 import BottomDrawerContent from '../views/BottomDrawerContent';
 const DEVICE = Dimensions.get('window');
-import {getStores} from '../api/firebaseHelpers';
+import {getStores, getCurrentListRef} from '../api/firebaseHelpers';
 
 export default () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -28,7 +28,8 @@ export default () => {
     const debouncedSearchTerm = useDebounce(searchTerm, 500);
     const [selectedProduct, setSelectedProduct] = useState(null);
     let [user, setUser] = useState(null);
-    let [stores, setStores] = useState([]);
+    let [stores, setStores] = useState(null);
+    let [list, setList] = useState(null);
 
     useEffect(() => {
         let unsubscribe = firebase.auth().onAuthStateChanged(user => {
@@ -44,16 +45,20 @@ export default () => {
             console.log(user.displayName);
             getStores(user.displayName)
                 .then(stores => {
-                    let arr = [];
-                    stores.map(store => {
-                        arr.push({
-                            retailer: store.retailer.toLowerCase(),
-                            storeId: store.storeId,
-                        });
-                    });
-                    setStores(arr);
+                    setStores(stores);
                 })
                 .catch(error => console.log(error));
+            getCurrentListRef(user.displayName).then(listRef =>
+                listRef.onSnapshot(
+                    snapshot => {
+                        console.log('id:', snapshot.id);
+                        let listObject = snapshot.data();
+                        listObject.id = snapshot.id;
+                        setList(listObject);
+                    },
+                    () => 'list update error',
+                ),
+            );
         }
     }, [user]);
 
@@ -120,6 +125,8 @@ export default () => {
 
             <BottomDrawer startUp={true}>
                 <BottomDrawerContent
+                    list={list}
+                    stores={stores}
                     logout={() => logout()}
                     selectedProduct={selectedProduct}
                 />

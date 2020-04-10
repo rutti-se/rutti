@@ -3,11 +3,14 @@ import {View, Text, StyleSheet} from 'react-native';
 import COLORS from '../../../assets/colors';
 import Img from '../common/Img';
 import Button from '../common/Button';
-export default ({product, amount}, props) => {
+export default ({product}, props) => {
+    useEffect(() => {
+        console.log('product data:', product.data);
+    }, [product]);
     function renderStores() {
         return (
             <View style={styles.storeContainer}>
-                {product.storeInformation.map(store => {
+                {product.data.storeInformation.map(store => {
                     return (
                         <View style={{width: 75, marginRight: 10}}>
                             <Button
@@ -28,10 +31,14 @@ export default ({product, amount}, props) => {
     return (
         <View style={styles.container}>
             <View style={styles.rightContainer}>
-                <Text style={styles.text}>
-                    {product.productInformation.name}
-                </Text>
-                {renderStores()}
+                {product.data && (
+                    <>
+                        <Text style={styles.text}>
+                            {product.data.productInformation.name}
+                        </Text>
+                        {renderStores()}
+                    </>
+                )}
             </View>
         </View>
     );

@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import COLORS from '../../assets/colors';
-import RuttiLogo from '../../assets/rutti_logo.svg';
+import RuttiLogo from '../../assets/rutti_nologo.svg';
 import {View, StyleSheet} from 'react-native';
 import {firebase} from '@react-native-firebase/auth';
 import AuthView from './AuthView';
@@ -16,14 +16,14 @@ export default () => {
         let unsubscribe = firebase.auth().onAuthStateChanged(user => {
             if (initializing) {
                 if (user) {
-                    //Användare finns redan
-                    RootNavigation.replace('Home');
+                    setTimeout(() => RootNavigation.replace('Home'), 3500);
                 } else {
                     //Ingen användare
                     setLoading(false);
                 }
                 unsubscribe();
             }
+            setInitializing(false);
         });
     }, []);
 
