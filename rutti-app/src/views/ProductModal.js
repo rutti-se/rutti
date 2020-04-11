@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, ScrollView} from 'react-native';
 
-import COLORS from '../../assets/colors';
+import COLOR from '../../assets/colors';
 import RoundButton from '../components/common/RoundButton';
 import FadeInView from '../components/animations/FadeInView';
 import calcBestPrice from '../utilities/calcBestPrice';
@@ -113,7 +113,7 @@ export default ({productInfo, storeInfo, onPress, closeButton}) => {
                                             : store.retailer
                                     }
                                     small={true}
-                                    backgroundColor={COLORS[store.retailer]}
+                                    backgroundColor={COLOR[store.retailer]}
                                 />
                             </View>
                         );
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         height: '80%',
         width: '100%',
-        backgroundColor: COLORS.WHITE,
+        backgroundColor: COLOR.WHITE,
         padding: 10,
         margin: 5,
         flexDirection: 'column',
@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
     },
 
     price: {
-        color: COLORS.PRIMARY,
+        color: COLOR.PRIMARY,
         fontFamily: 'Montserrat-Bold',
         fontSize: 20,
         alignSelf: 'flex-end',

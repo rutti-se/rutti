@@ -16,22 +16,16 @@ import Img from '../common/Img';
 import CollapsibleView from '../CollapsibleView';
 import {Dimensions} from 'react-native';
 import Spinner from '../common/Spinner';
-<<<<<<< HEAD
 import {removeProductFromList} from '../../api/firebaseHelpers';
-=======
 import filterStores from '../../utilities/filterStores';
->>>>>>> 3112ce0a9600fcaefe33342f8df69c0933fcb900
 
 const DEVICE = Dimensions.get('window');
 
 export default ({product, setQuantity, removeItem}) => {
     const [lowestPrice, setLowestPrice] = useState(null);
-<<<<<<< HEAD
     const [spinnerValue, setSpinnerValue] = useState(product.quantity);
-
-=======
     const [inStores, setInStores] = useState(null);
->>>>>>> 3112ce0a9600fcaefe33342f8df69c0933fcb900
+
     useEffect(() => {
         setLowestPrice(calcBestPrice(product.data.storeInformation));
 
@@ -107,22 +101,6 @@ export default ({product, setQuantity, removeItem}) => {
     function renderStores() {
         return (
             <View style={styles.storeContainer}>
-<<<<<<< HEAD
-                {product.data.storeInformation.map(store => {
-                    return (
-                        <View style={{width: 75, marginRight: 10}}>
-                            <Button
-                                text={
-                                    store.store.retailer === 'citygross'
-                                        ? 'c.g'
-                                        : store.store.retailer
-                                }
-                                small={true}
-                                backgroundColor={COLOR[store.store.retailer]}
-                            />
-                        </View>
-                    );
-=======
                 {inStores.map(store => {
                     if (store.isSelected) {
                         return (
@@ -134,12 +112,11 @@ export default ({product, setQuantity, removeItem}) => {
                                             : store.retailer
                                     }
                                     small={true}
-                                    backgroundColor={COLORS[store.retailer]}
+                                    backgroundColor={COLOR[store.retailer]}
                                 />
                             </View>
                         );
                     }
->>>>>>> 3112ce0a9600fcaefe33342f8df69c0933fcb900
                 })}
             </View>
         );

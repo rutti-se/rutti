@@ -36,23 +36,6 @@ export default ({product, removeItem, setQuantity}, props) => {
     function renderStores() {
         return (
             <View style={styles.storeContainer}>
-<<<<<<< HEAD
-                {product.data.storeInformation.map(store => {
-                    return (
-                        <View style={{width: 60, marginRight: 5}}>
-                            <Button
-                                disabled={true}
-                                text={
-                                    store.store.retailer === 'citygross'
-                                        ? 'c.g'
-                                        : store.store.retailer
-                                }
-                                extraSmall={true}
-                                backgroundColor={COLOR[store.store.retailer]}
-                            />
-                        </View>
-                    );
-=======
                 {inStores.map(store => {
                     if (store.isSelected) {
                         return (
@@ -65,12 +48,11 @@ export default ({product, removeItem, setQuantity}, props) => {
                                             : store.retailer
                                     }
                                     extraSmall={true}
-                                    backgroundColor={COLORS[store.retailer]}
+                                    backgroundColor={COLOR[store.retailer]}
                                 />
                             </View>
                         );
                     }
->>>>>>> 3112ce0a9600fcaefe33342f8df69c0933fcb900
                 })}
             </View>
         );

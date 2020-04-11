@@ -117,13 +117,14 @@ export default () => {
                 }}>
                 <RuttiLogo width={40} height={40} />
 
-                <LottieView
-                    style={{position: 'relative', marginLeft: 40}}
-                    resizeMode={'center'}
-                    width={40}
-                    height={40}
-                    source={require('../../assets/animations/hamburger.json')}
-                />
+                <View style={{height: 40, width: 40, marginLeft: 40}}>
+                    <LottieView
+                        resizeMode={'center'}
+                        width={40}
+                        height={40}
+                        source={require('../../assets/animations/hamburger.json')}
+                    />
+                </View>
             </View>
 
             <InputField
@@ -135,15 +136,18 @@ export default () => {
                 style={[{marginBottom: DEVICE.height / 4.8}, {marginTop: 10}]}>
                 {renderProductPage()}
             </View>
-            {!results.length > 0 && (
-                <LottieView
-                    source={require('../../assets/animations/cup-of-tea.json')}
-                    autoPlay
-                    resizeMode={'contain'}
-                    loop
-                    width={DEVICE.width * 1}
-                />
-            )}
+            <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                {!results.length > 0 && (
+                    <LottieView
+                        source={require('../../assets/animations/cup-of-tea.json')}
+                        autoPlay
+                        resizeMode={'contain'}
+                        loop
+                        height={400}
+                        width={DEVICE.width * 1}
+                    />
+                )}
+            </View>
 
             <BottomDrawer>
                 <BottomDrawerContent
