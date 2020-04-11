@@ -54,7 +54,6 @@ export default ({productSkus, stores, selectProduct}) => {
             getProducts({stores, productSkus}).then(result => {
                 result.map(res => {
                     if (res.status !== '400') {
-                        console.log('Respons', res.data);
                         newDetails[res.data.productInformation.gtin] = res.data;
                     }
                 });

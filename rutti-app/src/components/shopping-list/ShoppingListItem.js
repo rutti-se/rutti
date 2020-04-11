@@ -11,11 +11,12 @@ import Popup from '../common/Popup';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Icon} from '../../../assets/icomoon';
 import DetailedProduct from './DetailedProduct';
+import filterStores from '../../utilities/filterStores';
 
 export default ({product, removeItem}, props) => {
     const [lowestPrice, setLowestPrice] = useState(null);
     const [productName, setProductName] = useState(null);
-
+    const [inStores, setInStores] = useState(null);
     const [pickedUp, setPickedUp] = useState(false);
 
     const [popupVisible, setPopupVisible] = useState(false);
@@ -28,27 +29,30 @@ export default ({product, removeItem}, props) => {
         setProductName(name);
         if (product.data) {
             setLowestPrice(calcBestPrice(product.data.storeInformation));
+            setInStores(filterStores(product.data.storeInformation));
         }
     }, [product.data]);
 
     function renderStores() {
         return (
             <View style={styles.storeContainer}>
-                {product.data.storeInformation.map(store => {
-                    return (
-                        <View style={{width: 60, marginRight: 5}}>
-                            <Button
-                                disabled={true}
-                                text={
-                                    store.store.retailer === 'citygross'
-                                        ? 'c.g'
-                                        : store.store.retailer
-                                }
-                                extraSmall={true}
-                                backgroundColor={COLORS[store.store.retailer]}
-                            />
-                        </View>
-                    );
+                {inStores.map(store => {
+                    if (store.isSelected) {
+                        return (
+                            <View style={{width: 60, marginRight: 5}}>
+                                <Button
+                                    disabled={true}
+                                    text={
+                                        store.retailer === 'citygross'
+                                            ? 'c.g'
+                                            : store.retailer
+                                    }
+                                    extraSmall={true}
+                                    backgroundColor={COLORS[store.retailer]}
+                                />
+                            </View>
+                        );
+                    }
                 })}
             </View>
         );
@@ -68,7 +72,7 @@ export default ({product, removeItem}, props) => {
                 {product.data && (
                     <>
                         <Text style={styles.text}>{productName}</Text>
-                        {renderStores()}
+                        {inStores && renderStores()}
                     </>
                 )}
             </View>

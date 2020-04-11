@@ -16,14 +16,17 @@ import Img from '../common/Img';
 import CollapsibleView from '../CollapsibleView';
 import {Dimensions} from 'react-native';
 import Spinner from '../common/Spinner';
+import filterStores from '../../utilities/filterStores';
 
 const DEVICE = Dimensions.get('window');
 
 export default ({product, inShoppingList}) => {
     const [lowestPrice, setLowestPrice] = useState(null);
-
+    const [inStores, setInStores] = useState(null);
     useEffect(() => {
         setLowestPrice(calcBestPrice(product.data.storeInformation));
+
+        setInStores(filterStores(product.data.storeInformation));
     }, [product.data.storeInformation]);
 
     function renderTop() {
@@ -80,7 +83,7 @@ export default ({product, inShoppingList}) => {
                     flexDirection: 'row',
                     alignItems: 'center',
                 }}>
-                {renderStores()}
+                {inStores && renderStores()}
                 <View
                     style={{
                         flex: 1,
@@ -95,20 +98,22 @@ export default ({product, inShoppingList}) => {
     function renderStores() {
         return (
             <View style={styles.storeContainer}>
-                {product.data.storeInformation.map(store => {
-                    return (
-                        <View style={{width: 75, marginRight: 10}}>
-                            <Button
-                                text={
-                                    store.store.retailer === 'citygross'
-                                        ? 'c.g'
-                                        : store.store.retailer
-                                }
-                                small={true}
-                                backgroundColor={COLORS[store.store.retailer]}
-                            />
-                        </View>
-                    );
+                {inStores.map(store => {
+                    if (store.isSelected) {
+                        return (
+                            <View style={{width: 75, marginRight: 10}}>
+                                <Button
+                                    text={
+                                        store.retailer === 'citygross'
+                                            ? 'c.g'
+                                            : store.retailer
+                                    }
+                                    small={true}
+                                    backgroundColor={COLORS[store.retailer]}
+                                />
+                            </View>
+                        );
+                    }
                 })}
             </View>
         );
