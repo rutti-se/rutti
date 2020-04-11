@@ -109,11 +109,7 @@ export default ({product, removeItem}, props) => {
                     console.log('close');
                     setPopupVisible(false);
                 }}>
-<<<<<<< HEAD
                 <DetailedProduct product={product} />
-=======
-                <View style={{flex: 1, backgroundColor: 'black'}} />
->>>>>>> 9a61a2118ab840523d3dfba405c07fc72ac9cef5
             </Popup>
         </View>
     );

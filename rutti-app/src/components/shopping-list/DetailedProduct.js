@@ -15,6 +15,8 @@ import Button from '../common/Button';
 import Img from '../common/Img';
 import CollapsibleView from '../CollapsibleView';
 import {Dimensions} from 'react-native';
+import Spinner from '../common/Spinner';
+
 const DEVICE = Dimensions.get('window');
 
 export default ({product, inShoppingList}) => {
@@ -84,9 +86,8 @@ export default ({product, inShoppingList}) => {
                         flex: 1,
                         marginRight: '5%',
                         alignItems: 'flex-end',
-                    }}>
-                    <RoundButton icon={'buy-online-add'} />
-                </View>
+                    }}
+                />
             </View>
         );
     }
@@ -151,7 +152,49 @@ export default ({product, inShoppingList}) => {
                     {renderTop()}
                     {renderNameAndPrice()}
                     {renderMiddle()}
-                    {<Text>Ta bort, ändra, godkänn här</Text>}
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            marginTop: 5,
+                            padding: 20,
+                            paddingTop: 5,
+                            paddingBottom: 5,
+                            backgroundColor: COLORS.GRAY_5,
+                            borderRadius: 25,
+                        }}>
+                        <View style={{marginRight: 10}}>
+                            <RoundButton
+                                disabled={!product.quantity}
+                                icon={'cross'}
+                                color={
+                                    product.quantity
+                                        ? COLORS.GRAY_2
+                                        : COLORS.GRAY_4
+                                }
+                                inAnimatedView={true}
+                                onPress={() => cancel()}
+                            />
+                        </View>
+                        <Spinner
+                            onValueChange={() => console.log('quantity')}
+                        />
+                        <View style={{marginLeft: 10}}>
+                            <RoundButton
+                                icon={'check'}
+                                color={COLORS.COOP}
+                                inAnimatedView={true}
+                                onPress={() => {
+                                    addToList({
+                                        quantity: quantity,
+                                        sku: selectedProduct.productInfo.gtin,
+                                    });
+                                    setSelectedProduct(null);
+                                }}
+                            />
+                        </View>
+                    </View>
+
                     {renderProductDetails()}
                 </ScrollView>
             </FadeInView>
