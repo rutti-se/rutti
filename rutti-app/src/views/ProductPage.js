@@ -74,7 +74,7 @@ export default ({productSkus, stores, selectProduct}) => {
             <ProductItem
                 productInfo={item?.productInformation}
                 storeInfo={item?.storeInformation}
-                onLongPress={showProductDetail}
+                onItemPress={showProductDetail}
                 onPress={e => selectProduct(e)}
                 isLoading={isLoading}
                 index={index}
@@ -88,6 +88,7 @@ export default ({productSkus, stores, selectProduct}) => {
                 <View style={{height: DEVICE.height / 1.1, width: '100%'}}>
                     <ProductModal
                         productInfo={aboutProduct.productInfo}
+                        onPress={e => selectProduct(e)}
                         storeInfo={aboutProduct.storeInfo}
                         closeButton={() => setAboutProduct(null)}
                     />

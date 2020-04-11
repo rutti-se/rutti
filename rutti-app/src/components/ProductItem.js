@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, Alert} from 'react-native';
+import {View, Text, StyleSheet, Alert, TouchableOpacity} from 'react-native';
 import COLORS from '../../assets/colors';
 import RoundButton from './common/RoundButton';
 import calcBestPrice from '../utilities/calcBestPrice';
 import SkeletonContent from 'react-native-skeleton-content-nonexpo';
 import Img from './common/Img';
 
-export default ({productInfo, storeInfo, onPress, onLongPress, isLoading}) => {
+export default ({productInfo, storeInfo, onPress, onItemPress, isLoading}) => {
     const [lowestPrice, setLowestPrice] = useState(null);
 
     useEffect(() => {
@@ -23,7 +23,6 @@ export default ({productInfo, storeInfo, onPress, onLongPress, isLoading}) => {
                 <RoundButton
                     icon={'buy-online-add'}
                     onPress={() => onPress({productInfo, storeInfo})}
-                    onLongPress={() => onLongPress({productInfo, storeInfo})}
                 />
             </View>
         );
@@ -35,13 +34,17 @@ export default ({productInfo, storeInfo, onPress, onLongPress, isLoading}) => {
             isLoading={isLoading}
             layout={[
                 {key: 'image', width: 170, height: 170, marginBottom: 6},
-                {key: 'text', width: 120, height: 14, marginBottom: 6},
+                {key: 'titleText', width: 120, height: 14, marginBottom: 6},
             ]}>
-            <Img
-                style={styles.image}
-                resizeMode="contain"
-                source={productInfo?.imageUrl}
-            />
+            <TouchableOpacity
+                style={{maxHeight: 170}}
+                onPress={() => onItemPress({productInfo, storeInfo})}>
+                <Img
+                    style={styles.image}
+                    resizeMode="contain"
+                    source={productInfo?.imageUrl}
+                />
+            </TouchableOpacity>
             <Text style={styles.text}>
                 {productInfo?.name.length > 0
                     ? productInfo?.name
@@ -79,7 +82,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Montserrat-Bold',
     },
     bottom: {
-        marginTop: 20,
+        marginTop: 10,
         flexDirection: 'row',
         justifyContent: 'space-around',
         width: '100%',

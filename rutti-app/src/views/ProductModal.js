@@ -1,11 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-    View,
-    Text,
-    StyleSheet,
-    ImageBackground,
-    ScrollView,
-} from 'react-native';
+import {View, Text, StyleSheet, ScrollView} from 'react-native';
 
 import COLORS from '../../assets/colors';
 import RoundButton from '../components/common/RoundButton';
@@ -17,7 +11,7 @@ import CollapsibleView from '../components/CollapsibleView';
 import {Dimensions} from 'react-native';
 const DEVICE = Dimensions.get('window');
 export default ({productInfo, storeInfo, onPress, closeButton}) => {
-    const [lowestPrice, setLowestPrice] = useState(null);
+    const [lowestPrice, setLowestPrice, selectProduct] = useState(null);
 
     useEffect(() => {
         setLowestPrice(calcBestPrice(storeInfo));
@@ -92,7 +86,10 @@ export default ({productInfo, storeInfo, onPress, closeButton}) => {
                         marginRight: '5%',
                         alignItems: 'flex-end',
                     }}>
-                    <RoundButton icon={'buy-online-add'} />
+                    <RoundButton
+                        onPress={() => onPress({productInfo, storeInfo})}
+                        icon={'buy-online-add'}
+                    />
                 </View>
             </View>
         );
@@ -105,6 +102,7 @@ export default ({productInfo, storeInfo, onPress, closeButton}) => {
                     return (
                         <View style={{width: 75, marginRight: 10}}>
                             <Button
+                                disabled={true}
                                 text={
                                     store.store.retailer === 'citygross'
                                         ? 'c.g'

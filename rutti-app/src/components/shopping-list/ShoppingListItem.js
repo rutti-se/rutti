@@ -13,9 +13,23 @@ import {Icon} from '../../../assets/icomoon';
 import DetailedProduct from './DetailedProduct';
 
 export default ({product, removeItem}, props) => {
+    const [lowestPrice, setLowestPrice] = useState(null);
+    const [productName, setProductName] = useState(null);
+
     const [pickedUp, setPickedUp] = useState(false);
 
     const [popupVisible, setPopupVisible] = useState(false);
+    useEffect(() => {
+        let name = '';
+        product.data && (name = product.data.productInformation.name);
+        if (name.length > 25) {
+            name = name.substring(0, 25) + '...';
+        }
+        setProductName(name);
+        if (product.data) {
+            setLowestPrice(calcBestPrice(product.data.storeInformation));
+        }
+    }, [product.data]);
 
     function renderStores() {
         return (
@@ -24,6 +38,7 @@ export default ({product, removeItem}, props) => {
                     return (
                         <View style={{width: 60, marginRight: 5}}>
                             <Button
+                                disabled={true}
                                 text={
                                     store.store.retailer === 'citygross'
                                         ? 'c.g'
@@ -48,20 +63,11 @@ export default ({product, removeItem}, props) => {
                 inAnimatedView={true}
                 onPress={() => setPopupVisible(true)}
             />
-            {/* <RoundButton
-                icon={'cross'}
-                iconColor={'black'}
-                small={true}
-                color={COLORS.WHITE}
-                inAnimatedView={true}
-                onPress={() => removeItem(product)}
-            /> */}
+
             <View style={styles.leftContainer}>
                 {product.data && (
                     <>
-                        <Text style={styles.text}>
-                            {product.data.productInformation.name}
-                        </Text>
+                        <Text style={styles.text}>{productName}</Text>
                         {renderStores()}
                     </>
                 )}
@@ -73,9 +79,7 @@ export default ({product, removeItem}, props) => {
                             flexDirection: 'row',
                         }}>
                         <Text style={styles.priceText}>från</Text>
-                        <Text style={styles.price}>
-                            {calcBestPrice(product.data.storeInformation)}:-
-                        </Text>
+                        <Text style={styles.price}>{lowestPrice}:-</Text>
                     </View>
                 )}
             </View>
@@ -105,7 +109,11 @@ export default ({product, removeItem}, props) => {
                     console.log('close');
                     setPopupVisible(false);
                 }}>
+<<<<<<< HEAD
                 <DetailedProduct product={product} />
+=======
+                <View style={{flex: 1, backgroundColor: 'black'}} />
+>>>>>>> 9a61a2118ab840523d3dfba405c07fc72ac9cef5
             </Popup>
         </View>
     );
@@ -126,7 +134,7 @@ const styles = StyleSheet.create({
     leftContainer: {
         flex: 1,
         marginLeft: 10,
-        alignSelf: 'flex-start',
+        alignSelf: 'flex-end',
         flexDirection: 'column',
         alignContent: 'space-between',
     },
@@ -138,6 +146,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
     },
     text: {
+        flex: 1,
         fontFamily: 'Montserrat-bold',
         fontSize: 15,
         color: COLORS.WHITE,
@@ -158,10 +167,9 @@ const styles = StyleSheet.create({
     priceText: {
         fontFamily: 'Montserrat-regular',
         fontSize: 12,
-        marginBottom: 2,
-        marginTop: 5,
+        marginBottom: 3,
         color: COLORS.WHITE,
-        alignSelf: 'flex-start',
+        alignSelf: 'flex-end',
     },
     checkBox: {
         position: 'absolute',
