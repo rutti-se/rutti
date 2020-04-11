@@ -27,55 +27,65 @@ export default ({product, setQuantity, removeItem}) => {
     const [inStores, setInStores] = useState(null);
 
     useEffect(() => {
-        setLowestPrice(calcBestPrice(product.data.storeInformation));
+        if (product && product.storeInformation) {
+            setLowestPrice(calcBestPrice(product?.data?.storeInformation));
 
-        setInStores(filterStores(product.data.storeInformation));
-    }, [product.data.storeInformation]);
+            setInStores(filterStores(product?.data?.storeInformation));
+        }
+    }, [product]);
 
     function renderTop() {
         return (
-            <View
-                style={{
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                }}>
-                <Img
-                    style={styles.image}
-                    source={product.data.productInformation.imageUrl}
-                />
-            </View>
+            product &&
+            product.data &&
+            product.data.productInformation && (
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                    }}>
+                    <Img
+                        style={styles.image}
+                        source={product?.data?.productInformation?.imageUrl}
+                    />
+                </View>
+            )
         );
     }
 
     function renderNameAndPrice() {
         return (
-            <View style={styles.nameContainer}>
-                <View
-                    style={{
-                        flexDirection: 'column',
-                        flex: 2.5,
-                    }}>
-                    <Text style={styles.text}>
-                        {product.data.productInformation.name.length > 0
-                            ? product.data.productInformation.name
-                            : product.data.productInformation.brand}
-                    </Text>
-                    <Text style={styles.infoText}>
-                        {product.data.productInformation.name.length > 0
-                            ? product.data.productInformation.brand
-                            : ''}
-                    </Text>
-                </View>
+            product &&
+            product.data &&
+            product.data.productInformation && (
+                <View style={styles.nameContainer}>
+                    <View
+                        style={{
+                            flexDirection: 'column',
+                            flex: 2.5,
+                        }}>
+                        <Text style={styles.text}>
+                            {product?.data?.productInformation?.name?.length > 0
+                                ? product?.data?.productInformation?.name
+                                : product?.data?.productInformation?.brand}
+                        </Text>
+                        <Text style={styles.infoText}>
+                            {product?.data?.productInformation?.name?.length > 0
+                                ? product?.data?.productInformation?.brand
+                                : ''}
+                        </Text>
+                    </View>
 
-                <View
-                    style={{
-                        flexDirection: 'row',
-                        flex: 1,
-                    }}>
-                    <Text style={styles.priceText}>från</Text>
-                    <Text style={styles.price}>{lowestPrice}:-</Text>
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            flex: 1,
+                        }}>
+                        <Text style={styles.priceText}>från</Text>
+                        <Text style={styles.price}>{lowestPrice}:-</Text>
+                    </View>
                 </View>
-            </View>
+            )
         );
     }
 
@@ -130,20 +140,23 @@ export default ({product, setQuantity, removeItem}) => {
                         flexDirection: 'column',
                     }}>
                     <Text styles={styles.infoText}>
-                        {product.data.productInformation.description}
+                        {product?.data?.productInformation?.description}
                     </Text>
                     <View style={{marginTop: 10}}>
                         <CollapsibleView title={'Ingredienser'}>
                             <Text style={styles.infoText}>
-                                {product.data.productInformation.ingredientInfo}
+                                {
+                                    product?.data?.productInformation
+                                        ?.ingredientInfo
+                                }
                             </Text>
                         </CollapsibleView>
 
                         <CollapsibleView title={'Näringsvärde per 100g'}>
                             <Text style={styles.infoText}>
                                 {
-                                    product.data.productInformation
-                                        .nutritionalInfo
+                                    product?.data?.productInformation
+                                        ?.nutritionalInfo
                                 }
                             </Text>
                         </CollapsibleView>

@@ -7,20 +7,23 @@ import SkeletonContent from 'react-native-skeleton-content-nonexpo';
 import Img from './common/Img';
 import Popup from './common/Popup';
 import DetailedProduct from './shopping-list/DetailedProduct';
-import {removeProductFromList} from '../api/firebaseHelpers';
 
 export default ({product, onPress, isLoading, setQuantity, removeItem}) => {
     const [lowestPrice, setLowestPrice] = useState(null);
     const [popupVisible, setPopupVisible] = useState(false);
     const [currentProduct, setCurrentProduct] = useState(null);
 
-    console.log(product);
     useEffect(() => {
-        let temp = product;
-        if (!temp.data) {
-            temp = {sku: product.productInformation.gtin, data: product};
+        if (product) {
+            let temp = product;
+            if (!temp.data) {
+                temp = {
+                    sku: !temp.sku || product?.productInformation?.gtin,
+                    data: product,
+                };
+            }
+            setCurrentProduct(temp);
         }
-        setCurrentProduct(temp);
     }, [product]);
 
     useEffect(() => {
@@ -41,7 +44,7 @@ export default ({product, onPress, isLoading, setQuantity, removeItem}) => {
                 </View>
                 <RoundButton
                     icon={'buy-online-add'}
-                    onPress={() => onPress(product)}
+                    onPress={() => onPress(currentProduct)}
                 />
             </View>
         );
@@ -55,7 +58,7 @@ export default ({product, onPress, isLoading, setQuantity, removeItem}) => {
                 {key: 'image', width: 170, height: 170, marginBottom: 6},
                 {key: 'titleText', width: 120, height: 14, marginBottom: 6},
             ]}>
-            {currentProduct && (
+            {currentProduct && currentProduct.data && (
                 <>
                     <TouchableOpacity
                         style={{maxHeight: 170}}
@@ -64,14 +67,16 @@ export default ({product, onPress, isLoading, setQuantity, removeItem}) => {
                             style={styles.image}
                             resizeMode="contain"
                             source={
-                                currentProduct.data.productInformation?.imageUrl
+                                currentProduct?.data?.productInformation
+                                    ?.imageUrl
                             }
                         />
                     </TouchableOpacity>
                     <Text style={styles.text}>
-                        {currentProduct.data.productInformation?.name.length > 0
-                            ? currentProduct.data.productInformation?.name
-                            : currentProduct.data.productInformation?.brand}
+                        {currentProduct?.data?.productInformation?.name.length >
+                        0
+                            ? currentProduct?.data?.productInformation?.name
+                            : currentProduct?.data?.productInformation?.brand}
                     </Text>
                     <RenderBottom />
                     <Popup

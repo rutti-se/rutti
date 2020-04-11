@@ -3,7 +3,10 @@ import {View, StyleSheet, FlatList, Text} from 'react-native';
 import getProducts from '../api/getProducts';
 import ProductItem from '../components/ProductItem';
 import {Dimensions} from 'react-native';
-
+import {
+    removeProductFromList,
+    setProductQuantity,
+} from '../api/firebaseHelpers';
 const DEVICE = Dimensions.get('window');
 
 export default ({productSkus, stores, selectProduct, list}) => {
@@ -35,15 +38,15 @@ export default ({productSkus, stores, selectProduct, list}) => {
         }
     }, [stores, productSkus]); //När denna är tom körs det en gång
 
-    function renderProductItems({item}) {
+    function renderProductItems({item, index}) {
         if (item && list && item.productInformation) {
-            let index = list.products.findIndex(
+            let itemIndex = list.products.findIndex(
                 e => e.sku === item?.productInformation.gtin,
             );
 
             let listItem;
-            if (index >= 0) {
-                listItem = list.products[index];
+            if (itemIndex >= 0) {
+                listItem = list.products[itemIndex];
             }
 
             let conditionalProps = listItem
@@ -61,9 +64,16 @@ export default ({productSkus, stores, selectProduct, list}) => {
             return (
                 <ProductItem
                     product={listItem ? listItem : item}
-                    setQuantity={quantity =>
-                        setProductQuantity(list.id, product.sku, quantity)
-                    }
+                    setQuantity={quantity => {
+                        console.log(item.productInformation);
+                        setProductQuantity(
+                            list.id,
+                            listItem
+                                ? listItem.sku
+                                : item?.productInformation.gtin,
+                            quantity,
+                        );
+                    }}
                     onPress={e => selectProduct(e)}
                     isLoading={isLoading}
                     index={index}
