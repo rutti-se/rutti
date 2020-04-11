@@ -373,6 +373,10 @@ function formatIcaNames(productName, brandName) {
         name = productName.substr(0, index - 1);
         brand = productName.substr(index, productName.length);
     }
+    brand = brand
+        .replace('-', ' ')
+        .replace(/(^\w{1})|(\s{1}\w{1})/g, match => match.toUpperCase());
+    name = name.replace(brand, '').trim();
     return { name, brand };
 }
 

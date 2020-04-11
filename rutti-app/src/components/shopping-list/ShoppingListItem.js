@@ -21,7 +21,9 @@ export default ({product, removeItem}, props) => {
     useEffect(() => {
         let name = '';
         product.data && (name = product.data.productInformation.name);
-
+        if (name.length > 25) {
+            name = name.substring(0, 25) + '...';
+        }
         setProductName(name);
         if (product.data) {
             setLowestPrice(calcBestPrice(product.data.storeInformation));
@@ -60,14 +62,7 @@ export default ({product, removeItem}, props) => {
                 inAnimatedView={true}
                 onPress={() => setPopupVisible(true)}
             />
-            {/* <RoundButton
-                icon={'cross'}
-                iconColor={'black'}
-                small={true}
-                color={COLORS.WHITE}
-                inAnimatedView={true}
-                onPress={() => removeItem(product)}
-            /> */}
+
             <View style={styles.leftContainer}>
                 {product.data && (
                     <>
@@ -113,9 +108,7 @@ export default ({product, removeItem}, props) => {
                     console.log('close');
                     setPopupVisible(false);
                 }}>
-                <View
-                    style={{width: 100, height: 100, backgroundColor: 'black'}}
-                />
+                <View style={{flex: 1, backgroundColor: 'black'}} />
             </Popup>
         </View>
     );
@@ -136,7 +129,7 @@ const styles = StyleSheet.create({
     leftContainer: {
         flex: 1,
         marginLeft: 10,
-        alignSelf: 'flex-start',
+        alignSelf: 'flex-end',
         flexDirection: 'column',
         alignContent: 'space-between',
     },
@@ -148,6 +141,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
     },
     text: {
+        flex: 1,
         fontFamily: 'Montserrat-bold',
         fontSize: 15,
         color: COLORS.WHITE,
