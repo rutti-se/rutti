@@ -10,6 +10,7 @@ import calcBestPrice from '../../utilities/calcBestPrice';
 import Popup from '../common/Popup';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Icon} from '../../../assets/icomoon';
+import DetailedProduct from './DetailedProduct';
 
 export default ({product, removeItem}, props) => {
     const [pickedUp, setPickedUp] = useState(false);
@@ -104,9 +105,7 @@ export default ({product, removeItem}, props) => {
                     console.log('close');
                     setPopupVisible(false);
                 }}>
-                <View
-                    style={{width: 100, height: 100, backgroundColor: 'black'}}
-                />
+                <DetailedProduct product={product} />
             </Popup>
         </View>
     );

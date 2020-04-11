@@ -1,31 +1,33 @@
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, Text, Animated} from 'react-native';
+import {View, StyleSheet, Text, TouchableHighlight} from 'react-native';
 import {Icon} from '../../assets/icomoon';
-import {TouchableHighlight} from 'react-native-gesture-handler';
 import Collapsible from 'react-native-collapsible';
+import COLORS from '../../assets/colors';
 
 export default props => {
     const [collapsed, setCollapsed] = useState(true);
     function renderTitle() {
         return (
-            <View style={styles.titleContainer}>
-                <Text style={styles.title}>{props.title}</Text>
-                <TouchableHighlight
-                    underlayColor={'white'}
-                    onPress={() => setCollapsed(!collapsed)}>
+            <TouchableHighlight
+                underlayColor={'white'}
+                onPress={() => setCollapsed(!collapsed)}>
+                <View style={styles.titleContainer}>
+                    <Text style={styles.title}>{props.title}</Text>
+
                     <Icon
                         name={collapsed ? 'chevron-down' : 'chevron-up'}
                         size={30}
-                        color={'black'}></Icon>
-                </TouchableHighlight>
-            </View>
+                        color={'black'}
+                    />
+                </View>
+            </TouchableHighlight>
         );
     }
 
     return (
         <View style={styles.container}>
             {renderTitle()}
-            <Collapsible align={'bottom'} duration={1000} collapsed={collapsed}>
+            <Collapsible align={'bottom'} duration={600} collapsed={collapsed}>
                 <View style={styles.body}>{props.children}</View>
             </Collapsible>
         </View>
@@ -37,6 +39,7 @@ const styles = StyleSheet.create({
     titleContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        paddingVertical: 20,
     },
     title: {
         fontSize: 18,
@@ -46,5 +49,6 @@ const styles = StyleSheet.create({
     button: {},
     body: {
         flex: 1,
+        paddingBottom: 20,
     },
 });

@@ -4,7 +4,8 @@ import Modal from 'react-native-modal';
 import RoundButton from './RoundButton';
 import COLORS from '../../../assets/colors';
 
-export default ({isVisible, close}, props) => {
+export default ({isVisible, close, children}) => {
+    console.log(children);
     return (
         <Modal
             style={{justifyContent: 'center', alignItems: 'center'}}
@@ -18,20 +19,16 @@ export default ({isVisible, close}, props) => {
             backdropTransitionInTiming={600}
             backdropTransitionOutTiming={600}>
             <View style={styles.container}>
+                <View>{children}</View>
                 <View style={styles.topContainer}>
                     <RoundButton
                         icon={'cross'}
                         iconColor={COLORS.BLACK}
-                        color={COLORS.GRAY_4}
+                        color={COLORS.GRAY_5}
                         inAnimatedView={false}
-                        onPress={() => {
-                            console.log('click');
-                            close();
-                        }}
+                        onPress={close}
                     />
                 </View>
-
-                {props.children}
             </View>
         </Modal>
     );
@@ -40,8 +37,11 @@ export default ({isVisible, close}, props) => {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: 'white',
-        width: '80%',
+        width: '90%',
         minHeight: 200,
+        maxHeight: '80%',
+        borderRadius: 10,
+        padding: 10,
     },
     topContainer: {
         position: 'absolute',
