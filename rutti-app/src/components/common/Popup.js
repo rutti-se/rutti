@@ -41,7 +41,6 @@ const styles = StyleSheet.create({
         minHeight: 200,
         maxHeight: '80%',
         borderRadius: 10,
-        padding: 10,
     },
     topContainer: {
         position: 'absolute',

@@ -232,6 +232,7 @@ const styles = StyleSheet.create({
     nameContainer: {
         marginTop: 10,
         marginBottom: 10,
+        marginRight: 12,
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
