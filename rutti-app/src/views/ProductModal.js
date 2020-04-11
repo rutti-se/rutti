@@ -1,42 +1,24 @@
 import React, {useEffect, useState} from 'react';
-import {
-    View,
-    Text,
-    StyleSheet,
-    ImageBackground,
-    ScrollView,
-} from 'react-native';
+import {View, Text, StyleSheet, ScrollView} from 'react-native';
 
-import COLOR from '../../../assets/colors';
-import RoundButton from '../common/RoundButton';
-import FadeInView from '../animations/FadeInView';
-import calcBestPrice from '../../utilities/calcBestPrice';
-import Button from '../common/Button';
-import Img from '../common/Img';
-import CollapsibleView from '../CollapsibleView';
+import COLORS from '../../assets/colors';
+import RoundButton from '../components/common/RoundButton';
+import FadeInView from '../components/animations/FadeInView';
+import calcBestPrice from '../utilities/calcBestPrice';
+import Button from '../components/common/Button';
+import Img from '../components/common/Img';
+import CollapsibleView from '../components/CollapsibleView';
 import {Dimensions} from 'react-native';
-import Spinner from '../common/Spinner';
-<<<<<<< HEAD
-import {removeProductFromList} from '../../api/firebaseHelpers';
-=======
-import filterStores from '../../utilities/filterStores';
->>>>>>> 3112ce0a9600fcaefe33342f8df69c0933fcb900
+import filterStores from '../utilities/filterStores';
 
 const DEVICE = Dimensions.get('window');
-
-export default ({product, setQuantity, removeItem}) => {
+export default ({productInfo, storeInfo, onPress, closeButton}) => {
     const [lowestPrice, setLowestPrice] = useState(null);
-<<<<<<< HEAD
-    const [spinnerValue, setSpinnerValue] = useState(product.quantity);
-
-=======
     const [inStores, setInStores] = useState(null);
->>>>>>> 3112ce0a9600fcaefe33342f8df69c0933fcb900
     useEffect(() => {
-        setLowestPrice(calcBestPrice(product.data.storeInformation));
-
-        setInStores(filterStores(product.data.storeInformation));
-    }, [product.data.storeInformation]);
+        setLowestPrice(calcBestPrice(storeInfo));
+        setInStores(filterStores(storeInfo));
+    }, [storeInfo]);
 
     function renderTop() {
         return (
@@ -45,10 +27,20 @@ export default ({product, setQuantity, removeItem}) => {
                     flexDirection: 'row',
                     justifyContent: 'center',
                 }}>
-                <Img
-                    style={styles.image}
-                    source={product.data.productInformation.imageUrl}
-                />
+                <Img style={styles.image} source={productInfo.imageUrl} />
+                <View
+                    style={{
+                        position: 'absolute',
+                        right: 5,
+                        top: 5,
+                    }}>
+                    <RoundButton
+                        color="white"
+                        icon="cross"
+                        iconColor="black"
+                        onPress={closeButton}
+                    />
+                </View>
             </View>
         );
     }
@@ -62,14 +54,12 @@ export default ({product, setQuantity, removeItem}) => {
                         flex: 2.5,
                     }}>
                     <Text style={styles.text}>
-                        {product.data.productInformation.name.length > 0
-                            ? product.data.productInformation.name
-                            : product.data.productInformation.brand}
+                        {productInfo.name.length > 0
+                            ? productInfo.name
+                            : productInfo.brand}
                     </Text>
                     <Text style={styles.infoText}>
-                        {product.data.productInformation.name.length > 0
-                            ? product.data.productInformation.brand
-                            : ''}
+                        {productInfo.name.length > 0 ? productInfo.brand : ''}
                     </Text>
                 </View>
 
@@ -98,8 +88,12 @@ export default ({product, setQuantity, removeItem}) => {
                         flex: 1,
                         marginRight: '5%',
                         alignItems: 'flex-end',
-                    }}
-                />
+                    }}>
+                    <RoundButton
+                        onPress={() => onPress({productInfo, storeInfo})}
+                        icon={'buy-online-add'}
+                    />
+                </View>
             </View>
         );
     }
@@ -107,27 +101,12 @@ export default ({product, setQuantity, removeItem}) => {
     function renderStores() {
         return (
             <View style={styles.storeContainer}>
-<<<<<<< HEAD
-                {product.data.storeInformation.map(store => {
-                    return (
-                        <View style={{width: 75, marginRight: 10}}>
-                            <Button
-                                text={
-                                    store.store.retailer === 'citygross'
-                                        ? 'c.g'
-                                        : store.store.retailer
-                                }
-                                small={true}
-                                backgroundColor={COLOR[store.store.retailer]}
-                            />
-                        </View>
-                    );
-=======
                 {inStores.map(store => {
                     if (store.isSelected) {
                         return (
                             <View style={{width: 75, marginRight: 10}}>
                                 <Button
+                                    disabled={true}
                                     text={
                                         store.retailer === 'citygross'
                                             ? 'c.g'
@@ -139,7 +118,6 @@ export default ({product, setQuantity, removeItem}) => {
                             </View>
                         );
                     }
->>>>>>> 3112ce0a9600fcaefe33342f8df69c0933fcb900
                 })}
             </View>
         );
@@ -153,21 +131,18 @@ export default ({product, setQuantity, removeItem}) => {
                         flexDirection: 'column',
                     }}>
                     <Text styles={styles.infoText}>
-                        {product.data.productInformation.description}
+                        {productInfo.description}
                     </Text>
                     <View style={{marginTop: 10}}>
                         <CollapsibleView title={'Ingredienser'}>
                             <Text style={styles.infoText}>
-                                {product.data.productInformation.ingredientInfo}
+                                {productInfo.ingredientInfo}
                             </Text>
                         </CollapsibleView>
 
                         <CollapsibleView title={'Näringsvärde per 100g'}>
                             <Text style={styles.infoText}>
-                                {
-                                    product.data.productInformation
-                                        .nutritionalInfo
-                                }
+                                {productInfo.nutritionalInfo}
                             </Text>
                         </CollapsibleView>
                     </View>
@@ -183,49 +158,6 @@ export default ({product, setQuantity, removeItem}) => {
                     {renderTop()}
                     {renderNameAndPrice()}
                     {renderMiddle()}
-                    <View
-                        style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            marginTop: 5,
-                            padding: 20,
-                            paddingTop: 5,
-                            paddingBottom: 5,
-                            backgroundColor: COLOR.GRAY_5,
-                            borderRadius: 25,
-                        }}>
-                        <View style={{marginRight: 10}}>
-                            <RoundButton
-                                disabled={!product.quantity}
-                                icon={'cross'}
-                                color={
-                                    product.quantity
-                                        ? COLOR.GRAY_2
-                                        : COLOR.GRAY_4
-                                }
-                                inAnimatedView={false}
-                                onPress={() => {
-                                    removeItem();
-                                }}
-                            />
-                        </View>
-                        <Spinner
-                            inAnimatedView={false}
-                            defaultValue={spinnerValue}
-                            onValueChange={value => setSpinnerValue(value)}
-                        />
-                        <View style={{marginLeft: 10}}>
-                            <RoundButton
-                                icon={'check'}
-                                color={COLOR.COOP}
-                                inAnimatedView={false}
-                                onPress={() => {
-                                    setQuantity(spinnerValue);
-                                }}
-                            />
-                        </View>
-                    </View>
-
                     {renderProductDetails()}
                 </ScrollView>
             </FadeInView>
@@ -236,9 +168,9 @@ export default ({product, setQuantity, removeItem}) => {
 const styles = StyleSheet.create({
     container: {
         borderRadius: 10,
+        height: '80%',
         width: '100%',
-        height: '100%',
-        backgroundColor: COLOR.WHITE,
+        backgroundColor: COLORS.WHITE,
         padding: 10,
         margin: 5,
         flexDirection: 'column',
@@ -263,13 +195,12 @@ const styles = StyleSheet.create({
     nameContainer: {
         marginTop: 10,
         marginBottom: 10,
-        marginRight: 12,
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
 
     price: {
-        color: COLOR.PRIMARY,
+        color: COLORS.PRIMARY,
         fontFamily: 'Montserrat-Bold',
         fontSize: 20,
         alignSelf: 'flex-end',

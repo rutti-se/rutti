@@ -11,11 +11,12 @@ import Popup from '../common/Popup';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Icon} from '../../../assets/icomoon';
 import DetailedProduct from './DetailedProduct';
+import filterStores from '../../utilities/filterStores';
 
 export default ({product, removeItem, setQuantity}, props) => {
     const [lowestPrice, setLowestPrice] = useState(null);
     const [productName, setProductName] = useState(null);
-
+    const [inStores, setInStores] = useState(null);
     const [pickedUp, setPickedUp] = useState(false);
 
     const [popupVisible, setPopupVisible] = useState(false);
@@ -28,12 +29,14 @@ export default ({product, removeItem, setQuantity}, props) => {
         setProductName(name);
         if (product.data) {
             setLowestPrice(calcBestPrice(product.data.storeInformation));
+            setInStores(filterStores(product.data.storeInformation));
         }
     }, [product.data]);
 
     function renderStores() {
         return (
             <View style={styles.storeContainer}>
+<<<<<<< HEAD
                 {product.data.storeInformation.map(store => {
                     return (
                         <View style={{width: 60, marginRight: 5}}>
@@ -49,6 +52,25 @@ export default ({product, removeItem, setQuantity}, props) => {
                             />
                         </View>
                     );
+=======
+                {inStores.map(store => {
+                    if (store.isSelected) {
+                        return (
+                            <View style={{width: 60, marginRight: 5}}>
+                                <Button
+                                    disabled={true}
+                                    text={
+                                        store.retailer === 'citygross'
+                                            ? 'c.g'
+                                            : store.retailer
+                                    }
+                                    extraSmall={true}
+                                    backgroundColor={COLORS[store.retailer]}
+                                />
+                            </View>
+                        );
+                    }
+>>>>>>> 3112ce0a9600fcaefe33342f8df69c0933fcb900
                 })}
             </View>
         );
@@ -68,7 +90,7 @@ export default ({product, removeItem, setQuantity}, props) => {
                 {product.data && (
                     <>
                         <Text style={styles.text}>{productName}</Text>
-                        {renderStores()}
+                        {inStores && renderStores()}
                     </>
                 )}
             </View>
