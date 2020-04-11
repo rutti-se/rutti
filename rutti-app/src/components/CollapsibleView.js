@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, Text, TouchableHighlight} from 'react-native';
 import {Icon} from '../../assets/icomoon';
 import Collapsible from 'react-native-collapsible';
-import COLORS from '../../assets/colors';
+import COLOR from '../../assets/colors';
 
 export default props => {
     const [collapsed, setCollapsed] = useState(true);

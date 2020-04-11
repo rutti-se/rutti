@@ -2,10 +2,9 @@ import React, {Component, useEffect, useState} from 'react';
 import {Text, StyleSheet, View} from 'react-native';
 import Modal from 'react-native-modal';
 import RoundButton from './RoundButton';
-import COLORS from '../../../assets/colors';
+import COLOR from '../../../assets/colors';
 
 export default ({isVisible, close, children}) => {
-    console.log(children);
     return (
         <Modal
             style={{justifyContent: 'center', alignItems: 'center'}}
@@ -23,8 +22,8 @@ export default ({isVisible, close, children}) => {
                 <View style={styles.topContainer}>
                     <RoundButton
                         icon={'cross'}
-                        iconColor={COLORS.BLACK}
-                        color={COLORS.GRAY_5}
+                        iconColor={COLOR.BLACK}
+                        color={COLOR.GRAY_5}
                         inAnimatedView={false}
                         onPress={close}
                     />

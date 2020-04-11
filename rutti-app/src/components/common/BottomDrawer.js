@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import COLORS from '../../../assets/colors';
+import COLOR from '../../../assets/colors';
 import {
     PanResponder,
     Animated,
@@ -67,7 +67,7 @@ export class BottomDrawer extends Component {
     static defaultProps = {
         offset: 0,
         startUp: false,
-        backgroundColor: COLORS.GRAY_1,
+        backgroundColor: COLOR.GRAY_1,
         roundedEdges: true,
         shadow: true,
         dragBar: true,
@@ -275,7 +275,7 @@ const styles = {
     dragBar: dragBar => {
         return (
             dragBar == true && {
-                backgroundColor: COLORS.GRAY_4,
+                backgroundColor: COLOR.GRAY_4,
                 width: 70,
                 height: 5,
                 borderRadius: 25,

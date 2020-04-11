@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import COLORS from '../../assets/colors';
+import COLOR from '../../assets/colors';
 import StoreMarker from '../components/select-stores-view/StoreMarker';
 import {View, StyleSheet, Text, Alert} from 'react-native';
 import InputField from '../components/common/InputField';
@@ -72,7 +72,7 @@ export default ({username, onStoresSelected}) => {
                     paddingBottom: 20,
                     paddingHorizontal: 20,
                     shadowOffset: {width: 0, height: 5},
-                    shadowColor: COLORS.GRAY_4,
+                    shadowColor: COLOR.GRAY_4,
                     shadowOpacity: 1.0,
                 }}>
                 <Text style={styles.text}>Välj butiker</Text>
@@ -87,7 +87,7 @@ export default ({username, onStoresSelected}) => {
             <MapView
                 style={{flex: 1}}
                 provider={PROVIDER_GOOGLE}
-                clusterColor={COLORS.PRIMARY}
+                clusterColor={COLOR.PRIMARY}
                 initialRegion={{
                     latitude: mapBounds.latitude,
                     longitude: mapBounds.longitude,
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'flex-end',
-        backgroundColor: COLORS.SECONDARY,
+        backgroundColor: COLOR.SECONDARY,
     },
     resultsList: {
         padding: 20,

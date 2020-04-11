@@ -35,7 +35,7 @@ async function getNearbyStores({ zipCode }) {
 
     requests.push(getNearbyCityGrossStores(zipCode));
 
-    const results = await axios.all(requests).catch((error) => {
+    const results = await axios.all(requests).catch(error => {
         console.log(error);
         return { error: error };
     });
@@ -47,14 +47,14 @@ async function getNearbyStores({ zipCode }) {
     let storesResults = [];
     let bounds;
 
-    results.map((result) => {
+    results.map(result => {
         const retailer = result.config
             ? requestMap.get(result.config.url)
             : 'citygross';
 
         switch (retailer) {
             case 'ica':
-                result.data.forPickupDelivery.forEach((store) => {
+                result.data.forPickupDelivery.forEach(store => {
                     storesResults.push({
                         storeId: store.id,
                         retailer,
@@ -78,7 +78,7 @@ async function getNearbyStores({ zipCode }) {
                     centerLat: result.data.sourceLatitude,
                 };
 
-                result.data.stores.forEach((store) => {
+                result.data.stores.forEach(store => {
                     storesResults.push({
                         storeId: store.name,
                         retailer,
@@ -93,7 +93,7 @@ async function getNearbyStores({ zipCode }) {
                 });
                 break;
             case 'citygross':
-                result.forEach((store) => {
+                result.forEach(store => {
                     storesResults.push({
                         storeId: store.id,
                         retailer,

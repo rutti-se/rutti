@@ -3,7 +3,7 @@ import {View, Text, StyleSheet, ScrollView, Alert} from 'react-native';
 import Button from '../common/Button';
 import InputField from '../common/InputField';
 import {emailSignUp} from '../../api/firebaseHelpers';
-import COLORS from '../../../assets/colors';
+import COLOR from '../../../assets/colors';
 import getGeneratedUsername from '../../api/getGeneratedUsername';
 import RoundButton from '../common/RoundButton';
 
@@ -83,7 +83,7 @@ export default ({onRegistrationComplete, goToLogin, backPress}) => {
                     <View>
                         <Text
                             style={{
-                                color: COLORS.PRIMARY,
+                                color: COLOR.PRIMARY,
                                 fontFamily: 'Montserrat-Bold',
                                 paddingBottom: 10,
                                 paddingTop: 10,
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'flex-end',
-        backgroundColor: COLORS.SECONDARY,
+        backgroundColor: COLOR.SECONDARY,
     },
     topContainer: {
         flex: 1,

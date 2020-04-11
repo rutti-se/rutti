@@ -3,7 +3,10 @@ import {View, Text, TouchableWithoutFeedback} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import ShoppingListItem from './ShoppingListItem';
 import getProducts from '../../api/getProducts';
-import {removeProductFromList} from '../../api/firebaseHelpers';
+import {
+    removeProductFromList,
+    setProductQuantity,
+} from '../../api/firebaseHelpers';
 let cacheMap = new Map();
 
 export default ({list, stores}, props) => {
@@ -11,7 +14,6 @@ export default ({list, stores}, props) => {
 
     useEffect(() => {
         if (list && stores) {
-            console.log(list.products);
             setProducts(list.products);
             let productsWithoutData = [];
             list.products.forEach((product, index) => {
@@ -44,10 +46,6 @@ export default ({list, stores}, props) => {
         }
     }, [list]);
 
-    function removeListItem(product) {
-        removeProductFromList(list.id, product.sku, product.quantity);
-    }
-
     return (
         <View
             style={{
@@ -68,7 +66,20 @@ export default ({list, stores}, props) => {
                         <View>
                             {products.map(product => (
                                 <ShoppingListItem
-                                    removeItem={e => removeListItem(e)}
+                                    setQuantity={quantity =>
+                                        setProductQuantity(
+                                            list.id,
+                                            product.sku,
+                                            quantity,
+                                        )
+                                    }
+                                    removeItem={() =>
+                                        removeProductFromList(
+                                            list.id,
+                                            product.sku,
+                                            product.quantity,
+                                        )
+                                    }
                                     product={product}
                                 />
                             ))}

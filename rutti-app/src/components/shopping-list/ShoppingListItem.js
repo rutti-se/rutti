@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, Picker} from 'react-native';
-import COLORS from '../../../assets/colors';
+import COLOR from '../../../assets/colors';
 import Img from '../common/Img';
 import Button from '../common/Button';
 import RoundButton from '../common/RoundButton';
@@ -12,7 +12,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Icon} from '../../../assets/icomoon';
 import DetailedProduct from './DetailedProduct';
 
-export default ({product, removeItem}, props) => {
+export default ({product, removeItem, setQuantity}, props) => {
     const [lowestPrice, setLowestPrice] = useState(null);
     const [productName, setProductName] = useState(null);
 
@@ -45,7 +45,7 @@ export default ({product, removeItem}, props) => {
                                         : store.store.retailer
                                 }
                                 extraSmall={true}
-                                backgroundColor={COLORS[store.store.retailer]}
+                                backgroundColor={COLOR[store.store.retailer]}
                             />
                         </View>
                     );
@@ -59,7 +59,7 @@ export default ({product, removeItem}, props) => {
             <RoundButton
                 text={product.quantity}
                 iconColor={'white'}
-                color={COLORS.GRAY_1}
+                color={COLOR.GRAY_1}
                 inAnimatedView={true}
                 onPress={() => setPopupVisible(true)}
             />
@@ -87,9 +87,7 @@ export default ({product, removeItem}, props) => {
                 style={[
                     styles.checkBox,
                     {
-                        backgroundColor: pickedUp
-                            ? COLORS.GREEN
-                            : COLORS.GRAY_4,
+                        backgroundColor: pickedUp ? COLOR.GREEN : COLOR.GRAY_4,
                     },
                 ]}>
                 <TouchableOpacity
@@ -106,10 +104,19 @@ export default ({product, removeItem}, props) => {
             <Popup
                 isVisible={popupVisible}
                 close={() => {
-                    console.log('close');
                     setPopupVisible(false);
                 }}>
-                <DetailedProduct product={product} />
+                <DetailedProduct
+                    setQuantity={quantity => {
+                        setQuantity(quantity);
+                        setPopupVisible(false);
+                    }}
+                    product={product}
+                    removeItem={() => {
+                        removeItem();
+                        setPopupVisible(false);
+                    }}
+                />
             </Popup>
         </View>
     );
@@ -119,7 +126,7 @@ const styles = StyleSheet.create({
     container: {
         height: 100,
         width: '100%',
-        backgroundColor: COLORS.GRAY_2,
+        backgroundColor: COLOR.GRAY_2,
         flexDirection: 'row',
         marginBottom: 5,
         borderRadius: 10,
@@ -145,7 +152,7 @@ const styles = StyleSheet.create({
         flex: 1,
         fontFamily: 'Montserrat-bold',
         fontSize: 15,
-        color: COLORS.WHITE,
+        color: COLOR.WHITE,
         textAlign: 'left',
     },
     storeContainer: {
@@ -153,7 +160,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     price: {
-        color: COLORS.WHITE,
+        color: COLOR.WHITE,
         fontFamily: 'Montserrat-Bold',
         fontSize: 20,
         marginLeft: 5,
@@ -164,7 +171,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Montserrat-regular',
         fontSize: 12,
         marginBottom: 3,
-        color: COLORS.WHITE,
+        color: COLOR.WHITE,
         alignSelf: 'flex-end',
     },
     checkBox: {

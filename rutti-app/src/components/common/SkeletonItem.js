@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, Image, TextInput} from 'react-native';
-import COLORS from '../../../assets/colors';
+import COLOR from '../../../assets/colors';
 import FadeInView from '../animations/FadeInView';
 import SvgAnimatedLinearGradient from 'react-native-svg-animated-linear-gradient';
 import Svg, {Circle, Rect} from 'react-native-svg';

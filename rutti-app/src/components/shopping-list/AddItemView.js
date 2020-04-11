@@ -14,7 +14,7 @@ export default ({addToList, product, cancel}, props) => {
         setSelectedProduct(null);
         setSelectedProduct(product);
         let name = '';
-        product && (name = product.productInfo.name);
+        product && (name = product.productInformation.name);
         if (name.length > 15) {
             name = name.substring(0, 15) + '...';
         }
@@ -44,7 +44,7 @@ export default ({addToList, product, cancel}, props) => {
                             borderRadius: 50,
                             backgroundColor: 'white',
                         }}
-                        source={selectedProduct.productInfo.imageUrl}
+                        source={selectedProduct.productInformation.imageUrl}
                     />
 
                     <Text
@@ -67,7 +67,7 @@ export default ({addToList, product, cancel}, props) => {
                         onPress={() => {
                             addToList({
                                 quantity: quantity,
-                                sku: selectedProduct.productInfo.gtin,
+                                sku: selectedProduct.productInformation.gtin,
                             });
                             setSelectedProduct(null);
                         }}

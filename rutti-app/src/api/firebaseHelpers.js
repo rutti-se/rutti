@@ -155,6 +155,38 @@ export function addProductToList(listId, sku, quantity) {
     });
 }
 
+export function setProductQuantity(listId, sku, quantity) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let listRef = firestore()
+                .collection('lists')
+                .doc(listId);
+
+            let list = await listRef.get();
+
+            if (list.exists) {
+                let {products} = list.data();
+
+                let index = products.findIndex(e => e.sku === sku);
+
+                if (index >= 0) {
+                    products[index].quantity = quantity;
+                } else {
+                    products.push({sku, quantity});
+                }
+
+                await listRef.update({products});
+
+                resolve(products);
+            } else {
+                throw new Error('No list found.');
+            }
+        } catch (error) {
+            reject({error});
+        }
+    });
+}
+
 export function removeProductFromList(listId, sku, quantity) {
     return new Promise(async (resolve, reject) => {
         try {

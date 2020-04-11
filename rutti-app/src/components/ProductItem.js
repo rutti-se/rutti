@@ -1,17 +1,36 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, Alert, TouchableOpacity} from 'react-native';
-import COLORS from '../../assets/colors';
+import COLOR from '../../assets/colors';
 import RoundButton from './common/RoundButton';
 import calcBestPrice from '../utilities/calcBestPrice';
 import SkeletonContent from 'react-native-skeleton-content-nonexpo';
 import Img from './common/Img';
+import Popup from './common/Popup';
+import DetailedProduct from './shopping-list/DetailedProduct';
+import {removeProductFromList} from '../api/firebaseHelpers';
 
-export default ({productInfo, storeInfo, onPress, onItemPress, isLoading}) => {
+export default ({product, onPress, isLoading, setQuantity, removeItem}) => {
     const [lowestPrice, setLowestPrice] = useState(null);
+    const [popupVisible, setPopupVisible] = useState(false);
+    const [currentProduct, setCurrentProduct] = useState(null);
+
+    console.log(product);
+    useEffect(() => {
+        let temp = product;
+        if (!temp.data) {
+            temp = {sku: product.productInformation.gtin, data: product};
+        }
+        setCurrentProduct(temp);
+    }, [product]);
 
     useEffect(() => {
-        storeInfo && setLowestPrice(calcBestPrice(storeInfo));
-    }, [storeInfo]);
+        if (currentProduct) {
+            currentProduct.data.storeInformation &&
+                setLowestPrice(
+                    calcBestPrice(currentProduct.data.storeInformation),
+                );
+        }
+    }, [currentProduct]);
 
     const RenderBottom = () => {
         return (
@@ -22,7 +41,7 @@ export default ({productInfo, storeInfo, onPress, onItemPress, isLoading}) => {
                 </View>
                 <RoundButton
                     icon={'buy-online-add'}
-                    onPress={() => onPress({productInfo, storeInfo})}
+                    onPress={() => onPress(product)}
                 />
             </View>
         );
@@ -36,21 +55,41 @@ export default ({productInfo, storeInfo, onPress, onItemPress, isLoading}) => {
                 {key: 'image', width: 170, height: 170, marginBottom: 6},
                 {key: 'titleText', width: 120, height: 14, marginBottom: 6},
             ]}>
-            <TouchableOpacity
-                style={{maxHeight: 170}}
-                onPress={() => onItemPress({productInfo, storeInfo})}>
-                <Img
-                    style={styles.image}
-                    resizeMode="contain"
-                    source={productInfo?.imageUrl}
-                />
-            </TouchableOpacity>
-            <Text style={styles.text}>
-                {productInfo?.name.length > 0
-                    ? productInfo?.name
-                    : productInfo?.brand}
-            </Text>
-            <RenderBottom />
+            {currentProduct && (
+                <>
+                    <TouchableOpacity
+                        style={{maxHeight: 170}}
+                        onPress={() => setPopupVisible(true)}>
+                        <Img
+                            style={styles.image}
+                            resizeMode="contain"
+                            source={
+                                currentProduct.data.productInformation?.imageUrl
+                            }
+                        />
+                    </TouchableOpacity>
+                    <Text style={styles.text}>
+                        {currentProduct.data.productInformation?.name.length > 0
+                            ? currentProduct.data.productInformation?.name
+                            : currentProduct.data.productInformation?.brand}
+                    </Text>
+                    <RenderBottom />
+                    <Popup
+                        isVisible={popupVisible}
+                        close={() => {
+                            setPopupVisible(false);
+                        }}>
+                        <DetailedProduct
+                            setQuantity={quantity => {
+                                setQuantity(quantity);
+                                setPopupVisible(false);
+                            }}
+                            product={currentProduct}
+                            removeItem={removeItem}
+                        />
+                    </Popup>
+                </>
+            )}
         </SkeletonContent>
     );
 };
@@ -63,7 +102,7 @@ const styles = StyleSheet.create({
     },
     skeletonContent: {
         flex: 1 / 2,
-        backgroundColor: COLORS.WHITE,
+        backgroundColor: COLOR.WHITE,
         padding: 5,
         margin: 5,
         borderRadius: 10,
@@ -89,7 +128,7 @@ const styles = StyleSheet.create({
     },
 
     price: {
-        color: COLORS.PRIMARY,
+        color: COLOR.PRIMARY,
         fontFamily: 'Montserrat-Bold',
         fontSize: 20,
         alignSelf: 'flex-end',

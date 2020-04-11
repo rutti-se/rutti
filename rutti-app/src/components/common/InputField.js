@@ -1,6 +1,6 @@
 import React, {useRef} from 'react';
 import {TextInput, View, Text, StyleSheet, SafeAreaView} from 'react-native';
-import COLORS from '../../../assets/colors';
+import COLOR from '../../../assets/colors';
 import FadeInView from '../animations/FadeInView';
 
 export default props => {
@@ -8,7 +8,7 @@ export default props => {
         <View>
             <Text
                 style={{
-                    color: COLORS.PRIMARY,
+                    color: COLOR.PRIMARY,
                     fontFamily: 'Montserrat-Bold',
                     paddingBottom: 10,
                     paddingTop: 10,
@@ -18,7 +18,7 @@ export default props => {
             {props.invalidInput && props.invalidMessage && (
                 <Text
                     style={{
-                        color: COLORS.PRIMARY,
+                        color: COLOR.PRIMARY,
                         fontFamily: 'Montserrat',
                         paddingBottom: 10,
                     }}>

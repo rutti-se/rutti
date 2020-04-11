@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import InputField from '../components/common/InputField';
 import findStores from '../api/findStores';
-import COLORS from '../../assets/colors';
+import COLOR from '../../assets/colors';
 
 export default () => {
     let [zipCode, setZipCode] = useState(null);

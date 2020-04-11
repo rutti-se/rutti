@@ -7,7 +7,7 @@ import {
     ScrollView,
 } from 'react-native';
 
-import COLORS from '../../../assets/colors';
+import COLOR from '../../../assets/colors';
 import RoundButton from '../common/RoundButton';
 import FadeInView from '../animations/FadeInView';
 import calcBestPrice from '../../utilities/calcBestPrice';
@@ -16,11 +16,13 @@ import Img from '../common/Img';
 import CollapsibleView from '../CollapsibleView';
 import {Dimensions} from 'react-native';
 import Spinner from '../common/Spinner';
+import {removeProductFromList} from '../../api/firebaseHelpers';
 
 const DEVICE = Dimensions.get('window');
 
-export default ({product, inShoppingList}) => {
+export default ({product, setQuantity, removeItem}) => {
     const [lowestPrice, setLowestPrice] = useState(null);
+    const [spinnerValue, setSpinnerValue] = useState(product.quantity);
 
     useEffect(() => {
         setLowestPrice(calcBestPrice(product.data.storeInformation));
@@ -105,7 +107,7 @@ export default ({product, inShoppingList}) => {
                                         : store.store.retailer
                                 }
                                 small={true}
-                                backgroundColor={COLORS[store.store.retailer]}
+                                backgroundColor={COLOR[store.store.retailer]}
                             />
                         </View>
                     );
@@ -160,7 +162,7 @@ export default ({product, inShoppingList}) => {
                             padding: 20,
                             paddingTop: 5,
                             paddingBottom: 5,
-                            backgroundColor: COLORS.GRAY_5,
+                            backgroundColor: COLOR.GRAY_5,
                             borderRadius: 25,
                         }}>
                         <View style={{marginRight: 10}}>
@@ -169,28 +171,27 @@ export default ({product, inShoppingList}) => {
                                 icon={'cross'}
                                 color={
                                     product.quantity
-                                        ? COLORS.GRAY_2
-                                        : COLORS.GRAY_4
+                                        ? COLOR.GRAY_2
+                                        : COLOR.GRAY_4
                                 }
                                 inAnimatedView={false}
-                                onPress={() => cancel()}
+                                onPress={() => {
+                                    removeItem();
+                                }}
                             />
                         </View>
                         <Spinner
                             inAnimatedView={false}
-                            onValueChange={() => console.log('quantity')}
+                            defaultValue={spinnerValue}
+                            onValueChange={value => setSpinnerValue(value)}
                         />
                         <View style={{marginLeft: 10}}>
                             <RoundButton
                                 icon={'check'}
-                                color={COLORS.COOP}
+                                color={COLOR.COOP}
                                 inAnimatedView={false}
                                 onPress={() => {
-                                    addToList({
-                                        quantity: quantity,
-                                        sku: selectedProduct.productInfo.gtin,
-                                    });
-                                    setSelectedProduct(null);
+                                    setQuantity(spinnerValue);
                                 }}
                             />
                         </View>
@@ -208,7 +209,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         width: '100%',
         height: '100%',
-        backgroundColor: COLORS.WHITE,
+        backgroundColor: COLOR.WHITE,
         padding: 10,
         margin: 5,
         flexDirection: 'column',
@@ -239,7 +240,7 @@ const styles = StyleSheet.create({
     },
 
     price: {
-        color: COLORS.PRIMARY,
+        color: COLOR.PRIMARY,
         fontFamily: 'Montserrat-Bold',
         fontSize: 20,
         alignSelf: 'flex-end',

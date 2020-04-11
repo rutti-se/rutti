@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, Animated} from 'react-native';
-import COLORS from '../../assets/colors';
+import {View, Text, StyleSheet, Animated, TouchableOpacity} from 'react-native';
+import COLOR from '../../assets/colors';
 import {BottomDrawer} from '../components/common/BottomDrawer';
 import InputField from '../components/common/InputField';
 import findStores from '../api/findStores';
@@ -18,6 +18,8 @@ import AddItemView from '../components/shopping-list/AddItemView';
 import BottomDrawerContent from '../views/BottomDrawerContent';
 const DEVICE = Dimensions.get('window');
 import {getStores, getCurrentListRef} from '../api/firebaseHelpers';
+import RoundButton from '../components/common/RoundButton';
+import RuttiLogo from '../../assets/rutti_logo.svg';
 
 export default () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -88,6 +90,7 @@ export default () => {
             products.length > 0 &&
             stores && (
                 <ProductPage
+                    list={list}
                     stores={stores}
                     productSkus={products}
                     selectProduct={e => setSelectedProduct(e)}
@@ -105,7 +108,28 @@ export default () => {
 
     return (
         <View style={styles.container}>
-            <InputField onChangeText={text => onTextChange(text)} />
+            <View
+                style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignContent: 'center',
+                    width: '90%',
+                }}>
+                <RuttiLogo width={40} height={40} />
+
+                <LottieView
+                    style={{position: 'relative', marginLeft: 40}}
+                    resizeMode={'center'}
+                    width={40}
+                    height={40}
+                    source={require('../../assets/animations/hamburger.json')}
+                />
+            </View>
+
+            <InputField
+                placeholder={'Sök efter produkter'}
+                onChangeText={text => onTextChange(text)}
+            />
             {/*  <SelectStorePage /> */}
             <View
                 style={[{marginBottom: DEVICE.height / 4.8}, {marginTop: 10}]}>
@@ -113,13 +137,11 @@ export default () => {
             </View>
             {!results.length > 0 && (
                 <LottieView
-                    source={require('../../assets/animations/search.json')}
+                    source={require('../../assets/animations/cup-of-tea.json')}
                     autoPlay
+                    resizeMode={'contain'}
                     loop
-                    style={{
-                        height: 250,
-                        width: 250,
-                    }}
+                    width={DEVICE.width * 1}
                 />
             )}
 
@@ -138,7 +160,7 @@ export default () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: COLORS.SECONDARY,
+        backgroundColor: COLOR.SECONDARY,
         padding: 20,
     },
 });

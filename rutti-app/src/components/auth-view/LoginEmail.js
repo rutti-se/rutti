@@ -10,7 +10,7 @@ import {
 import Button from '../common/Button';
 import InputField from '../common/InputField';
 import {emailLogin} from '../../api/firebaseHelpers';
-import COLORS from '../../../assets/colors';
+import COLOR from '../../../assets/colors';
 import RoundButton from '../common/RoundButton';
 
 export default ({onLoginComplete, goToRegistration, backPress}) => {
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'flex-end',
-        backgroundColor: COLORS.SECONDARY,
+        backgroundColor: COLOR.SECONDARY,
     },
     topContainer: {
         flex: 1,

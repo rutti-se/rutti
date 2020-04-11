@@ -19,7 +19,7 @@ app.post('/:productSku', async (req, res) => {
 });
 
 async function getProduct({ productSku, stores }) {
-    const skuRegex = /^-?\d+\.?\d*$/;
+    const skuRegex = /^-?\d*?\_*?\d*$/;
     if (!skuRegex.test(productSku)) {
         return { status: 400, data: { error: 'Faulty SKU.' } };
     }

@@ -2,41 +2,12 @@ import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, FlatList, Text} from 'react-native';
 import getProducts from '../api/getProducts';
 import ProductItem from '../components/ProductItem';
-import ProductModal from '../views/ProductModal';
 import {Dimensions} from 'react-native';
 
 const DEVICE = Dimensions.get('window');
 
-const storeInfo = [
-    {
-        store: {
-            retailer: 'ica',
-            storeId: '09808',
-        },
-        priceInformation: {
-            price: 11.95,
-            isPromotion: false,
-            currentPromotions: [],
-        },
-    },
-    {
-        store: {
-            retailer: 'coop',
-            storeId: '257300',
-        },
-        priceInformation: {
-            price: 8.95,
-            comparePrice: '319.64',
-            comparePriceUnit: 'kr/kg',
-            isPromotion: false,
-            currentPromotions: [],
-        },
-    },
-];
-
-export default ({productSkus, stores, selectProduct}) => {
+export default ({productSkus, stores, selectProduct, list}) => {
     const [productDetails, setProductDetails] = useState([]);
-    const [aboutProduct, setAboutProduct] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
     const skeletons = [...Array(20).keys()];
@@ -54,7 +25,6 @@ export default ({productSkus, stores, selectProduct}) => {
             getProducts({stores, productSkus}).then(result => {
                 result.map(res => {
                     if (res.status !== '400') {
-                        console.log('Respons', res.data);
                         newDetails[res.data.productInformation.gtin] = res.data;
                     }
                 });
@@ -65,36 +35,46 @@ export default ({productSkus, stores, selectProduct}) => {
         }
     }, [stores, productSkus]); //När denna är tom körs det en gång
 
-    function showProductDetail(product) {
-        setAboutProduct(product);
-    }
+    function renderProductItems({item}) {
+        if (item && list && item.productInformation) {
+            let index = list.products.findIndex(
+                e => e.sku === item?.productInformation.gtin,
+            );
 
-    function renderProductItems({item, index}) {
-        return (
-            <ProductItem
-                productInfo={item?.productInformation}
-                storeInfo={item?.storeInformation}
-                onItemPress={showProductDetail}
-                onPress={e => selectProduct(e)}
-                isLoading={isLoading}
-                index={index}
-            />
-        );
+            let listItem;
+            if (index >= 0) {
+                listItem = list.products[index];
+            }
+
+            let conditionalProps = listItem
+                ? {
+                      removeItem: () => {
+                          removeProductFromList(
+                              list.id,
+                              listItem.sku,
+                              listItem.quantity,
+                          );
+                      },
+                  }
+                : null;
+
+            return (
+                <ProductItem
+                    product={listItem ? listItem : item}
+                    setQuantity={quantity =>
+                        setProductQuantity(list.id, product.sku, quantity)
+                    }
+                    onPress={e => selectProduct(e)}
+                    isLoading={isLoading}
+                    index={index}
+                    {...conditionalProps}
+                />
+            );
+        }
     }
 
     return (
         <View>
-            {aboutProduct && (
-                <View style={{height: DEVICE.height / 1.1, width: '100%'}}>
-                    <ProductModal
-                        productInfo={aboutProduct.productInfo}
-                        onPress={e => selectProduct(e)}
-                        storeInfo={aboutProduct.storeInfo}
-                        closeButton={() => setAboutProduct(null)}
-                    />
-                </View>
-            )}
-
             <FlatList
                 data={isLoading ? skeletons : Object.values(productDetails)}
                 style={styles.container}
