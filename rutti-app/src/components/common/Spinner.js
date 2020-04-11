@@ -2,7 +2,10 @@ import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import RoundButton from './RoundButton';
 
-export default ({defaultValue, onValueChange, textColor}, props) => {
+export default (
+    {defaultValue, onValueChange, textColor, inAnimatedView},
+    props,
+) => {
     const [quantity, setQuantity] = useState(defaultValue || 1);
 
     useEffect(() => {
@@ -22,7 +25,7 @@ export default ({defaultValue, onValueChange, textColor}, props) => {
         <View style={styles.container}>
             <RoundButton
                 onPress={() => subValue()}
-                inAnimatedView={true}
+                inAnimatedView={inAnimatedView}
                 small="true"
                 text="-"
             />
@@ -35,7 +38,7 @@ export default ({defaultValue, onValueChange, textColor}, props) => {
             </Text>
             <RoundButton
                 onPress={() => addValue()}
-                inAnimatedView={true}
+                inAnimatedView={inAnimatedView}
                 small="true"
                 text="+"
             />

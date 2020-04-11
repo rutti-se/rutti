@@ -172,18 +172,19 @@ export default ({product, inShoppingList}) => {
                                         ? COLORS.GRAY_2
                                         : COLORS.GRAY_4
                                 }
-                                inAnimatedView={true}
+                                inAnimatedView={false}
                                 onPress={() => cancel()}
                             />
                         </View>
                         <Spinner
+                            inAnimatedView={false}
                             onValueChange={() => console.log('quantity')}
                         />
                         <View style={{marginLeft: 10}}>
                             <RoundButton
                                 icon={'check'}
                                 color={COLORS.COOP}
-                                inAnimatedView={true}
+                                inAnimatedView={false}
                                 onPress={() => {
                                     addToList({
                                         quantity: quantity,
