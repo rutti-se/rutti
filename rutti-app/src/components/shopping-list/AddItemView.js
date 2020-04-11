@@ -54,7 +54,10 @@ export default ({addToList, product, cancel}, props) => {
                         }}>
                         {productName}
                     </Text>
-                    <Spinner onValueChange={value => setQuantity(value)} />
+                    <Spinner
+                        inAnimatedView={true}
+                        onValueChange={value => setQuantity(value)}
+                    />
                     <RoundButton
                         style={{alignSelf: 'flex-end'}}
                         icon={'check'}
