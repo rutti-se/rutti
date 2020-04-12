@@ -11,7 +11,7 @@ import FadeInView from '../components/animations/FadeInView';
 import COLOR from '../../assets/colors';
 import {addProductToList} from '../api/firebaseHelpers';
 
-export default ({selectedProduct, user, logout, list, stores}, props) => {
+export default ({selectedProduct, user, list, stores}, props) => {
     let [productCount, setProductCount] = useState(0);
     let [productToAdd, setProductToAdd] = useState(null);
 
@@ -67,14 +67,7 @@ export default ({selectedProduct, user, logout, list, stores}, props) => {
             <View style={{flex: 3}}>
                 <ShoppingList list={list} stores={stores} />
             </View>
-            <View style={{flex: 1 / 2, justifyContent: 'flex-end'}}>
-                <Button
-                    text="Logga ut"
-                    shadow={true}
-                    type={'primary'}
-                    onPress={logout}
-                />
-            </View>
+            <View style={{flex: 1 / 2, justifyContent: 'flex-end'}} />
         </View>
     );
 };

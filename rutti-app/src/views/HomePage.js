@@ -20,6 +20,7 @@ const DEVICE = Dimensions.get('window');
 import {getStores, getCurrentListRef} from '../api/firebaseHelpers';
 import RoundButton from '../components/common/RoundButton';
 import RuttiLogo from '../../assets/rutti_logo.svg';
+import Settings from '../components/Settings';
 
 export default () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -44,7 +45,6 @@ export default () => {
 
     useEffect(() => {
         if (user) {
-            console.log(user.displayName);
             getStores(user.displayName)
                 .then(stores => {
                     setStores(stores);
@@ -99,32 +99,17 @@ export default () => {
         );
     }
 
-    function logout() {
-        firebase
-            .auth()
-            .signOut()
-            .then(() => RootNavigation.replace('SignIn'));
-    }
-
     return (
         <View style={styles.container}>
             <View
                 style={{
                     flexDirection: 'row',
                     justifyContent: 'space-between',
-                    alignContent: 'center',
-                    width: '90%',
+                    width: '100%',
                 }}>
                 <RuttiLogo width={40} height={40} />
 
-                <View style={{height: 40, width: 40, marginLeft: 40}}>
-                    <LottieView
-                        resizeMode={'center'}
-                        width={40}
-                        height={40}
-                        source={require('../../assets/animations/hamburger.json')}
-                    />
-                </View>
+                <Settings username={user?.displayName} />
             </View>
 
             <InputField
@@ -132,28 +117,34 @@ export default () => {
                 onChangeText={text => onTextChange(text)}
             />
             {/*  <SelectStorePage /> */}
-            <View
-                style={[{marginBottom: DEVICE.height / 4.8}, {marginTop: 10}]}>
-                {renderProductPage()}
-            </View>
-            <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                {!results.length > 0 && (
+            {results.length > 0 ? (
+                <View
+                    style={[
+                        {marginBottom: DEVICE.height / 4.8},
+                        {marginTop: 10},
+                    ]}>
+                    {renderProductPage()}
+                </View>
+            ) : (
+                <View
+                    style={{
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}>
                     <LottieView
                         source={require('../../assets/animations/cup-of-tea.json')}
                         autoPlay
-                        resizeMode={'contain'}
                         loop
-                        height={400}
-                        width={DEVICE.width * 1}
+                        height={500}
+                        width={DEVICE.width}
                     />
-                )}
-            </View>
+                </View>
+            )}
 
             <BottomDrawer>
                 <BottomDrawerContent
                     list={list}
                     stores={stores}
-                    logout={() => logout()}
                     selectedProduct={selectedProduct}
                 />
             </BottomDrawer>

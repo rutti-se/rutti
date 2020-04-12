@@ -63,9 +63,12 @@ export default ({productSkus, stores, selectProduct, list}) => {
 
             return (
                 <ProductItem
-                    product={listItem ? listItem : item}
+                    product={{
+                        data: item,
+                        sku: item.productInformation.gtin,
+                        quantity: listItem?.quantity,
+                    }}
                     setQuantity={quantity => {
-                        console.log(item.productInformation);
                         setProductQuantity(
                             list.id,
                             listItem

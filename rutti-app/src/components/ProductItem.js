@@ -11,29 +11,12 @@ import DetailedProduct from './shopping-list/DetailedProduct';
 export default ({product, onPress, isLoading, setQuantity, removeItem}) => {
     const [lowestPrice, setLowestPrice] = useState(null);
     const [popupVisible, setPopupVisible] = useState(false);
-    const [currentProduct, setCurrentProduct] = useState(null);
 
     useEffect(() => {
-        if (product) {
-            let temp = product;
-            if (!temp.data) {
-                temp = {
-                    sku: !temp.sku || product?.productInformation?.gtin,
-                    data: product,
-                };
-            }
-            setCurrentProduct(temp);
+        if (product && product.data && product.data.storeInformation) {
+            setLowestPrice(calcBestPrice(product.data.storeInformation));
         }
     }, [product]);
-
-    useEffect(() => {
-        if (currentProduct) {
-            currentProduct.data.storeInformation &&
-                setLowestPrice(
-                    calcBestPrice(currentProduct.data.storeInformation),
-                );
-        }
-    }, [currentProduct]);
 
     const RenderBottom = () => {
         return (
@@ -44,7 +27,7 @@ export default ({product, onPress, isLoading, setQuantity, removeItem}) => {
                 </View>
                 <RoundButton
                     icon={'buy-online-add'}
-                    onPress={() => onPress(currentProduct)}
+                    onPress={() => onPress(product)}
                 />
             </View>
         );
@@ -58,7 +41,7 @@ export default ({product, onPress, isLoading, setQuantity, removeItem}) => {
                 {key: 'image', width: 170, height: 170, marginBottom: 6},
                 {key: 'titleText', width: 120, height: 14, marginBottom: 6},
             ]}>
-            {currentProduct && currentProduct.data && (
+            {product && product.data && (
                 <>
                     <TouchableOpacity
                         style={{maxHeight: 170}}
@@ -66,17 +49,13 @@ export default ({product, onPress, isLoading, setQuantity, removeItem}) => {
                         <Img
                             style={styles.image}
                             resizeMode="contain"
-                            source={
-                                currentProduct?.data?.productInformation
-                                    ?.imageUrl
-                            }
+                            source={product?.data?.productInformation?.imageUrl}
                         />
                     </TouchableOpacity>
                     <Text style={styles.text}>
-                        {currentProduct?.data?.productInformation?.name.length >
-                        0
-                            ? currentProduct?.data?.productInformation?.name
-                            : currentProduct?.data?.productInformation?.brand}
+                        {product?.data?.productInformation?.name.length > 0
+                            ? product?.data?.productInformation?.name
+                            : product?.data?.productInformation?.brand}
                     </Text>
                     <RenderBottom />
                     <Popup
@@ -89,7 +68,7 @@ export default ({product, onPress, isLoading, setQuantity, removeItem}) => {
                                 setQuantity(quantity);
                                 setPopupVisible(false);
                             }}
-                            product={currentProduct}
+                            product={product}
                             removeItem={removeItem}
                         />
                     </Popup>
