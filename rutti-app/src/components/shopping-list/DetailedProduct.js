@@ -27,7 +27,7 @@ export default ({product, setQuantity, removeItem}) => {
     const [inStores, setInStores] = useState(null);
 
     useEffect(() => {
-        if (product && product.storeInformation) {
+        if (product && product.data.storeInformation) {
             setLowestPrice(calcBestPrice(product?.data?.storeInformation));
 
             setInStores(filterStores(product?.data?.storeInformation));

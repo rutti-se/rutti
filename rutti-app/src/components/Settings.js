@@ -5,7 +5,7 @@ import RoundButton from './common/RoundButton';
 import COLOR from '../../assets/colors';
 import {firebase} from '@react-native-firebase/auth';
 import SelectStoresView from '../views/SelectStoresView';
-
+import * as RootNavigation from '../views/RootNavigation';
 export default ({username}) => {
     const [visible, setVisible] = useState(false);
     const [selectStoresVisible, setSelectStoresVisible] = useState(false);

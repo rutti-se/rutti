@@ -11,10 +11,17 @@ import DetailedProduct from './shopping-list/DetailedProduct';
 export default ({product, onPress, isLoading, setQuantity, removeItem}) => {
     const [lowestPrice, setLowestPrice] = useState(null);
     const [popupVisible, setPopupVisible] = useState(false);
+    const [productName, setProductName] = useState(null);
 
     useEffect(() => {
         if (product && product.data && product.data.storeInformation) {
             setLowestPrice(calcBestPrice(product.data.storeInformation));
+            let name =
+                product.data.productInformation.name.length > 0
+                    ? product.data.productInformation.name
+                    : product.data.productInformation.brand;
+
+            setProductName(name);
         }
     }, [product]);
 
@@ -52,11 +59,7 @@ export default ({product, onPress, isLoading, setQuantity, removeItem}) => {
                             source={product?.data?.productInformation?.imageUrl}
                         />
                     </TouchableOpacity>
-                    <Text style={styles.text}>
-                        {product?.data?.productInformation?.name.length > 0
-                            ? product?.data?.productInformation?.name
-                            : product?.data?.productInformation?.brand}
-                    </Text>
+                    <Text style={styles.text}>{productName}</Text>
                     <RenderBottom />
                     <Popup
                         isVisible={popupVisible}
