@@ -117,7 +117,7 @@ export default () => {
                 onChangeText={text => onTextChange(text)}
             />
             {/*  <SelectStorePage /> */}
-            {results.length > 0 ? (
+            {products.length > 0 ? (
                 <View
                     style={[
                         {marginBottom: DEVICE.height / 4.8},

@@ -27,7 +27,11 @@ export default ({productSkus, stores, selectProduct, list}) => {
 
             getProducts({stores, productSkus}).then(result => {
                 result.map(res => {
-                    if (res.status !== '400') {
+                    if (
+                        res.status !== '400' &&
+                        res.data &&
+                        res.data.productInformation
+                    ) {
                         newDetails[res.data.productInformation.gtin] = res.data;
                     }
                 });
@@ -71,9 +75,7 @@ export default ({productSkus, stores, selectProduct, list}) => {
                     setQuantity={quantity => {
                         setProductQuantity(
                             list.id,
-                            listItem
-                                ? listItem.sku
-                                : item?.productInformation.gtin,
+                            item.productInformation.gtin,
                             quantity,
                         );
                     }}
