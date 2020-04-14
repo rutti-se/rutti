@@ -25,11 +25,16 @@ export default ({product, setQuantity, removeItem}) => {
     const [lowestPrice, setLowestPrice] = useState(null);
     const [spinnerValue, setSpinnerValue] = useState(product.quantity);
     const [inStores, setInStores] = useState(null);
-
+    const [isPromotion, setIsPromotion] = useState(false);
+    const [promotion, setPromotion] = useState(null);
     useEffect(() => {
         if (product && product.data.storeInformation) {
-            setLowestPrice(calcBestPrice(product?.data?.storeInformation));
-
+            let priceInformation = calcBestPrice(
+                product?.data?.storeInformation,
+            );
+            setLowestPrice(priceInformation.price);
+            setIsPromotion(priceInformation.promotion.isPromotion);
+            setPromotion(priceInformation.promotion);
             setInStores(filterStores(product?.data?.storeInformation));
         }
     }, [product]);
@@ -48,10 +53,41 @@ export default ({product, setQuantity, removeItem}) => {
                         style={styles.image}
                         source={product?.data?.productInformation?.imageUrl}
                     />
+                    {isPromotion && <RenderPromotion />}
                 </View>
             )
         );
     }
+    const RenderPromotion = () => {
+        return (
+            <ImageBackground
+                style={{
+                    width: 150,
+                    height: 120,
+                    position: 'absolute',
+                    justifyContent: 'center',
+                    left: '5%',
+                    top: '50%',
+                }}
+                resizeMode={'contain'}
+                source={require('../../../assets/promotion.png')}>
+                <View
+                    style={{
+                        alignSelf: 'center',
+                        flexDirection: 'column',
+                    }}>
+                    {promotion?.noOfItemsToDiscount > 0 && (
+                        <Text style={styles.promotionText}>
+                            {promotion.noOfItemsToDiscount} för
+                        </Text>
+                    )}
+                    <Text style={styles.promotion}>
+                        {promotion?.promotionPrice}:-
+                    </Text>
+                </View>
+            </ImageBackground>
+        );
+    };
 
     function renderNameAndPrice() {
         return (
@@ -283,5 +319,17 @@ const styles = StyleSheet.create({
     infoText: {
         fontFamily: 'Montserrat-Regular',
         borderRadius: 50,
+    },
+    promotion: {
+        color: COLOR.PRIMARY,
+        fontFamily: 'Montserrat-Bold',
+        fontSize: 22,
+        textAlign: 'center',
+    },
+    promotionText: {
+        color: COLOR.PRIMARY,
+        fontFamily: 'Montserrat-Bold',
+        fontSize: 16,
+        textAlign: 'center',
     },
 });

@@ -18,6 +18,8 @@ export default ({product, removeItem, setQuantity}, props) => {
     const [productName, setProductName] = useState(null);
     const [inStores, setInStores] = useState(null);
     const [pickedUp, setPickedUp] = useState(false);
+    const [isPromotion, setIsPromotion] = useState(false);
+    const [promotion, setPromotion] = useState(null);
 
     const [popupVisible, setPopupVisible] = useState(false);
     useEffect(() => {
@@ -28,7 +30,12 @@ export default ({product, removeItem, setQuantity}, props) => {
         }
         setProductName(name);
         if (product.data) {
-            setLowestPrice(calcBestPrice(product.data.storeInformation));
+            let priceInformation = calcBestPrice(
+                product?.data?.storeInformation,
+            );
+            setLowestPrice(priceInformation.price);
+            setIsPromotion(priceInformation.promotion.isPromotion);
+            setPromotion(priceInformation.promotion);
             setInStores(filterStores(product.data.storeInformation));
         }
     }, [product.data]);

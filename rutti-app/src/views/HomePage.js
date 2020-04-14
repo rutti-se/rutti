@@ -120,7 +120,9 @@ export default () => {
             {products.length > 0 ? (
                 <View
                     style={[
-                        {marginBottom: DEVICE.height / 4.8},
+                        {
+                            marginBottom: DEVICE.height / 4.3,
+                        },
                         {marginTop: 10},
                     ]}>
                     {renderProductPage()}

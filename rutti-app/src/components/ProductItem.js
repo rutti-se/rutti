@@ -1,10 +1,19 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, Alert, TouchableOpacity} from 'react-native';
+import {
+    View,
+    Text,
+    StyleSheet,
+    Alert,
+    TouchableOpacity,
+    Image,
+    ImageBackground,
+} from 'react-native';
 import COLOR from '../../assets/colors';
 import RoundButton from './common/RoundButton';
 import calcBestPrice from '../utilities/calcBestPrice';
 import SkeletonContent from 'react-native-skeleton-content-nonexpo';
 import Img from './common/Img';
+
 import Popup from './common/Popup';
 import DetailedProduct from './shopping-list/DetailedProduct';
 
@@ -12,10 +21,14 @@ export default ({product, onPress, isLoading, setQuantity, removeItem}) => {
     const [lowestPrice, setLowestPrice] = useState(null);
     const [popupVisible, setPopupVisible] = useState(false);
     const [productName, setProductName] = useState(null);
-
+    const [isPromotion, setIsPromotion] = useState(false);
+    const [promotion, setPromotion] = useState(null);
     useEffect(() => {
         if (product && product.data && product.data.storeInformation) {
-            setLowestPrice(calcBestPrice(product.data.storeInformation));
+            let priceInformation = calcBestPrice(product.data.storeInformation);
+            setLowestPrice(priceInformation.price);
+            setIsPromotion(priceInformation.promotion.isPromotion);
+            setPromotion(priceInformation.promotion);
             let name =
                 product.data.productInformation.name.length > 0
                     ? product.data.productInformation.name
@@ -40,6 +53,37 @@ export default ({product, onPress, isLoading, setQuantity, removeItem}) => {
         );
     };
 
+    const RenderPromotion = () => {
+        return (
+            <ImageBackground
+                style={{
+                    width: 120,
+                    height: 90,
+                    position: 'absolute',
+                    justifyContent: 'center',
+                    left: '5%',
+                    top: '50%',
+                }}
+                resizeMode={'contain'}
+                source={require('../../assets/promotion.png')}>
+                <View
+                    style={{
+                        alignSelf: 'center',
+                        flexDirection: 'column',
+                    }}>
+                    {promotion.noOfItemsToDiscount > 0 && (
+                        <Text style={styles.promotionText}>
+                            {promotion.noOfItemsToDiscount} för
+                        </Text>
+                    )}
+                    <Text style={styles.promotion}>
+                        {promotion.promotionPrice}:-
+                    </Text>
+                </View>
+            </ImageBackground>
+        );
+    };
+
     return (
         <SkeletonContent
             containerStyle={styles.skeletonContent}
@@ -53,11 +97,19 @@ export default ({product, onPress, isLoading, setQuantity, removeItem}) => {
                     <TouchableOpacity
                         style={{maxHeight: 170}}
                         onPress={() => setPopupVisible(true)}>
-                        <Img
-                            style={styles.image}
-                            resizeMode="contain"
-                            source={product?.data?.productInformation?.imageUrl}
-                        />
+                        <View>
+                            <Img
+                                style={styles.image}
+                                isPromotion={true}
+                                promotionText={'2 för'}
+                                promotionValue={30}
+                                resizeMode="contain"
+                                source={
+                                    product?.data?.productInformation?.imageUrl
+                                }
+                            />
+                            {isPromotion && <RenderPromotion />}
+                        </View>
                     </TouchableOpacity>
                     <Text style={styles.text}>{productName}</Text>
                     <RenderBottom />
@@ -127,5 +179,18 @@ const styles = StyleSheet.create({
         fontSize: 12,
         alignSelf: 'flex-end',
         marginBottom: 2,
+    },
+
+    promotion: {
+        color: COLOR.PRIMARY,
+        fontFamily: 'Montserrat-Bold',
+        fontSize: 18,
+        textAlign: 'center',
+    },
+    promotionText: {
+        color: COLOR.PRIMARY,
+        fontFamily: 'Montserrat-Bold',
+        fontSize: 13,
+        textAlign: 'center',
     },
 });

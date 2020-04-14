@@ -1,13 +1,31 @@
 export default function(storeInfo) {
     let price = Number.MAX_SAFE_INTEGER;
-    storeInfo.map(store => {
+
+    let promotion = {
+        isPromotion: false,
+        comparePrice: Number.MAX_SAFE_INTEGER,
+        noOfItemsToDiscount: 0,
+        promotionPrice: 0,
+    };
+    storeInfo.map(aStore => {
+        const store = aStore.priceInformation;
+
+        if (store.price < price && store.price !== null) {
+            price = store.price;
+        }
+
         if (
-            store.priceInformation.price < price &&
-            store.priceInformation.price !== null
+            store.isPromotion &&
+            store.currentPromotions[0].comparePrice < store.comparePrice
         ) {
-            price = store.priceInformation.price;
+            promotion.isPromotion = true;
+            promotion.comparePrice = store.currentPromotions[0].comparePrice;
+            promotion.noOfItemsToDiscount =
+                store.currentPromotions[0].noOfItemsToDiscount;
+            promotion.promotionPrice = store.currentPromotions[0].price;
         }
     });
     price = price.toFixed(2);
-    return price < Number.MAX_SAFE_INTEGER ? price : null;
+    price = price < Number.MAX_SAFE_INTEGER ? price : null;
+    return {price: price, promotion: promotion};
 }

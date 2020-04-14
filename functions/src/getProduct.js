@@ -122,7 +122,10 @@ function getIcaStoreData(data) {
             currentPromotions.push({
                 promoId: promotion.promotionId,
                 type: promotion.type,
-                price: promotion.discountValue,
+                price:
+                    promotion.unitOfMeasure === 'kg'
+                        ? promotion.discountValue * 1000
+                        : promotion.discountValue,
                 comparePrice: promotion.discountedComparePrice,
                 endDate: promotion.endUsable,
                 noOfItemsToDiscount: promotion.noOfItemsToDiscount,

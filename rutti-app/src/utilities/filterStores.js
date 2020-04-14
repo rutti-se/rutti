@@ -1,5 +1,4 @@
 export default function(stores) {
-    console.log('STORESSSSS: ', stores);
     let arr = [
         {retailer: 'ica', isSelected: false},
         {retailer: 'coop', isSelected: false},
