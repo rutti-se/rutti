@@ -3,6 +3,8 @@ import {View, Dimensions, StyleSheet, Text} from 'react-native';
 import AddItemView from '../components/shopping-list/AddItemView';
 import Button from '../components/common/Button';
 import RoundButton from '../components/common/RoundButton';
+import {Icon} from '../../assets/icomoon';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 import ShoppingList from '../components/shopping-list/ShoppingList';
 const SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -10,10 +12,12 @@ const containerHeight = SCREEN_HEIGHT / 1.3;
 import FadeInView from '../components/animations/FadeInView';
 import COLOR from '../../assets/colors';
 import {addProductToList} from '../api/firebaseHelpers';
+import SelectShoppingList from '../components/shopping-list/SelectShoppingList';
 
 export default ({selectedProduct, user, list, stores}, props) => {
     let [productCount, setProductCount] = useState(0);
     let [productToAdd, setProductToAdd] = useState(null);
+    let [selectListVisible, setSelectListVisible] = useState(false);
 
     useEffect(() => {
         try {
@@ -52,7 +56,30 @@ export default ({selectedProduct, user, list, stores}, props) => {
                     {list && (
                         <FadeInView duration={500}>
                             <View style={styles.contentContainer}>
-                                <Text style={styles.text}>{list.name}</Text>
+                                <TouchableOpacity
+                                    onPressOut={() =>
+                                        setSelectListVisible(true)
+                                    }>
+                                    <View
+                                        style={{
+                                            flexDirection: 'row',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                        }}>
+                                        <Text
+                                            style={[
+                                                styles.text,
+                                                {marginRight: 5},
+                                            ]}>
+                                            {list.name}
+                                        </Text>
+                                        <Icon
+                                            name={'chevron-down'}
+                                            size={15}
+                                            color={'white'}
+                                        />
+                                    </View>
+                                </TouchableOpacity>
 
                                 <RoundButton
                                     style={{alignSelf: 'flex-end'}}
@@ -68,6 +95,10 @@ export default ({selectedProduct, user, list, stores}, props) => {
                 <ShoppingList list={list} stores={stores} />
             </View>
             <View style={{flex: 1 / 2, justifyContent: 'flex-end'}} />
+            <SelectShoppingList
+                selectListVisible={selectListVisible}
+                setSelectListVisible={setSelectListVisible}
+            />
         </View>
     );
 };
