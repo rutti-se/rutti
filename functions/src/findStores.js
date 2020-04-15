@@ -93,19 +93,19 @@ async function getNearbyStores({ zipCode }) {
                 });
                 break;
             case 'citygross':
-                result.forEach(store => {
-                    storesResults.push({
-                        storeId: store.id,
-                        retailer,
-                        name: store.storeName,
-                        city: store.address.city,
-                        street: store.address.streetAddress,
-                        zipCode: store.address.zipCode,
-                        latitude: store.latitude,
-                        longitude: store.longitude,
-                        isSelected: false,
-                    });
-                });
+                // result.forEach(store => {
+                //     storesResults.push({
+                //         storeId: store.id,
+                //         retailer,
+                //         name: store.storeName,
+                //         city: store.address.city,
+                //         street: store.address.streetAddress,
+                //         zipCode: store.address.zipCode,
+                //         latitude: store.latitude,
+                //         longitude: store.longitude,
+                //         isSelected: false,
+                //     });
+                // });
                 break;
         }
     });

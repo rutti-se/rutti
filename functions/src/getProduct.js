@@ -45,10 +45,10 @@ async function getProduct({ productSku, stores }) {
                     store,
                 );
             } else if (store.retailer === 'citygross') {
-                addRequest(
-                    `https://www.citygross.se/api/v1/esales/search/quick/?q=${productSku}`,
-                    store,
-                );
+                // addRequest(
+                //     `https://www.citygross.se/api/v1/esales/search/quick/?q=${productSku}`,
+                //     store,
+                // );
             }
         });
 

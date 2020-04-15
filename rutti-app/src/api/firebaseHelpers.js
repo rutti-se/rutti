@@ -239,3 +239,17 @@ export function getCurrentListRef(username) {
         }
     });
 }
+
+export function getCurrentUserRef(username) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let user = await firestore()
+                .collection('users')
+                .doc(username);
+
+            resolve(user);
+        } catch (error) {
+            reject({error});
+        }
+    });
+}
