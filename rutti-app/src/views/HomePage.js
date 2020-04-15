@@ -62,6 +62,7 @@ export default () => {
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                     width: '100%',
+                    paddingHorizontal: 10,
                 }}>
                 <RuttiLogo width={40} height={40} />
 
@@ -90,6 +91,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: COLOR.SECONDARY,
         paddingTop: 20,
-        paddingBottom: DEVICE.height / 1.4,
+        paddingBottom: DEVICE.height / 2.7,
     },
 });

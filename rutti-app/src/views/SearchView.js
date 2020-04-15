@@ -1,27 +1,14 @@
 import React, {useEffect, useState, useRef} from 'react';
-import {
-    View,
-    StyleSheet,
-    FlatList,
-    Text,
-    TouchableOpacity,
-    ColorPropType,
-} from 'react-native';
-import getProducts from '../api/getProducts';
-import ProductItem from '../components/ProductItem';
+import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import useDebounce from '../utilities/useDebounce';
 import InputField from '../components/common/InputField';
 import searchProducts from '../api/searchProducts';
 import {Dimensions} from 'react-native';
-import {
-    removeProductFromList,
-    setProductQuantity,
-} from '../api/firebaseHelpers';
 const DEVICE = Dimensions.get('window');
 import LottieView from 'lottie-react-native';
-import Swiper from 'react-native-swiper';
 import Carousel from 'react-native-snap-carousel';
 import COLOR from '../../assets/colors';
+import SearchResultList from '../components/search-results/SearchResultList';
 
 const PRODUCT_RESULTS_VIEW = 0;
 const RECIPE_RESULTS_VIEW = 1;
@@ -61,14 +48,15 @@ export default ({stores, list, setSelectedProduct}) => {
     }
 
     return (
-        <View>
+        <>
             <View style={{paddingHorizontal: 10}}>
                 <InputField
                     placeholder={'Sök efter produkter'}
                     onChangeText={text => onTextChange(text)}
                 />
 
-                <View style={{padding: 10, flexDirection: 'row'}}>
+                <View
+                    style={{padding: 10, paddingTop: 20, flexDirection: 'row'}}>
                     <TouchableOpacity
                         style={{flexDirection: 'row'}}
                         onPressOut={() =>
@@ -148,27 +136,43 @@ export default ({stores, list, setSelectedProduct}) => {
                 <Carousel
                     ref={carouselRef}
                     data={[PRODUCT_RESULTS_VIEW, RECIPE_RESULTS_VIEW]}
-                    renderItem={
-                        ({item}) => {
-                            console.log(item);
-                            return (
-                                <View
-                                    style={{
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                        height: '100%',
-                                        width: '100%',
-                                    }}>
-                                    {item === PRODUCT_RESULTS_VIEW && (
+                    renderItem={({item}) => {
+                        return (
+                            <View
+                                style={{
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    height: '100%',
+                                    width: '100%',
+                                }}>
+                                {item === PRODUCT_RESULTS_VIEW &&
+                                    (products.length > 0 ? (
+                                        <>
+                                            <SearchResultList
+                                                productSkus={products}
+                                                list={list}
+                                                stores={stores}
+                                                setSelectedProduct={
+                                                    setSelectedProduct
+                                                }
+                                            />
+                                        </>
+                                    ) : (
                                         <LottieView
                                             source={require('../../assets/animations/cup-of-tea.json')}
+                                            resizeMode={'cover'}
                                             autoPlay
                                             loop
                                             height={'100%'}
                                             width={'100%'}
                                         />
-                                    )}
-                                    {item === RECIPE_RESULTS_VIEW && (
+                                    ))}
+                                {item === RECIPE_RESULTS_VIEW && (
+                                    <View
+                                        style={{
+                                            height: '70%',
+                                            width: '100%',
+                                        }}>
                                         <LottieView
                                             source={require('../../assets/animations/recipe.json')}
                                             resizeMode={'contain'}
@@ -177,72 +181,17 @@ export default ({stores, list, setSelectedProduct}) => {
                                             height={'100%'}
                                             width={'100%'}
                                         />
-                                    )}
-                                </View>
-                            );
-                        }
-                        //     style={{
-                        //         width: '100',
-                        //         height: '100%',
-                        //         paddingHorizontal: 10,
-                        //     }}>
-                        //     <View
-                        //         style={{
-                        //             justifyContent: 'center',
-                        //             alignItems: 'center',
-                        //         }}>
-
-                        //     </View>
-                        //     {/* {item === RECIPE_RESULTS_VIEW &&
-                        //         (products.length > 0 ? (
-                        //             <Text>Recept</Text>
-                        //         ) : (
-                        //             <View
-                        //                 style={{
-                        //                     justifyContent: 'center',
-                        //                     alignItems: 'center',
-                        //                 }}>
-                        //                 <LottieView
-                        //                     source={require('../../assets/animations/recipe.json')}
-                        //                     autoPlay
-                        //                     loop
-                        //                     height={500}
-                        //                     width={'100%'}
-                        //                 />
-                        //             </View>
-                        //         ))} */}
-                        // </View>
-                    }
+                                    </View>
+                                )}
+                            </View>
+                        );
+                    }}
                     onBeforeSnapToItem={index => setSelectedResultView(index)}
                     sliderWidth={DEVICE.width}
                     itemWidth={DEVICE.width}
                 />
             </View>
-
-            {/* {products.length > 0 ? (
-                <></>
-            ) : (
-                // <ProductPage
-                //     list={list}
-                //     stores={stores}
-                //     productSkus={products}
-                //     selectProduct={e => setSelectedProduct(e)}
-                // />
-                <View
-                    style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                    }}>
-                    <LottieView
-                        source={require('../../assets/animations/recipe.json')}
-                        autoPlay
-                        loop
-                        height={500}
-                        width={'100%'}
-                    />
-                </View>
-            )} */}
-        </View>
+        </>
     );
 };
 
@@ -257,14 +206,7 @@ const styles = StyleSheet.create({
         color: COLOR.WHITE,
         padding: 5,
         paddingHorizontal: 15,
-        borderRadius: 20,
-    },
-    countPillInactive: {
-        marginLeft: 5,
-        backgroundColor: COLOR.GRAY_4,
-        color: COLOR.WHITE,
-        padding: 5,
-        paddingHorizontal: 15,
-        borderRadius: 20,
+        borderRadius: 100,
+        overflow: 'hidden',
     },
 });
