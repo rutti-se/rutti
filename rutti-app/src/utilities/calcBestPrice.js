@@ -29,3 +29,23 @@ export default function(storeInfo) {
     price = price < Number.MAX_SAFE_INTEGER ? price : null;
     return {price: price, promotion: promotion};
 }
+
+export function calcCurrentPrice(
+    price,
+    quantity,
+    promotionPrice,
+    noOfItemsToDiscount,
+) {
+    let result = {
+        price: (price * quantity).toFixed(2),
+        grantedPromotion: false,
+    };
+    if (noOfItemsToDiscount > 0 && quantity >= noOfItemsToDiscount) {
+        let difference = noOfItemsToDiscount * price - promotionPrice;
+        result.price -= difference;
+        result.price = result.price.toFixed(2);
+        result.grantedPromotion = true;
+    }
+
+    return result;
+}

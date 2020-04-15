@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, Picker} from 'react-native';
+import {View, Text, StyleSheet, Picker, ImageBackground} from 'react-native';
 import COLOR from '../../../assets/colors';
 import Img from '../common/Img';
 import Button from '../common/Button';
 import RoundButton from '../common/RoundButton';
 import AddItemView from '../../components/shopping-list/AddItemView';
 import Spinner from '../common/Spinner';
-import calcBestPrice from '../../utilities/calcBestPrice';
+import calcBestPrice, {calcCurrentPrice} from '../../utilities/calcBestPrice';
 import Popup from '../common/Popup';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Icon} from '../../../assets/icomoon';
@@ -15,11 +15,13 @@ import filterStores from '../../utilities/filterStores';
 
 export default ({product, removeItem, setQuantity}, props) => {
     const [lowestPrice, setLowestPrice] = useState(null);
+    const [currentPrice, setCurrentPrice] = useState(null);
     const [productName, setProductName] = useState(null);
     const [inStores, setInStores] = useState(null);
     const [pickedUp, setPickedUp] = useState(false);
     const [isPromotion, setIsPromotion] = useState(false);
     const [promotion, setPromotion] = useState(null);
+    const [grantedPromotion, setGrantedPromotion] = useState(false);
 
     const [popupVisible, setPopupVisible] = useState(false);
     useEffect(() => {
@@ -33,13 +35,29 @@ export default ({product, removeItem, setQuantity}, props) => {
             let priceInformation = calcBestPrice(
                 product?.data?.storeInformation,
             );
-            setLowestPrice(priceInformation.price);
             setIsPromotion(priceInformation.promotion.isPromotion);
+            setLowestPrice(priceInformation.price);
+            setCurrentPrice(
+                (priceInformation.price * product.quantity).toFixed(2),
+            );
             setPromotion(priceInformation.promotion);
+
             setInStores(filterStores(product.data.storeInformation));
         }
     }, [product.data]);
 
+    useEffect(() => {
+        if (promotion) {
+            let result = calcCurrentPrice(
+                lowestPrice,
+                product.quantity,
+                promotion.promotionPrice,
+                promotion.noOfItemsToDiscount,
+            );
+            setCurrentPrice(result.price);
+            setGrantedPromotion(result.grantedPromotion);
+        }
+    }, [promotion, product.quantity]);
     function renderStores() {
         return (
             <View style={styles.storeContainer}>
@@ -65,6 +83,37 @@ export default ({product, removeItem, setQuantity}, props) => {
         );
     }
 
+    const RenderPromotion = () => {
+        return (
+            <View
+                style={{
+                    flex: 1,
+                }}>
+                {isPromotion && (
+                    <View
+                        style={{
+                            alignSelf: 'center',
+                            flexDirection: 'row',
+                            backgroundColor: COLOR.SECONDARY,
+                            padding: 5,
+                            paddingLeft: 10,
+                            paddingRight: 10,
+                            borderRadius: 25,
+                        }}>
+                        {promotion?.noOfItemsToDiscount > 0 && (
+                            <Text style={styles.promotionText}>
+                                {promotion.noOfItemsToDiscount} för{' '}
+                            </Text>
+                        )}
+                        <Text style={styles.promotion}>
+                            {promotion?.promotionPrice}:-
+                        </Text>
+                    </View>
+                )}
+            </View>
+        );
+    };
+
     return (
         <View style={[styles.container, {opacity: pickedUp ? 0.4 : 1}]}>
             <RoundButton
@@ -84,13 +133,24 @@ export default ({product, removeItem, setQuantity}, props) => {
                 )}
             </View>
             <View style={styles.rightContainer}>
+                <RenderPromotion />
                 {product.data && (
                     <View
                         style={{
                             flexDirection: 'row',
                         }}>
                         <Text style={styles.priceText}>från</Text>
-                        <Text style={styles.price}>{lowestPrice}:-</Text>
+                        <Text
+                            style={[
+                                styles.price,
+                                {
+                                    color: grantedPromotion
+                                        ? COLOR.PRIMARY
+                                        : COLOR.WHITE,
+                                },
+                            ]}>
+                            {currentPrice}:-
+                        </Text>
                     </View>
                 )}
             </View>
@@ -153,11 +213,11 @@ const styles = StyleSheet.create({
         alignContent: 'space-between',
     },
     rightContainer: {
-        flex: 1,
         marginLeft: 10,
         alignSelf: 'center',
         alignItems: 'center',
         flexDirection: 'column',
+        justifyContent: 'space-between',
     },
     text: {
         flex: 1,
@@ -177,6 +237,7 @@ const styles = StyleSheet.create({
         marginLeft: 5,
         textAlign: 'center',
         alignSelf: 'flex-start',
+        marginRight: 5,
     },
     priceText: {
         fontFamily: 'Montserrat-regular',
@@ -193,5 +254,15 @@ const styles = StyleSheet.create({
         width: 40,
         borderTopRightRadius: 10,
         borderBottomRightRadius: 10,
+    },
+    promotion: {
+        fontFamily: 'Montserrat-Bold',
+        color: COLOR.PRIMARY,
+        fontSize: 15,
+    },
+    promotionText: {
+        fontFamily: 'Montserrat-Regular',
+        color: COLOR.PRIMARY,
+        fontSize: 15,
     },
 });
