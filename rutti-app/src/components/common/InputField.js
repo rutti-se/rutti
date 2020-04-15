@@ -7,12 +7,14 @@ export default props => {
     return (
         <View>
             <Text
-                style={{
-                    color: COLOR.PRIMARY,
-                    fontFamily: 'Montserrat-Bold',
-                    paddingBottom: 10,
-                    paddingTop: 10,
-                }}>
+                style={[
+                    {
+                        color: COLOR.PRIMARY,
+                        fontFamily: 'Montserrat-Bold',
+                        paddingBottom: 10,
+                        paddingTop: 10,
+                    },
+                ]}>
                 {props.labelText}
             </Text>
             {props.invalidInput && props.invalidMessage && (

@@ -95,6 +95,7 @@ export default () => {
             {currentPage === SELECT_STORES_PAGE && (
                 <FadeInView>
                     <SelectStoresView
+                        initialSetup={true}
                         username={username}
                         onStoresSelected={() => {
                             RootNavigation.replace('Home');

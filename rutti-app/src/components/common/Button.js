@@ -3,7 +3,7 @@ import {Text, StyleSheet, View} from 'react-native';
 import {Icon} from '../../../assets/icomoon';
 import COLOR from '../../../assets/colors';
 import LottieView from 'lottie-react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+let TouchableOpacity;
 
 export default (
     {
@@ -19,9 +19,15 @@ export default (
         extraSmall,
         isLoading,
         disabled,
+        inAnimatedView,
     },
     props,
 ) => {
+    let opacityImport = inAnimatedView
+        ? require('react-native-gesture-handler')
+        : require('react-native');
+
+    TouchableOpacity = opacityImport.TouchableOpacity;
     return (
         <View style={styles.Box}>
             <TouchableOpacity

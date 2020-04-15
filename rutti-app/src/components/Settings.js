@@ -6,9 +6,14 @@ import COLOR from '../../assets/colors';
 import {firebase} from '@react-native-firebase/auth';
 import SelectStoresView from '../views/SelectStoresView';
 import * as RootNavigation from '../views/RootNavigation';
-export default ({username}) => {
+import FadeInView from './animations/FadeInView';
+export default ({username, stores}) => {
     const [visible, setVisible] = useState(false);
     const [selectStoresVisible, setSelectStoresVisible] = useState(false);
+
+    function close() {
+        selectStoresVisible ? setSelectStoresVisible(false) : setVisible(false);
+    }
 
     return (
         <>
@@ -22,9 +27,9 @@ export default ({username}) => {
             <Modal
                 style={{justifyContent: 'flex-end', margin: 0}}
                 isVisible={visible}
-                onBackButtonPress={() => setVisible(false)}
-                onBackdropPress={() => setVisible(false)}
-                onSwipeComplete={() => setVisible(false)}
+                onBackButtonPress={close}
+                onBackdropPress={close}
+                onSwipeComplete={close}
                 swipeDirection={selectStoresVisible ? [] : ['down']}>
                 <>
                     {!selectStoresVisible ? (
@@ -74,17 +79,20 @@ export default ({username}) => {
                                     iconColor={COLOR.BLACK}
                                     color={COLOR.GRAY_4}
                                     inAnimatedView={false}
-                                    onPress={() => setVisible(false)}
+                                    onPress={close}
                                 />
                             </View>
                         </View>
                     ) : (
-                        <SelectStoresView
-                            username={username}
-                            onStoresSelected={() =>
-                                setSelectStoresVisible(false)
-                            }
-                        />
+                        <FadeInView>
+                            <SelectStoresView
+                                stores={stores}
+                                username={username}
+                                onStoresSelected={() =>
+                                    setSelectStoresVisible(false)
+                                }
+                            />
+                        </FadeInView>
                     )}
                 </>
             </Modal>

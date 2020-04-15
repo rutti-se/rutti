@@ -7,11 +7,10 @@ import Button from '../components/common/Button';
 import findStores from '../api/findStores';
 import MapView from 'react-native-map-clustering';
 import {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
-import {saveStores, getStores} from '../api/firebaseHelpers';
+import {saveStores} from '../api/firebaseHelpers';
 
-export default ({username, onStoresSelected}) => {
+export default ({username, stores, onStoresSelected, initialSetup}) => {
     let [selectedStores, setSelectedStores] = useState([]);
-    let [amountSelected, setAmountSelected] = useState(0);
     let [zipCode, setZipCode] = useState('');
     let [storeResults, setStoreResults] = useState([]);
     let [loading, setLoading] = useState(false);
@@ -21,9 +20,9 @@ export default ({username, onStoresSelected}) => {
     });
 
     useEffect(() => {
-        getStores(username).then(stores => {
+        if (stores && !initialSetup) {
             setSelectedStores(stores);
-        });
+        }
     }, []);
 
     useEffect(() => {
@@ -49,7 +48,6 @@ export default ({username, onStoresSelected}) => {
                     ? selectedStores.pop(store)
                     : selectedStores.push(store);
                 store.isSelected = !store.isSelected;
-                setAmountSelected(selectedStores.length);
             }
         });
     }
@@ -59,9 +57,8 @@ export default ({username, onStoresSelected}) => {
 
         saveStores(username, selectedStores)
             .then(() => onStoresSelected())
-            .catch(error =>
-                Alert.alert('Något gick fel!', error.error.message),
-            );
+            .catch(error => Alert.alert('Något gick fel!', error.error.message))
+            .finally(setLoading(false));
     }
 
     return (
@@ -109,7 +106,12 @@ export default ({username, onStoresSelected}) => {
                                 onPress={() => onPressMarker(store.storeId)}>
                                 <StoreMarker
                                     store={store.retailer}
-                                    selected={store.isSelected}
+                                    selected={
+                                        store.isSelected ||
+                                        selectedStores.findIndex(
+                                            e => e.storeId === store.storeId,
+                                        ) >= 0
+                                    }
                                 />
                             </Marker>
                         );
@@ -118,8 +120,10 @@ export default ({username, onStoresSelected}) => {
             <View style={styles.buttonContainer}>
                 <Button
                     text={
-                        amountSelected && selectedStores.length > 0
-                            ? 'Fortsätt'
+                        selectedStores.length > 0
+                            ? initialSetup
+                                ? 'Fortsätt'
+                                : 'Spara'
                             : 'Välj minst en butik'
                     }
                     shadow={true}
