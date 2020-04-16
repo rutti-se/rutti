@@ -100,7 +100,7 @@ export default ({recipe}) => {
 
     function renderIngredientGroups() {
         let ingredientGroups = [];
-        recipeDetails.ingredients.map(ingredientGroup => {
+        recipeDetails?.ingredients.map(ingredientGroup => {
             ingredientGroups.push(
                 <View>
                     <Text style={{fontFamily: 'Montserrat-Bold'}}>
@@ -173,7 +173,14 @@ export default ({recipe}) => {
                             {
                                 key: 'title',
                                 width: 250,
-                                height: 30,
+                                height: 20,
+                                marginBottom: 6,
+                                marginTop: 10,
+                            },
+                            {
+                                key: 'rating',
+                                width: 150,
+                                height: 20,
                                 marginBottom: 6,
                                 marginTop: 10,
                             },

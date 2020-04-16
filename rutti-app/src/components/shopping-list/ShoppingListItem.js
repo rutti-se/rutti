@@ -58,6 +58,7 @@ export default ({product, removeItem, setQuantity}, props) => {
             setGrantedPromotion(result.grantedPromotion);
         }
     }, [promotion, product.quantity]);
+
     function renderStores() {
         return (
             <View style={styles.storeContainer}>
@@ -100,13 +101,14 @@ export default ({product, removeItem, setQuantity}, props) => {
                             paddingRight: 10,
                             borderRadius: 25,
                         }}>
-                        {promotion?.noOfItemsToDiscount > 0 && (
+                        {promotion?.noOfItemsToDiscount > 1 && (
                             <Text style={styles.promotionText}>
                                 {promotion.noOfItemsToDiscount} för{' '}
                             </Text>
                         )}
                         <Text style={styles.promotion}>
-                            {promotion?.promotionPrice}:-
+                            {promotion?.promotionPrice}
+                            {promotion?.noOfItemsToDiscount > 1 ? ':-' : '/st'}
                         </Text>
                     </View>
                 )}
@@ -134,6 +136,20 @@ export default ({product, removeItem, setQuantity}, props) => {
             </View>
             <View style={styles.rightContainer}>
                 <RenderPromotion />
+                {grantedPromotion && (
+                    <Text
+                        style={[
+                            styles.priceText,
+                            {
+                                alignSelf: 'center',
+                                textDecorationLine: 'line-through',
+                                textDecorationColor: 'white',
+                                fontSize: 15,
+                            },
+                        ]}>
+                        {(lowestPrice * product.quantity).toFixed(2)}:-
+                    </Text>
+                )}
                 {product.data && (
                     <View
                         style={{

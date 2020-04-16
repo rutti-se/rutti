@@ -9,7 +9,7 @@ import {
     getCurrentListRef,
     getCurrentUserRef,
 } from '../api/firebaseHelpers';
-import RuttiLogo from '../../assets/rutti_logo.svg';
+import RuttiLogo from '../../assets/rutti_logo_notext.svg';
 import Settings from '../components/Settings';
 import SearchView from './SearchView';
 const DEVICE = Dimensions.get('window');

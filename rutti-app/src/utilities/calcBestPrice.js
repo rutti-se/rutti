@@ -18,6 +18,7 @@ export default function(storeInfo) {
             store.isPromotion &&
             store.currentPromotions[0].comparePrice < store.comparePrice
         ) {
+            console.log(store);
             promotion.isPromotion = true;
             promotion.comparePrice = store.currentPromotions[0].comparePrice;
             promotion.noOfItemsToDiscount =
@@ -40,11 +41,22 @@ export function calcCurrentPrice(
         price: (price * quantity).toFixed(2),
         grantedPromotion: false,
     };
-    if (noOfItemsToDiscount > 0 && quantity >= noOfItemsToDiscount) {
-        let difference = noOfItemsToDiscount * price - promotionPrice;
-        result.price -= difference;
+
+    if (noOfItemsToDiscount > 1) {
+        if (quantity >= noOfItemsToDiscount) {
+            let difference = noOfItemsToDiscount * price - promotionPrice;
+            result.price -= difference;
+            result.price = result.price.toFixed(2);
+            result.grantedPromotion = true;
+        } else {
+            result.price = price;
+        }
+        console.log('HÄR:', result.price);
+    } else if (promotionPrice > 0) {
+        result.price = quantity * promotionPrice;
         result.price = result.price.toFixed(2);
         result.grantedPromotion = true;
+        console.log('DÄR:', result.price);
     }
 
     return result;

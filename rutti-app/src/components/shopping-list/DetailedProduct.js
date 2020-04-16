@@ -60,32 +60,46 @@ export default ({product, setQuantity, removeItem}) => {
     }
     const RenderPromotion = () => {
         return (
-            <ImageBackground
+            <View
                 style={{
-                    width: 150,
-                    height: 120,
+                    flex: 1,
+                    height: '20%',
+                    top: 0,
+                    left: 0,
+                    right: 0,
                     position: 'absolute',
+                    backgroundColor: COLOR.PRIMARY,
+                    opacity: 0.9,
                     justifyContent: 'center',
-                    left: '5%',
-                    top: '50%',
-                }}
-                resizeMode={'contain'}
-                source={require('../../../assets/promotion.png')}>
+                    borderTopLeftRadius: 10,
+                    borderTopRightRadius: 10,
+                    zIndex: 1001,
+                }}>
                 <View
                     style={{
                         alignSelf: 'center',
-                        flexDirection: 'column',
+                        flexDirection: 'row',
+                        opacity: 1,
                     }}>
-                    {promotion?.noOfItemsToDiscount > 0 && (
-                        <Text style={styles.promotionText}>
-                            {promotion.noOfItemsToDiscount} för
-                        </Text>
+                    {promotion.noOfItemsToDiscount > 1 && (
+                        <View style={{flexDirection: 'row'}}>
+                            <Text style={styles.promotion}>
+                                {promotion.noOfItemsToDiscount}
+                            </Text>
+                            <Text
+                                style={[styles.promotionText, {marginLeft: 5}]}>
+                                för
+                            </Text>
+                        </View>
                     )}
                     <Text style={styles.promotion}>
-                        {promotion?.promotionPrice}:-
+                        {promotion.promotionPrice}
+                    </Text>
+                    <Text style={styles.promotionText}>
+                        {promotion?.noOfItemsToDiscount > 1 ? ':-' : '/st'}
                     </Text>
                 </View>
-            </ImageBackground>
+            </View>
         );
     };
 
@@ -321,15 +335,17 @@ const styles = StyleSheet.create({
         borderRadius: 50,
     },
     promotion: {
-        color: COLOR.PRIMARY,
+        color: COLOR.WHITE,
         fontFamily: 'Montserrat-Bold',
-        fontSize: 22,
+        fontSize: 18,
         textAlign: 'center',
     },
     promotionText: {
-        color: COLOR.PRIMARY,
+        color: COLOR.WHITE,
         fontFamily: 'Montserrat-Bold',
-        fontSize: 16,
+        fontSize: 13,
         textAlign: 'center',
+        alignSelf: 'center',
+        marginRight: 3,
     },
 });
