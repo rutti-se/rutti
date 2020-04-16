@@ -13,8 +13,6 @@ export class SelectStoresView extends Component {
 
         const {stores} = this.props;
 
-        console.log(stores.length);
-
         this.state = {
             selectedStores: stores || [],
             storeResults: [],
