@@ -179,13 +179,13 @@ export default ({product, removeItem, setQuantity}, props) => {
                 }}>
                 <DetailedProduct
                     setQuantity={quantity => {
-                        setQuantity(quantity);
-                        setPopupVisible(false);
+                        setQuantity(quantity).then(() =>
+                            setPopupVisible(false),
+                        );
                     }}
                     product={product}
                     removeItem={() => {
-                        removeItem();
-                        setPopupVisible(false);
+                        removeItem().then(() => setPopupVisible(false));
                     }}
                 />
             </Popup>

@@ -1,140 +1,137 @@
-import React, {useState, useEffect} from 'react';
+import React, {Component} from 'react';
 import COLOR from '../../assets/colors';
-import StoreMarker from '../components/select-stores-view/StoreMarker';
 import {View, StyleSheet, Text, Alert} from 'react-native';
 import InputField from '../components/common/InputField';
 import Button from '../components/common/Button';
 import findStores from '../api/findStores';
-import MapView from 'react-native-map-clustering';
-import {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import {saveStores} from '../api/firebaseHelpers';
+import StoreMap from '../components/select-stores-view/StoreMap';
 
-export default ({username, stores, onStoresSelected, initialSetup}) => {
-    let [selectedStores, setSelectedStores] = useState([]);
-    let [zipCode, setZipCode] = useState('');
-    let [storeResults, setStoreResults] = useState([]);
-    let [loading, setLoading] = useState(false);
-    let [mapBounds, setMapBounds] = useState({
-        latitude: 56.483105,
-        longitude: 13.585107,
-    });
+export class SelectStoresView extends Component {
+    constructor(props) {
+        super(props);
 
-    useEffect(() => {
-        if (stores && !initialSetup) {
-            setSelectedStores(stores);
-        }
-    }, []);
+        const {stores} = this.props;
 
-    useEffect(() => {
-        if (zipCode.length === 5) {
-            findStores({zipCode})
-                .then(result => {
-                    setStoreResults(result.stores);
-                    setMapBounds({
-                        latitude: result.stores.centerLat,
-                        longitude: result.stores.centerLong,
-                    });
-                })
-                .catch(error => {
-                    Alert.alert('Något gick fel!', error.toString());
-                });
-        }
-    }, [zipCode]);
+        console.log(stores.length);
 
-    function onPressMarker(id) {
-        storeResults.map(store => {
-            if (store.storeId === id) {
-                store.isSelected
-                    ? selectedStores.pop(store)
-                    : selectedStores.push(store);
-                store.isSelected = !store.isSelected;
-            }
-        });
+        this.state = {
+            selectedStores: stores || [],
+            storeResults: [],
+            loading: false,
+            mapBounds: {latitude: 56.483105, longitude: 13.585107},
+        };
     }
 
-    function onPress() {
-        setLoading(true);
+    render() {
+        let {selectedStores, storeResults, mapBounds, loading} = this.state;
+        let {username, initialSetup, onStoresSelected} = this.props;
 
-        saveStores(username, selectedStores)
-            .then(() => onStoresSelected())
-            .catch(error => Alert.alert('Något gick fel!', error.error.message))
-            .finally(setLoading(false));
+        console.log('stores length: ', selectedStores.length);
+
+        return (
+            <View style={styles.container}>
+                <View
+                    style={{
+                        paddingTop: 40,
+                        paddingBottom: 20,
+                        paddingHorizontal: 20,
+                        shadowOffset: {width: 0, height: 5},
+                        shadowColor: COLOR.GRAY_4,
+                        shadowOpacity: 1.0,
+                    }}>
+                    <Text style={styles.text}>Välj butiker</Text>
+
+                    <InputField
+                        onChangeText={text => {
+                            console.log(text);
+                            if (text.length === 5) {
+                                findStores({zipCode: text})
+                                    .then(result => {
+                                        this.setState({
+                                            storeResults: result.stores,
+                                            mapBounds: {
+                                                latitude:
+                                                    result.stores.centerLat,
+                                                longitude:
+                                                    result.stores.centerLong,
+                                            },
+                                        });
+                                    })
+                                    .catch(error => {
+                                        Alert.alert(
+                                            'Något gick fel!',
+                                            error.toString(),
+                                        );
+                                    });
+                            }
+                        }}
+                        name={'zipCode'}
+                        labelText={'Postnummer'}
+                    />
+                </View>
+
+                {storeResults && (
+                    <StoreMap
+                        stores={storeResults.map(store =>
+                            selectedStores.findIndex(
+                                e => e.storeId === store.storeId,
+                            ) >= 0
+                                ? {...store, ...{isSelected: !store.isSelected}}
+                                : store,
+                        )}
+                        onStorePress={store => {
+                            console.log('press');
+                            if (store) {
+                                if (
+                                    selectedStores.findIndex(
+                                        e => e.storeId === store.storeId,
+                                    ) >= 0
+                                ) {
+                                    selectedStores.pop(store);
+                                } else {
+                                    selectedStores.push(store);
+                                }
+                                this.setState({selectedStores});
+                            }
+                        }}
+                        mapBounds={mapBounds}
+                    />
+                )}
+
+                <View style={styles.buttonContainer}>
+                    <Button
+                        text={
+                            selectedStores.length > 0
+                                ? initialSetup
+                                    ? 'Fortsätt'
+                                    : 'Spara'
+                                : 'Välj minst en butik'
+                        }
+                        shadow={true}
+                        loading={loading}
+                        type={
+                            selectedStores.length > 0 ? 'primary' : 'secondary'
+                        }
+                        onPress={() => {
+                            this.setState({loading: true});
+
+                            saveStores(username, selectedStores)
+                                .then(() => onStoresSelected())
+                                .catch(error =>
+                                    Alert.alert(
+                                        'Något gick fel!',
+                                        error.error.message,
+                                    ),
+                                )
+                                .finally(this.setState({loading: false}));
+                        }}
+                    />
+                </View>
+            </View>
+        );
     }
-
-    return (
-        <View style={styles.container}>
-            <View
-                style={{
-                    paddingTop: 40,
-                    paddingBottom: 20,
-                    paddingHorizontal: 20,
-                    shadowOffset: {width: 0, height: 5},
-                    shadowColor: COLOR.GRAY_4,
-                    shadowOpacity: 1.0,
-                }}>
-                <Text style={styles.text}>Välj butiker</Text>
-
-                <InputField
-                    onChangeText={text => setZipCode(text)}
-                    name={'zipCode'}
-                    labelText={'Postnummer'}
-                />
-            </View>
-
-            <MapView
-                style={{flex: 1}}
-                provider={PROVIDER_GOOGLE}
-                clusterColor={COLOR.PRIMARY}
-                initialRegion={{
-                    latitude: mapBounds.latitude,
-                    longitude: mapBounds.longitude,
-                    latitudeDelta: 2.4,
-                    longitudeDelta: 2.4,
-                }}
-                showsUserLocation={true}>
-                {storeResults &&
-                    storeResults.map(store => {
-                        return (
-                            <Marker
-                                coordinate={{
-                                    latitude: store.latitude,
-                                    longitude: store.longitude,
-                                }}
-                                title={store.name}
-                                //tracksViewChanges={false}
-                                key={store.storeId.toString()}
-                                onPress={() => onPressMarker(store.storeId)}>
-                                <StoreMarker
-                                    store={store.retailer}
-                                    selected={
-                                        store.isSelected ||
-                                        selectedStores.findIndex(
-                                            e => e.storeId === store.storeId,
-                                        ) >= 0
-                                    }
-                                />
-                            </Marker>
-                        );
-                    })}
-            </MapView>
-            <View style={styles.buttonContainer}>
-                <Button
-                    text={
-                        selectedStores.length > 0
-                            ? initialSetup
-                                ? 'Fortsätt'
-                                : 'Spara'
-                            : 'Välj minst en butik'
-                    }
-                    shadow={true}
-                    loading={loading}
-                    type={selectedStores.length > 0 ? 'primary' : 'secondary'}
-                    onPress={onPress}
-                />
-            </View>
-        </View>
-    );
-};
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -159,3 +156,5 @@ const styles = StyleSheet.create({
         fontFamily: 'Montserrat-Bold',
     },
 });
+
+export default SelectStoresView;
