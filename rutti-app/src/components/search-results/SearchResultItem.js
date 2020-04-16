@@ -73,7 +73,7 @@ export default ({product, onPress, isLoading, setQuantity, removeItem}) => {
                         flexDirection: 'row',
                         opacity: 1,
                     }}>
-                    {promotion.noOfItemsToDiscount > 0 && (
+                    {promotion.noOfItemsToDiscount > 1 && (
                         <View style={{flexDirection: 'row'}}>
                             <Text style={styles.promotion}>
                                 {promotion.noOfItemsToDiscount}
@@ -84,8 +84,12 @@ export default ({product, onPress, isLoading, setQuantity, removeItem}) => {
                             </Text>
                         </View>
                     )}
+
                     <Text style={styles.promotion}>
-                        {promotion.promotionPrice}:-
+                        {promotion.promotionPrice}
+                    </Text>
+                    <Text style={styles.promotionText}>
+                        {promotion?.noOfItemsToDiscount > 1 ? ':-' : '/st'}
                     </Text>
                 </View>
             </View>
