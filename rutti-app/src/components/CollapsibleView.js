@@ -6,6 +6,8 @@ import COLOR from '../../assets/colors';
 
 export default props => {
     const [collapsed, setCollapsed] = useState(true);
+
+    useEffect(() => {}, []);
     function renderTitle() {
         return (
             <TouchableHighlight
@@ -25,7 +27,7 @@ export default props => {
     }
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, props.style]}>
             {renderTitle()}
             <Collapsible align={'bottom'} duration={600} collapsed={collapsed}>
                 <View style={styles.body}>{props.children}</View>
@@ -39,7 +41,7 @@ const styles = StyleSheet.create({
     titleContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        paddingVertical: 20,
+        paddingVertical: 10,
     },
     title: {
         fontSize: 18,
@@ -49,6 +51,6 @@ const styles = StyleSheet.create({
     button: {},
     body: {
         flex: 1,
-        paddingBottom: 20,
+        paddingBottom: 10,
     },
 });

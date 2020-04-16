@@ -9,6 +9,7 @@ import LottieView from 'lottie-react-native';
 import Carousel from 'react-native-snap-carousel';
 import COLOR from '../../assets/colors';
 import SearchResultList from '../components/search-results/SearchResultList';
+import SearchRecipeList from '../components/search-results/SearchRecipeList';
 
 const PRODUCT_RESULTS_VIEW = 0;
 const RECIPE_RESULTS_VIEW = 1;
@@ -35,7 +36,9 @@ export default ({stores, list, setSelectedProduct}) => {
                     setRecipes(recipes);
                 })
                 .catch(error => console.log('search error: ', error))
-                .finally(() => setIsSearching(false));
+                .finally(() => {
+                    setIsSearching(false);
+                });
         } else {
             setResults([]);
         }
@@ -126,7 +129,7 @@ export default ({stores, list, setSelectedProduct}) => {
                                             : 0.6,
                                 },
                             ]}>
-                            {recipes.totalFound || 0}
+                            {recipes?.recipes?.length || 0}
                         </Text>
                     </TouchableOpacity>
                 </View>
@@ -167,22 +170,28 @@ export default ({stores, list, setSelectedProduct}) => {
                                             width={'100%'}
                                         />
                                     ))}
-                                {item === RECIPE_RESULTS_VIEW && (
-                                    <View
-                                        style={{
-                                            height: '70%',
-                                            width: '100%',
-                                        }}>
-                                        <LottieView
-                                            source={require('../../assets/animations/recipe.json')}
-                                            resizeMode={'contain'}
-                                            autoPlay
-                                            loop
-                                            height={'100%'}
-                                            width={'100%'}
+
+                                {item === RECIPE_RESULTS_VIEW &&
+                                    (recipes?.recipes?.length > 0 ? (
+                                        <SearchRecipeList
+                                            recipes={recipes.recipes}
                                         />
-                                    </View>
-                                )}
+                                    ) : (
+                                        <View
+                                            style={{
+                                                height: '70%',
+                                                width: '100%',
+                                            }}>
+                                            <LottieView
+                                                source={require('../../assets/animations/recipe.json')}
+                                                resizeMode={'contain'}
+                                                autoPlay
+                                                loop
+                                                height={'100%'}
+                                                width={'100%'}
+                                            />
+                                        </View>
+                                    ))}
                             </View>
                         );
                     }}
@@ -206,7 +215,7 @@ const styles = StyleSheet.create({
         color: COLOR.WHITE,
         padding: 5,
         paddingHorizontal: 15,
-        borderRadius: 100,
+        borderRadius: 15,
         overflow: 'hidden',
     },
 });
