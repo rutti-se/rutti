@@ -91,6 +91,5 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: COLOR.SECONDARY,
         paddingTop: 20,
-        paddingBottom: DEVICE.height / 2.7,
     },
 });

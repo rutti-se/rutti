@@ -163,10 +163,10 @@ export default ({stores, list, setSelectedProduct}) => {
                                     ) : (
                                         <LottieView
                                             source={require('../../assets/animations/cup-of-tea.json')}
-                                            resizeMode={'cover'}
+                                            resizeMode={'contain'}
                                             autoPlay
                                             loop
-                                            height={'100%'}
+                                            height={'65%'}
                                             width={'100%'}
                                         />
                                     ))}
@@ -179,15 +179,15 @@ export default ({stores, list, setSelectedProduct}) => {
                                     ) : (
                                         <View
                                             style={{
-                                                height: '70%',
-                                                width: '100%',
+                                                height: '100%',
+                                                width: '80%',
                                             }}>
                                             <LottieView
                                                 source={require('../../assets/animations/recipe.json')}
                                                 resizeMode={'contain'}
                                                 autoPlay
                                                 loop
-                                                height={'100%'}
+                                                height={'60%'}
                                                 width={'100%'}
                                             />
                                         </View>

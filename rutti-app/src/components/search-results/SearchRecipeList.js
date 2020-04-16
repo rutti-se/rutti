@@ -30,6 +30,14 @@ export default ({recipes}) => {
                     renderItem={renderRecipeItem}
                     keyExtractor={(item, index) => index.toString()}
                     numColumns={2}
+                    ListFooterComponent={
+                        <View
+                            style={{
+                                height: 500,
+                                width: '100%',
+                            }}
+                        />
+                    }
                 />
             )}
         </View>
