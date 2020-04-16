@@ -41,7 +41,7 @@ export default ({product, onPress, isLoading, setQuantity, removeItem}) => {
     const RenderBottom = () => {
         return (
             <View style={styles.bottom}>
-                <View style={{flexDirection: 'row'}}>
+                <View style={{flexDirection: 'column'}}>
                     <Text style={styles.priceText}>från</Text>
                     <Text style={styles.price}>{lowestPrice}:-</Text>
                 </View>
@@ -52,32 +52,43 @@ export default ({product, onPress, isLoading, setQuantity, removeItem}) => {
 
     const RenderPromotion = () => {
         return (
-            <ImageBackground
+            <View
                 style={{
-                    width: 120,
-                    height: 90,
+                    flex: 1,
+                    height: '20%',
+                    top: 0,
+                    left: 0,
+                    right: 0,
                     position: 'absolute',
+                    backgroundColor: COLOR.PRIMARY,
+                    opacity: 0.9,
                     justifyContent: 'center',
-                    left: '5%',
-                    top: '50%',
-                }}
-                resizeMode={'contain'}
-                source={require('../../../assets/promotion.png')}>
+                    borderTopLeftRadius: 10,
+                    borderTopRightRadius: 10,
+                    zIndex: 1001,
+                }}>
                 <View
                     style={{
                         alignSelf: 'center',
-                        flexDirection: 'column',
+                        flexDirection: 'row',
+                        opacity: 1,
                     }}>
                     {promotion.noOfItemsToDiscount > 0 && (
-                        <Text style={styles.promotionText}>
-                            {promotion.noOfItemsToDiscount} för
-                        </Text>
+                        <View style={{flexDirection: 'row'}}>
+                            <Text style={styles.promotion}>
+                                {promotion.noOfItemsToDiscount}
+                            </Text>
+                            <Text
+                                style={[styles.promotionText, {marginLeft: 5}]}>
+                                för
+                            </Text>
+                        </View>
                     )}
                     <Text style={styles.promotion}>
                         {promotion.promotionPrice}:-
                     </Text>
                 </View>
-            </ImageBackground>
+            </View>
         );
     };
 
@@ -91,6 +102,7 @@ export default ({product, onPress, isLoading, setQuantity, removeItem}) => {
             ]}>
             {product && product.data && (
                 <>
+                    {isPromotion && <RenderPromotion />}
                     <TouchableOpacity
                         style={{maxHeight: 170}}
                         onPress={() => setPopupVisible(true)}>
@@ -105,7 +117,6 @@ export default ({product, onPress, isLoading, setQuantity, removeItem}) => {
                                     product?.data?.productInformation?.imageUrl
                                 }
                             />
-                            {isPromotion && <RenderPromotion />}
                         </View>
                     </TouchableOpacity>
                     <Text style={styles.text}>{productName}</Text>
@@ -168,26 +179,26 @@ const styles = StyleSheet.create({
         fontFamily: 'Montserrat-Bold',
         fontSize: 20,
         alignSelf: 'flex-end',
-        marginLeft: 5,
         textAlign: 'center',
     },
     priceText: {
         fontFamily: 'Montserrat-regular',
         fontSize: 12,
-        alignSelf: 'flex-end',
-        marginBottom: 2,
+        alignSelf: 'flex-start',
     },
 
     promotion: {
-        color: COLOR.PRIMARY,
+        color: COLOR.WHITE,
         fontFamily: 'Montserrat-Bold',
         fontSize: 18,
         textAlign: 'center',
     },
     promotionText: {
-        color: COLOR.PRIMARY,
+        color: COLOR.WHITE,
         fontFamily: 'Montserrat-Bold',
         fontSize: 13,
         textAlign: 'center',
+        alignSelf: 'center',
+        marginRight: 3,
     },
 });
