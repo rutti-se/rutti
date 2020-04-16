@@ -9,10 +9,14 @@ import {
     setProductQuantity,
 } from '../../api/firebaseHelpers';
 import LinearGradient from 'react-native-linear-gradient';
+import PickupList from './PickupList';
+import Button from '../common/Button';
+
 let cacheMap = new Map();
 
 export default ({list, stores}, props) => {
     let [products, setProducts] = useState([]);
+    const [pickupListVisible, setPickupListVisible] = useState(false);
 
     useEffect(() => {
         if (list && stores) {
@@ -57,58 +61,78 @@ export default ({list, stores}, props) => {
                 justifyContent: 'space-between',
                 zIndex: 1000,
             }}>
-            <View
-                style={{
-                    height: '100%',
-                    width: '95%',
-                    alignSelf: 'center',
-                }}>
-                <ScrollView>
-                    <TouchableWithoutFeedback>
-                        <View style={{paddingVertical: 10}}>
-                            {products.map(product => (
-                                <ShoppingListItem
-                                    setQuantity={quantity =>
-                                        setProductQuantity(
-                                            list.id,
-                                            product.sku,
-                                            quantity,
-                                        )
-                                    }
-                                    removeItem={() =>
-                                        removeProductFromList(
-                                            list.id,
-                                            product.sku,
-                                            product.quantity,
-                                        )
-                                    }
-                                    product={product}
+            {pickupListVisible ? (
+                <PickupList
+                    products={products}
+                    stores={stores}
+                    close={() => setPickupListVisible(false)}
+                />
+            ) : (
+                <View
+                    style={{
+                        height: '100%',
+                        width: '95%',
+                        alignSelf: 'center',
+                    }}>
+                    <ScrollView>
+                        <TouchableWithoutFeedback>
+                            <View
+                                style={{
+                                    paddingVertical: 10,
+                                    justifyContent: 'center',
+                                }}>
+                                {products.map(product => (
+                                    <ShoppingListItem
+                                        setQuantity={quantity =>
+                                            setProductQuantity(
+                                                list.id,
+                                                product.sku,
+                                                quantity,
+                                            )
+                                        }
+                                        removeItem={() =>
+                                            removeProductFromList(
+                                                list.id,
+                                                product.sku,
+                                                product.quantity,
+                                            )
+                                        }
+                                        product={product}
+                                    />
+                                ))}
+                                <Button
+                                    text="Hitta bästa rutt"
+                                    type={'primary'}
+                                    inAnimatedView={true}
+                                    onPress={() => {
+                                        setPickupListVisible(true);
+                                    }}
                                 />
-                            ))}
-                        </View>
-                    </TouchableWithoutFeedback>
-                </ScrollView>
-                <LinearGradient
-                    style={{
-                        position: 'absolute',
-                        top: 0,
-                        width: '100%',
-                        height: 10,
-                    }}
-                    colors={['rgba(51, 51, 51, 1)', 'rgba(51, 51, 51, 0)']}
-                    pointerEvents={'none'}
-                />
-                <LinearGradient
-                    style={{
-                        position: 'absolute',
-                        bottom: 0,
-                        width: '100%',
-                        height: 10,
-                    }}
-                    colors={['rgba(51, 51, 51, 0)', 'rgba(51, 51, 51, 1)']}
-                    pointerEvents={'none'}
-                />
-            </View>
+                            </View>
+                        </TouchableWithoutFeedback>
+                    </ScrollView>
+                    <LinearGradient
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            width: '100%',
+                            height: 10,
+                        }}
+                        colors={['rgba(51, 51, 51, 1)', 'rgba(51, 51, 51, 0)']}
+                        pointerEvents={'none'}
+                    />
+                    <LinearGradient
+                        style={{
+                            position: 'absolute',
+                            bottom: 0,
+                            width: '100%',
+                            height: 10,
+                        }}
+                        colors={['rgba(51, 51, 51, 0)', 'rgba(51, 51, 51, 1)']}
+                        pointerEvents={'none'}
+                    />
+                </View>
+            )}
         </View>
     );
 };
