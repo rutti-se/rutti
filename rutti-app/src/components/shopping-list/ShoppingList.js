@@ -11,6 +11,7 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import PickupList from './PickupList';
 import Button from '../common/Button';
+import FadeInView from '../animations/FadeInView';
 
 let cacheMap = new Map();
 
@@ -62,76 +63,86 @@ export default ({list, stores}, props) => {
                 zIndex: 1000,
             }}>
             {pickupListVisible ? (
-                <PickupList
-                    products={products}
-                    stores={stores}
-                    close={() => setPickupListVisible(false)}
-                />
+                <FadeInView>
+                    <PickupList
+                        products={products}
+                        stores={stores}
+                        close={() => setPickupListVisible(false)}
+                    />
+                </FadeInView>
             ) : (
-                <View
-                    style={{
-                        height: '100%',
-                        width: '95%',
-                        alignSelf: 'center',
-                    }}>
-                    <ScrollView>
-                        <TouchableWithoutFeedback>
-                            <View
-                                style={{
-                                    paddingVertical: 10,
-                                    justifyContent: 'center',
-                                }}>
-                                {products.map(product => (
-                                    <ShoppingListItem
-                                        setQuantity={quantity =>
-                                            setProductQuantity(
-                                                list.id,
-                                                product.sku,
-                                                quantity,
-                                            )
-                                        }
-                                        removeItem={() =>
-                                            removeProductFromList(
-                                                list.id,
-                                                product.sku,
-                                                product.quantity,
-                                            )
-                                        }
-                                        product={product}
+                <FadeInView>
+                    <View
+                        style={{
+                            height: '100%',
+                            width: '95%',
+                            alignSelf: 'center',
+                        }}>
+                        <ScrollView>
+                            <TouchableWithoutFeedback>
+                                <View
+                                    style={{
+                                        paddingVertical: 10,
+                                        justifyContent: 'center',
+                                    }}>
+                                    {products.map(product => (
+                                        <ShoppingListItem
+                                            setQuantity={quantity =>
+                                                setProductQuantity(
+                                                    list.id,
+                                                    product.sku,
+                                                    quantity,
+                                                )
+                                            }
+                                            removeItem={() =>
+                                                removeProductFromList(
+                                                    list.id,
+                                                    product.sku,
+                                                    product.quantity,
+                                                )
+                                            }
+                                            product={product}
+                                        />
+                                    ))}
+                                    <Button
+                                        text="Hitta bästa rutt"
+                                        type={'primary'}
+                                        inAnimatedView={true}
+                                        onPress={() => {
+                                            setPickupListVisible(true);
+                                        }}
                                     />
-                                ))}
-                                <Button
-                                    text="Hitta bästa rutt"
-                                    type={'primary'}
-                                    inAnimatedView={true}
-                                    onPress={() => {
-                                        setPickupListVisible(true);
-                                    }}
-                                />
-                            </View>
-                        </TouchableWithoutFeedback>
-                    </ScrollView>
-                    <LinearGradient
-                        style={{
-                            position: 'absolute',
-                            top: 0,
-                            width: '100%',
-                            height: 10,
-                        }}
-                        colors={['rgba(51, 51, 51, 1)', 'rgba(51, 51, 51, 0)']}
-                        pointerEvents={'none'}
-                    />
-                    <LinearGradient
-                        style={{
-                            position: 'absolute',
-                            bottom: 0,
-                            width: '100%',
-                            height: 10,
-                        }}
-                        colors={['rgba(51, 51, 51, 0)', 'rgba(51, 51, 51, 1)']}
-                        pointerEvents={'none'}
-                    />
-                </View>
+                                </View>
+                            </TouchableWithoutFeedback>
+                        </ScrollView>
+                        <LinearGradient
+                            style={{
+                                position: 'absolute',
+                                top: 0,
+                                width: '100%',
+                                height: 10,
+                            }}
+                            colors={[
+                                'rgba(51, 51, 51, 1)',
+                                'rgba(51, 51, 51, 0)',
+                            ]}
+                            pointerEvents={'none'}
+                        />
+                        <LinearGradient
+                            style={{
+                                position: 'absolute',
+                                bottom: 0,
+                                width: '100%',
+                                height: 10,
+                            }}
+                            colors={[
+                                'rgba(51, 51, 51, 0)',
+                                'rgba(51, 51, 51, 1)',
+                            ]}
+                            pointerEvents={'none'}
+                        />
+                    </View>
+                </FadeInView>
             )}
         </View>
     );
