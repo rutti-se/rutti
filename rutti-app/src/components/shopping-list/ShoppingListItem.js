@@ -37,7 +37,7 @@ export default ({product, removeItem, setQuantity}, props) => {
             );
             setPromotion(priceInformation.promotion);
 
-            setInStores(filterStores(product.data.storeInformation));
+            setInStores(filterStores(product?.data?.storeInformation));
         }
     }, [product.data]);
 

@@ -112,9 +112,6 @@ export default ({product, onPress, isLoading, setQuantity, removeItem}) => {
                         <View>
                             <Img
                                 style={styles.image}
-                                isPromotion={true}
-                                promotionText={'2 för'}
-                                promotionValue={30}
                                 resizeMode="contain"
                                 source={
                                     product?.data?.productInformation?.imageUrl

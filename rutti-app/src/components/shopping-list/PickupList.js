@@ -12,7 +12,10 @@ import LinearGradient from 'react-native-linear-gradient';
 import LottieView from 'lottie-react-native';
 import Button from '../common/Button';
 import RoundButton from '../common/RoundButton';
-
+import calcBestPrice, {
+    calcTotalPrice,
+    calcHighestPrice,
+} from '../../utilities/calcBestPrice';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import getDistanceFromLatLonInKm from '../../utilities/calcDistance';
 
@@ -38,31 +41,32 @@ export default ({products, close}, props) => {
 
         products.forEach(product => {
             if (product.data && product.data.storeInformation) {
-                let maxPrice = Number.MIN_SAFE_INTEGER;
-                let minPrice = Number.MAX_SAFE_INTEGER;
+                let priceInfo = calcBestPrice(product.data.storeInformation);
+
+                let highPriceInfo = calcHighestPrice(
+                    product.data.storeInformation,
+                    priceInfo.price,
+                    priceInfo.promotion.comparePrice,
+                );
 
                 product.data.storeInformation.forEach(store => {
-                    // GET PRICE DIFFERENCE BETWEEN STORES AND DISCOUNTS
-                    let price = store.priceInformation.price;
-                    let originalPrice = store.priceInformation.price;
-
-                    if (
-                        store.priceInformation.isPromotion &&
-                        store.priceInformation.currentPromotions[0]
-                    ) {
-                        price =
-                            store.priceInformation.currentPromotions[0].price;
-                    }
-
-                    maxPrice < originalPrice && (maxPrice = originalPrice);
-                    minPrice > price && (minPrice = price);
-
-                    //ADD TO STORE MAP TO SEE WHICH STORES WE NEED TO CALCULATE DISTANCE BETWEEN
-                    console.log(store.store.retailer);
                     !shopMap.has(store.store.retailer) &&
                         shopMap.set(store.store.retailer, store);
                 });
-                economical += (maxPrice - minPrice) * product.quantity;
+
+                let maxPrice = calcTotalPrice(
+                    highPriceInfo.price,
+                    product.quantity,
+                    highPriceInfo.promotion.promotionPrice,
+                    highPriceInfo.promotion.noOfItemsToDiscount,
+                ).price;
+                let minPrice = calcTotalPrice(
+                    priceInfo.price,
+                    product.quantity,
+                    priceInfo.promotion.promotionPrice,
+                    priceInfo.promotion.noOfItemsToDiscount,
+                ).price;
+                economical += maxPrice - minPrice;
             }
         });
 

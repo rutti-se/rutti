@@ -61,9 +61,24 @@ export default ({recipe}) => {
                         margin: 5,
                     }}>
                     {renderRating()}
-
-                    <Text style={styles.time}>{recipe.cookingTime}</Text>
-                    <Text style={styles.timeText}>min</Text>
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            marginLeft: '15%',
+                        }}>
+                        <View>
+                            <Text style={[styles.time]}>
+                                {recipe.pricePerPortion}:-
+                            </Text>
+                            <Text style={styles.timeText}>port</Text>
+                        </View>
+                        <View>
+                            <Text style={styles.time}>
+                                {recipe.cookingTime}
+                            </Text>
+                            <Text style={styles.timeText}>min</Text>
+                        </View>
+                    </View>
                 </View>
             </View>
         );
@@ -91,6 +106,7 @@ export default ({recipe}) => {
                 style={{
                     flexDirection: 'row',
                     justifyContent: 'space-between',
+                    alignItems: 'center',
                     width: 130,
                 }}>
                 {rating}
@@ -102,7 +118,7 @@ export default ({recipe}) => {
         let ingredientGroups = [];
         recipeDetails?.ingredients.map(ingredientGroup => {
             ingredientGroups.push(
-                <View>
+                <View style={{marginBottom: 5}}>
                     <Text style={{fontFamily: 'Montserrat-Bold'}}>
                         {ingredientGroup.groupName}
                     </Text>

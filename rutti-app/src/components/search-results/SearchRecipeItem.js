@@ -1,23 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {
-    View,
-    Text,
-    StyleSheet,
-    Alert,
-    TouchableOpacity,
-    Image,
-    ImageBackground,
-} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import COLOR from '../../../assets/colors';
-import RoundButton from '../common/RoundButton';
-import calcBestPrice from '../../utilities/calcBestPrice';
-import SkeletonContent from 'react-native-skeleton-content-nonexpo';
 import Img from '../common/Img';
 
 import Popup from '../common/Popup';
 import DetailedRecipe from '../shopping-list/DetailedRecipe';
 
-export default ({recipe, onPress, isLoading, setQuantity, removeItem}) => {
+export default ({recipe}) => {
     const [popupVisible, setPopupVisible] = useState(false);
 
     useEffect(() => {}, [recipe]);
@@ -26,6 +15,7 @@ export default ({recipe, onPress, isLoading, setQuantity, removeItem}) => {
         return (
             <View style={styles.bottom}>
                 {renderRating()}
+
                 <Text style={styles.time}>{recipe.cookingTime}</Text>
                 <Text style={styles.timeText}>min</Text>
             </View>
@@ -69,9 +59,6 @@ export default ({recipe, onPress, isLoading, setQuantity, removeItem}) => {
                         <View>
                             <Img
                                 style={styles.image}
-                                isPromotion={true}
-                                promotionText={'2 för'}
-                                promotionValue={30}
                                 resizeMode="contain"
                                 source={recipe.imageUrl.replace(
                                     '//',
