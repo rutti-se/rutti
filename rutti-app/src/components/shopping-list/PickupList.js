@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, TouchableWithoutFeedback} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import ShoppingListItem from './ShoppingListItem';
-import getProducts from '../../api/getProducts';
+
+import PickupListItem from './PickupListItem';
 import COLOR from '../../../assets/colors';
 import {
     removeProductFromList,
@@ -247,7 +247,8 @@ export default ({stores, products, close}, props) => {
                                         justifyContent: 'center',
                                     }}>
                                     {products.map(product => (
-                                        <ShoppingListItem
+                                        <PickupListItem
+                                            setPickup={pickupOption}
                                             setQuantity={quantity =>
                                                 setProductQuantity(
                                                     list.id,

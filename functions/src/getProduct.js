@@ -259,10 +259,11 @@ function getCoopProductInformation(data) {
         });
     }
 
+    const coopNames = formatIcaNames(data.name, data.manufacturer);
     return {
         gtin: data.code,
-        name: data.name,
-        brand: data.manufacturer,
+        name: coopNames.name,
+        brand: coopNames.brand,
         /* imageUrl: data.images[0].url, */
         imageUrl: formatCoopImageUrl(data.images[0].url),
         description: data.description,
@@ -362,22 +363,25 @@ function formatCoopImageUrl(url) {
 function formatCityGrossImageUrl(url) {
     return 'https://www.citygross.se/images/products/' + url + '?w=300';
 }
+
 function formatIcaNames(productName, brandName) {
     let name = productName;
     let brand = brandName;
 
-    const index = productName
+    let index = productName
         .toLowerCase()
         .replace(/å|ä/, 'a')
         .replace(/ö/, 'o')
-        .indexOf(brandName.replace(/[-]+/g, ''));
+        .replace(/[-]+/g, ' ')
+        .indexOf(brandName.replace(/[-]+/g, ' '));
 
     if (index > -1) {
         name = productName.substr(0, index - 1);
         brand = productName.substr(index, productName.length);
     }
+
     brand = brand
-        .replace('-', ' ')
+        .replace(/[-]+/g, ' ')
         .replace(/(^\w{1})|(\s{1}\w{1})/g, match => match.toUpperCase());
     name = name.replace(brand, '').trim();
     return { name, brand };

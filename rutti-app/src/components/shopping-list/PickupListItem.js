@@ -1,23 +1,28 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, Picker, ImageBackground} from 'react-native';
 import COLOR from '../../../assets/colors';
+import Button from '../common/Button';
 import RoundButton from '../common/RoundButton';
 import StoreSticker from '../common/StoreSticker';
 import calcBestPrice, {calcTotalPrice} from '../../utilities/calcBestPrice';
 import Popup from '../common/Popup';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {Icon} from '../../../assets/icomoon';
 import DetailedProduct from './DetailedProduct';
 import filterStores from '../../utilities/filterStores';
 
-export default ({product, removeItem, setQuantity}, props) => {
+const OPTION_SUSTAINABLE = 1;
+const OPTION_ECONOMICAL = 2;
+
+export default ({product, removeItem, setQuantity, setPickup}, props) => {
     const [lowestPrice, setLowestPrice] = useState(null);
     const [totalPrice, setTotalPrice] = useState(null);
     const [productName, setProductName] = useState(null);
     const [inStores, setInStores] = useState(null);
-    const [pickedUp, setPickedUp] = useState(false);
     const [isPromotion, setIsPromotion] = useState(false);
+    const [pickedUp, setPickedUp] = useState(false);
     const [promotion, setPromotion] = useState(null);
     const [grantedPromotion, setGrantedPromotion] = useState(false);
-
     const [popupVisible, setPopupVisible] = useState(false);
     useEffect(() => {
         let name = '';
@@ -36,8 +41,13 @@ export default ({product, removeItem, setQuantity}, props) => {
                 (priceInformation.price * product.quantity).toFixed(2),
             );
             setPromotion(priceInformation.promotion);
-
             setInStores(filterStores(product.data.storeInformation));
+
+            if (setPickup === OPTION_ECONOMICAL) {
+                setInStores([
+                    {isSelected: true, retailer: priceInformation.retailer},
+                ]);
+            }
         }
     }, [product.data]);
 
@@ -159,7 +169,24 @@ export default ({product, removeItem, setQuantity}, props) => {
                     </View>
                 )}
             </View>
-
+            <View
+                style={[
+                    styles.checkBox,
+                    {
+                        backgroundColor: pickedUp ? COLOR.GREEN : COLOR.GRAY_4,
+                    },
+                ]}>
+                <TouchableOpacity
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}
+                    onPressOut={() => setPickedUp(!pickedUp)}>
+                    <Icon name={'check'} size={40} color={'white'} />
+                </TouchableOpacity>
+            </View>
             <Popup
                 isVisible={popupVisible}
                 close={() => {
@@ -191,6 +218,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         padding: 10,
         alignItems: 'center',
+        paddingRight: 40,
     },
     leftContainer: {
         flex: 1,
@@ -200,7 +228,6 @@ const styles = StyleSheet.create({
         alignContent: 'space-between',
     },
     rightContainer: {
-        flex: 1,
         marginLeft: 10,
         alignSelf: 'center',
         alignItems: 'center',

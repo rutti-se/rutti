@@ -33,7 +33,6 @@ export default ({product, onPress, isLoading, setQuantity, removeItem}) => {
                 product.data.productInformation.name.length > 0
                     ? product.data.productInformation.name
                     : product.data.productInformation.brand;
-
             setProductName(name);
         }
     }, [product]);
@@ -123,7 +122,14 @@ export default ({product, onPress, isLoading, setQuantity, removeItem}) => {
                             />
                         </View>
                     </TouchableOpacity>
+
                     <Text style={styles.text}>{productName}</Text>
+                    <Text style={styles.infoText}>
+                        {productName?.length > 0
+                            ? product?.data?.productInformation?.brand
+                            : ''}
+                    </Text>
+
                     <RenderBottom />
                     <Popup
                         isVisible={popupVisible}
@@ -170,6 +176,12 @@ const styles = StyleSheet.create({
         fontSize: 14,
         textAlign: 'center',
         fontFamily: 'Montserrat-Bold',
+    },
+    infoText: {
+        fontFamily: 'Montserrat-Regular',
+        textAlign: 'center',
+        alignSelf: 'flex-start',
+        marginLeft: '10%',
     },
     bottom: {
         marginTop: 10,

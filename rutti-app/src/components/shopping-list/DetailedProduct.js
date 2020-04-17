@@ -16,6 +16,7 @@ import Img from '../common/Img';
 import CollapsibleView from '../CollapsibleView';
 import {Dimensions} from 'react-native';
 import Spinner from '../common/Spinner';
+import StoreSticker from '../common/StoreSticker';
 import {removeProductFromList} from '../../api/firebaseHelpers';
 import filterStores from '../../utilities/filterStores';
 
@@ -165,13 +166,9 @@ export default ({product, setQuantity, removeItem}) => {
                     if (store.isSelected) {
                         return (
                             <View style={{width: 75, marginRight: 10}}>
-                                <Button
-                                    text={
-                                        store.retailer === 'citygross'
-                                            ? 'c.g'
-                                            : store.retailer
-                                    }
-                                    small={true}
+                                <StoreSticker
+                                    text={store.retailer}
+                                    large={true}
                                     backgroundColor={COLOR[store.retailer]}
                                 />
                             </View>
