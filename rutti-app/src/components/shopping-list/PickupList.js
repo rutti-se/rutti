@@ -14,40 +14,84 @@ import Button from '../common/Button';
 import RoundButton from '../common/RoundButton';
 
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import getDistanceFromLatLonInKm from '../../utilities/calcDistance';
 
 const NO_OPTION_SELECTED = 0;
 const OPTION_SUSTAINABLE = 1;
 const OPTION_ECONOMICAL = 2;
+const CO2_PER_KM = 140;
+const BIRDS_DISTANCE_TO_ROAD_MULTIPLIER = 4;
 
-export default ({stores, products, close}, props) => {
+export default ({products, close}, props) => {
     const [pickupOption, setPickupOption] = useState(NO_OPTION_SELECTED);
     const [listVisible, setListVisible] = useState(false);
+    const [savings, setSavings] = useState({
+        sustainable: 0,
+        economical: 0,
+    });
 
     useEffect(() => {
-        console.log('products changed');
-    }, [products, stores]);
+        let sustainable = 0;
+        let economical = 0;
+
+        let shopMap = new Map();
+
+        products.forEach(product => {
+            if (product.data && product.data.storeInformation) {
+                let maxPrice = Number.MIN_SAFE_INTEGER;
+                let minPrice = Number.MAX_SAFE_INTEGER;
+
+                product.data.storeInformation.forEach(store => {
+                    // GET PRICE DIFFERENCE BETWEEN STORES AND DISCOUNTS
+                    let price = store.priceInformation.price;
+                    let originalPrice = store.priceInformation.price;
+
+                    if (
+                        store.priceInformation.isPromotion &&
+                        store.priceInformation.currentPromotions[0]
+                    ) {
+                        price =
+                            store.priceInformation.currentPromotions[0].price;
+                    }
+
+                    maxPrice < originalPrice && (maxPrice = originalPrice);
+                    minPrice > price && (minPrice = price);
+
+                    //ADD TO STORE MAP TO SEE WHICH STORES WE NEED TO CALCULATE DISTANCE BETWEEN
+                    console.log(store.store.retailer);
+                    !shopMap.has(store.store.retailer) &&
+                        shopMap.set(store.store.retailer, store);
+                });
+                economical += (maxPrice - minPrice) * product.quantity;
+            }
+        });
+
+        const shopsForDistance = [...shopMap.values()];
+
+        if (shopsForDistance.length > 1) {
+            for (let i = 1; i < shopsForDistance.length; i++) {
+                let shop1 = shopsForDistance[i - 1];
+                let shop2 = shopsForDistance[i];
+                console.log(shop1);
+                sustainable +=
+                    getDistanceFromLatLonInKm(
+                        shop1.store.latitude,
+                        shop1.store.longitude,
+                        shop2.store.latitude,
+                        shop2.store.longitude,
+                    ) *
+                    BIRDS_DISTANCE_TO_ROAD_MULTIPLIER *
+                    CO2_PER_KM;
+            }
+        }
+
+        setSavings({economical, sustainable});
+    }, [products]);
 
     return (
-        <View style={{height: '100%'}}>
+        <View style={{flex: 1}}>
             {!listVisible ? (
-                <View style={{height: '100%'}}>
-                    <View
-                        style={{
-                            position: 'absolute',
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                        }}>
-                        <Button
-                            disabled={pickupOption === NO_OPTION_SELECTED}
-                            text="Fortsätt"
-                            type={'primary'}
-                            inAnimatedView={Platform.OS === 'android'}
-                            onPress={() => {
-                                setListVisible(true);
-                            }}
-                        />
-                    </View>
+                <View style={{flex: 1}}>
                     <View
                         style={{
                             justifyContent: 'center',
@@ -91,7 +135,7 @@ export default ({stores, products, close}, props) => {
                     <View
                         style={{
                             flexDirection: 'row',
-                            height: '50%',
+                            height: '40%',
                         }}>
                         <View
                             style={{
@@ -193,6 +237,43 @@ export default ({stores, products, close}, props) => {
                                 </Text>
                             </TouchableOpacity>
                         </View>
+                    </View>
+                    <Text
+                        style={{
+                            paddingVertical: 25,
+                            paddingHorizontal: 10,
+                            fontFamily: 'Montserrat-Bold',
+                            color: 'white',
+                            textAlign: 'center',
+                        }}>
+                        {pickupOption === OPTION_ECONOMICAL &&
+                            savings.economical > 0 &&
+                            `Du sparar nästan ${Math.round(
+                                savings.economical,
+                            )} kr`}
+
+                        {pickupOption === OPTION_SUSTAINABLE &&
+                            savings.sustainable > 0 &&
+                            `Du minskar CO2-utsläpp med cirka ${Math.round(
+                                savings.sustainable,
+                            )} gram`}
+                    </Text>
+                    <View
+                        style={{
+                            position: 'absolute',
+                            bottom: 0,
+                            left: 10,
+                            right: 10,
+                        }}>
+                        <Button
+                            disabled={pickupOption === NO_OPTION_SELECTED}
+                            text="Fortsätt"
+                            type={'primary'}
+                            inAnimatedView={Platform.OS === 'android'}
+                            onPress={() => {
+                                setListVisible(true);
+                            }}
+                        />
                     </View>
                 </View>
             ) : (

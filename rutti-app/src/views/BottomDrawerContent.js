@@ -8,7 +8,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 
 import ShoppingList from '../components/shopping-list/ShoppingList';
 const SCREEN_HEIGHT = Dimensions.get('window').height;
-const containerHeight = SCREEN_HEIGHT / 1.3;
+const containerHeight = SCREEN_HEIGHT;
 import FadeInView from '../components/animations/FadeInView';
 import COLOR from '../../assets/colors';
 import {addProductToList} from '../api/firebaseHelpers';
@@ -40,7 +40,7 @@ export default ({selectedProduct, user, list, stores}, props) => {
             style={{
                 flexDirection: 'column',
                 marginTop: 10,
-                height: containerHeight,
+                height: containerHeight / 1.2,
             }}>
             {productToAdd ? (
                 <AddItemView
@@ -91,10 +91,9 @@ export default ({selectedProduct, user, list, stores}, props) => {
                 </View>
             )}
 
-            <View style={{flex: 3}}>
+            <View style={{flex: 1, marginBottom: 50}}>
                 <ShoppingList list={list} stores={stores} />
             </View>
-            <View style={{flex: 1 / 2, justifyContent: 'flex-end'}} />
             <SelectShoppingList
                 selectListVisible={selectListVisible}
                 setSelectListVisible={setSelectListVisible}
@@ -118,7 +117,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingHorizontal: 25,
         justifyContent: 'space-between',
-
         alignItems: 'center',
     },
     text: {
