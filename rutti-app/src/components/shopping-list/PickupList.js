@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, TouchableWithoutFeedback} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import ShoppingListItem from './ShoppingListItem';
 import getProducts from '../../api/getProducts';
@@ -21,6 +21,7 @@ const OPTION_ECONOMICAL = 2;
 
 export default ({stores, products, close}, props) => {
     const [pickupOption, setPickupOption] = useState(NO_OPTION_SELECTED);
+    const [listVisible, setListVisible] = useState(false);
 
     useEffect(() => {
         console.log('products changed');
@@ -28,42 +29,34 @@ export default ({stores, products, close}, props) => {
 
     return (
         <View style={{height: '100%'}}>
-            <View style={styles.topContainer} />
-            {/* <View
-                style={{
-                    marginLeft: '5%',
-                    marginVertical: 20,
-                    width: '90%',
-                    height: 2,
-                    borderRadius: 10,
-                    backgroundColor: 'white',
-                }}
-            /> */}
-            <View style={{height: '100%', justifyContent: 'center'}}>
-                <View
-                    style={{
-                        width: '100%',
-                        paddingHorizontal: 10,
-                        marginTop: 50,
-                        marginBottom: 50,
-                    }}>
-                    <RoundButton
-                        icon={'arrow-left'}
-                        iconColor={COLOR.WHITE}
-                        color={COLOR.PRIMARY}
-                        inAnimatedView={true}
-                        onPress={close}
-                    />
-                    <Text
+            {!listVisible ? (
+                <View style={{height: '100%'}}>
+                    <View
                         style={{
-                            width: '100%',
-                            textAlign: 'center',
-                            fontSize: 20,
-                            color: 'white',
-                            fontFamily: 'Montserrat-Bold',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            height: 40,
                         }}>
-                        Hur vill du handla?
-                    </Text>
+                        <Text
+                            style={{
+                                width: '100%',
+                                textAlign: 'center',
+                                fontSize: 20,
+                                color: 'white',
+                                fontFamily: 'Montserrat-Bold',
+                            }}>
+                            Hur vill du handla?
+                        </Text>
+                        <View style={{position: 'absolute', top: 0, left: 10}}>
+                            <RoundButton
+                                icon={'arrow-left'}
+                                iconColor={COLOR.WHITE}
+                                color={COLOR.PRIMARY}
+                                inAnimatedView={true}
+                                onPress={close}
+                            />
+                        </View>
+                    </View>
                     <Text
                         style={{
                             width: '100%',
@@ -73,202 +66,239 @@ export default ({stores, products, close}, props) => {
                             fontSize: 14,
                             color: COLOR.GRAY_5,
                             fontFamily: 'Montserrat',
+                            marginBottom: 50,
                         }}>
                         I en butik, för att vara effektiv? Eller kanske i flera,
                         för att spara pengar?
                     </Text>
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            height: '50%',
+                        }}>
+                        <View
+                            style={{
+                                flex: 1,
+                                backgroundColor:
+                                    pickupOption === OPTION_SUSTAINABLE
+                                        ? COLOR.PRIMARY
+                                        : COLOR.SECONDARY,
+                                borderRadius: 10,
+                                marginHorizontal: 10,
+                            }}>
+                            <TouchableOpacity
+                                style={{height: '100%', width: '100%'}}
+                                onPressOut={() =>
+                                    setPickupOption(OPTION_SUSTAINABLE)
+                                }>
+                                <View
+                                    style={{
+                                        marginTop: 20,
+                                        height: '80%',
+                                        width: '100%',
+                                        alignItems: 'center',
+                                    }}>
+                                    <LottieView
+                                        source={require('../../../assets/animations/sustainable.json')}
+                                        resizeMode={'contain'}
+                                        autoPlay
+                                        loop
+                                        height={'70%'}
+                                        width={'100%'}
+                                    />
+                                </View>
+                                <Text
+                                    style={{
+                                        position: 'absolute',
+                                        bottom: 0,
+                                        left: 0,
+                                        right: 0,
+                                        paddingVertical: 15,
+                                        textAlign: 'center',
+                                        fontSize: 20,
+                                        color:
+                                            pickupOption === OPTION_SUSTAINABLE
+                                                ? COLOR.WHITE
+                                                : COLOR.GRAY_1,
+                                        fontFamily: 'Montserrat-Bold',
+                                    }}>
+                                    Miljösmart
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View
+                            style={{
+                                flex: 1,
+                                backgroundColor:
+                                    pickupOption === OPTION_ECONOMICAL
+                                        ? COLOR.PRIMARY
+                                        : COLOR.SECONDARY,
+                                borderRadius: 10,
+                                marginHorizontal: 10,
+                            }}>
+                            <TouchableOpacity
+                                style={{height: '100%', width: '100%'}}
+                                onPressOut={() =>
+                                    setPickupOption(OPTION_ECONOMICAL)
+                                }>
+                                <View
+                                    style={{
+                                        marginTop: 15,
+                                        height: '80%',
+                                        width: '100%',
+                                        alignItems: 'center',
+                                    }}>
+                                    <LottieView
+                                        source={require('../../../assets/animations/economical.json')}
+                                        resizeMode={'contain'}
+                                        autoPlay
+                                        loop
+                                        height={'70%'}
+                                        width={'100%'}
+                                    />
+                                </View>
+                                <Text
+                                    style={{
+                                        position: 'absolute',
+                                        bottom: 0,
+                                        left: 0,
+                                        right: 0,
+                                        paddingVertical: 15,
+                                        textAlign: 'center',
+                                        fontSize: 20,
+                                        color:
+                                            pickupOption === OPTION_ECONOMICAL
+                                                ? COLOR.WHITE
+                                                : COLOR.GRAY_1,
+                                        fontFamily: 'Montserrat-Bold',
+                                    }}>
+                                    Sparsamt
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                    <View style={{marginTop: 100, marginHorizontal: 10}}>
+                        <Button
+                            disabled={pickupOption === NO_OPTION_SELECTED}
+                            text="Fortsätt"
+                            type={'primary'}
+                            inAnimatedView={true}
+                            onPress={() => {
+                                setListVisible(true);
+                            }}
+                        />
+                    </View>
                 </View>
+            ) : (
                 <View
                     style={{
-                        flexDirection: 'row',
-                        height: '50%',
+                        height: '100%',
+                        width: '100%',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                        zIndex: 1000,
                     }}>
                     <View
                         style={{
-                            flex: 1,
-                            backgroundColor:
-                                pickupOption === OPTION_SUSTAINABLE
-                                    ? COLOR.PRIMARY
-                                    : COLOR.SECONDARY,
-                            borderRadius: 10,
-                            marginHorizontal: 10,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            height: 40,
                         }}>
-                        <TouchableOpacity
-                            style={{height: '100%', width: '100%'}}
-                            onPressOut={() =>
-                                setPickupOption(OPTION_SUSTAINABLE)
-                            }>
-                            <View
-                                style={{
-                                    marginTop: 20,
-                                    height: '80%',
-                                    width: '100%',
-                                    alignItems: 'center',
-                                }}>
-                                <LottieView
-                                    source={require('../../../assets/animations/sustainable.json')}
-                                    resizeMode={'contain'}
-                                    autoPlay
-                                    loop
-                                    height={'70%'}
-                                    width={'100%'}
-                                />
-                            </View>
-                            <Text
-                                style={{
-                                    position: 'absolute',
-                                    bottom: 0,
-                                    left: 0,
-                                    right: 0,
-                                    paddingVertical: 15,
-                                    textAlign: 'center',
-                                    fontSize: 20,
-                                    color:
-                                        pickupOption === OPTION_SUSTAINABLE
-                                            ? COLOR.WHITE
-                                            : COLOR.GRAY_1,
-                                    fontFamily: 'Montserrat-Bold',
-                                }}>
-                                Miljösmart
-                            </Text>
-                        </TouchableOpacity>
+                        <Text
+                            style={{
+                                width: '100%',
+                                textAlign: 'center',
+                                fontSize: 20,
+                                color: 'white',
+                                fontFamily: 'Montserrat-Bold',
+                            }}>
+                            {pickupOption === OPTION_SUSTAINABLE &&
+                                'Miljösmart'}
+                            {pickupOption === OPTION_ECONOMICAL && 'Sparsamt'}
+                        </Text>
+                        <View style={{position: 'absolute', top: 0, left: 10}}>
+                            <RoundButton
+                                icon={'arrow-left'}
+                                iconColor={COLOR.WHITE}
+                                color={COLOR.PRIMARY}
+                                inAnimatedView={true}
+                                onPress={() => setListVisible(false)}
+                            />
+                        </View>
                     </View>
                     <View
                         style={{
-                            flex: 1,
-                            backgroundColor:
-                                pickupOption === OPTION_ECONOMICAL
-                                    ? COLOR.PRIMARY
-                                    : COLOR.SECONDARY,
-                            borderRadius: 10,
-                            marginHorizontal: 10,
+                            height: '100%',
+                            marginTop: 20,
+                            width: '95%',
+                            alignSelf: 'center',
                         }}>
-                        <TouchableOpacity
-                            style={{height: '100%', width: '100%'}}
-                            onPressOut={() =>
-                                setPickupOption(OPTION_ECONOMICAL)
-                            }>
-                            <View
-                                style={{
-                                    marginTop: 15,
-                                    height: '80%',
-                                    width: '100%',
-                                    alignItems: 'center',
-                                }}>
-                                <LottieView
-                                    source={require('../../../assets/animations/economical.json')}
-                                    resizeMode={'contain'}
-                                    autoPlay
-                                    loop
-                                    height={'70%'}
-                                    width={'100%'}
-                                />
-                            </View>
-                            <Text
-                                style={{
-                                    position: 'absolute',
-                                    bottom: 0,
-                                    left: 0,
-                                    right: 0,
-                                    paddingVertical: 15,
-                                    textAlign: 'center',
-                                    fontSize: 20,
-                                    color:
-                                        pickupOption === OPTION_ECONOMICAL
-                                            ? COLOR.WHITE
-                                            : COLOR.GRAY_1,
-                                    fontFamily: 'Montserrat-Bold',
-                                }}>
-                                Sparsamt
-                            </Text>
-                        </TouchableOpacity>
+                        <ScrollView>
+                            <TouchableWithoutFeedback>
+                                <View
+                                    style={{
+                                        paddingVertical: 10,
+                                        justifyContent: 'center',
+                                    }}>
+                                    {products.map(product => (
+                                        <ShoppingListItem
+                                            setQuantity={quantity =>
+                                                setProductQuantity(
+                                                    list.id,
+                                                    product.sku,
+                                                    quantity,
+                                                )
+                                            }
+                                            removeItem={() =>
+                                                removeProductFromList(
+                                                    list.id,
+                                                    product.sku,
+                                                    product.quantity,
+                                                )
+                                            }
+                                            product={product}
+                                        />
+                                    ))}
+                                </View>
+                            </TouchableWithoutFeedback>
+                        </ScrollView>
+                        <LinearGradient
+                            style={{
+                                position: 'absolute',
+                                top: 0,
+                                width: '100%',
+                                height: 10,
+                            }}
+                            colors={[
+                                'rgba(51, 51, 51, 1)',
+                                'rgba(51, 51, 51, 0)',
+                            ]}
+                            pointerEvents={'none'}
+                        />
+                        <LinearGradient
+                            style={{
+                                position: 'absolute',
+                                bottom: 0,
+                                width: '100%',
+                                height: 10,
+                            }}
+                            colors={[
+                                'rgba(51, 51, 51, 0)',
+                                'rgba(51, 51, 51, 1)',
+                            ]}
+                            pointerEvents={'none'}
+                        />
                     </View>
                 </View>
-                <View style={{marginTop: 100, marginHorizontal: 10}}>
-                    <Button
-                        text="Fortsätt"
-                        type={'primary'}
-                        inAnimatedView={true}
-                        onPress={() => {
-                            console.log('continue');
-                        }}
-                    />
-                </View>
-            </View>
+            )}
         </View>
-        // <View
-        //     style={{
-        //         height: '100%',
-        //         width: '100%',
-        //         flexDirection: 'column',
-        //         justifyContent: 'space-between',
-        //         zIndex: 1000,
-        //     }}>
-        //     <View
-        //         style={{
-        //             height: '100%',
-        //             width: '95%',
-        //             alignSelf: 'center',
-        //         }}>
-        //         <ScrollView>
-        //             <TouchableWithoutFeedback>
-        //                 <View
-        //                     style={{
-        //                         paddingVertical: 10,
-        //                         justifyContent: 'center',
-        //                     }}>
-        //                     {products.map(product => (
-        //                         <ShoppingListItem
-        //                             setQuantity={quantity =>
-        //                                 setProductQuantity(
-        //                                     list.id,
-        //                                     product.sku,
-        //                                     quantity,
-        //                                 )
-        //                             }
-        //                             removeItem={() =>
-        //                                 removeProductFromList(
-        //                                     list.id,
-        //                                     product.sku,
-        //                                     product.quantity,
-        //                                 )
-        //                             }
-        //                             product={product}
-        //                         />
-        //                     ))}
-
-        //                 </View>
-        //             </TouchableWithoutFeedback>
-        //         </ScrollView>
-        //         <LinearGradient
-        //             style={{
-        //                 position: 'absolute',
-        //                 top: 0,
-        //                 width: '100%',
-        //                 height: 10,
-        //             }}
-        //             colors={['rgba(51, 51, 51, 1)', 'rgba(51, 51, 51, 0)']}
-        //             pointerEvents={'none'}
-        //         />
-        //         <LinearGradient
-        //             style={{
-        //                 position: 'absolute',
-        //                 bottom: 0,
-        //                 width: '100%',
-        //                 height: 10,
-        //             }}
-        //             colors={['rgba(51, 51, 51, 0)', 'rgba(51, 51, 51, 1)']}
-        //             pointerEvents={'none'}
-        //         />
-        //     </View>
-        // </View>
     );
 };
 
 const styles = StyleSheet.create({
     topContainer: {
         position: 'absolute',
-        left: 0,
+        left: 10,
         top: 0,
     },
 });

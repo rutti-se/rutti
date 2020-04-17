@@ -96,6 +96,9 @@ export default (
     }
 
     function getBackgroundColor() {
+        if (disabled) {
+            return COLOR.GRAY_2;
+        }
         if (backgroundColor) {
             return backgroundColor;
         }

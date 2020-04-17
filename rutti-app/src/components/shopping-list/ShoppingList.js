@@ -67,6 +67,7 @@ export default ({list, stores}, props) => {
                     <PickupList
                         products={products}
                         stores={stores}
+                        list={list}
                         close={() => setPickupListVisible(false)}
                     />
                 </FadeInView>
