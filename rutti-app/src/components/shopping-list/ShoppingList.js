@@ -108,7 +108,9 @@ export default ({list, stores}, props) => {
                                     <Button
                                         text="Hitta bästa rutt"
                                         type={'primary'}
-                                        inAnimatedView={true}
+                                        inAnimatedView={
+                                            Platform.OS === 'android'
+                                        }
                                         onPress={() => {
                                             setPickupListVisible(true);
                                         }}

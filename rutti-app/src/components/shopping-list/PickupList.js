@@ -33,6 +33,23 @@ export default ({stores, products, close}, props) => {
                 <View style={{height: '100%'}}>
                     <View
                         style={{
+                            position: 'absolute',
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                        }}>
+                        <Button
+                            disabled={pickupOption === NO_OPTION_SELECTED}
+                            text="Fortsätt"
+                            type={'primary'}
+                            inAnimatedView={Platform.OS === 'android'}
+                            onPress={() => {
+                                setListVisible(true);
+                            }}
+                        />
+                    </View>
+                    <View
+                        style={{
                             justifyContent: 'center',
                             alignItems: 'center',
                             height: 40,
@@ -176,17 +193,6 @@ export default ({stores, products, close}, props) => {
                                 </Text>
                             </TouchableOpacity>
                         </View>
-                    </View>
-                    <View style={{marginTop: 100, marginHorizontal: 10}}>
-                        <Button
-                            disabled={pickupOption === NO_OPTION_SELECTED}
-                            text="Fortsätt"
-                            type={'primary'}
-                            inAnimatedView={true}
-                            onPress={() => {
-                                setListVisible(true);
-                            }}
-                        />
                     </View>
                 </View>
             ) : (
