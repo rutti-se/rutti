@@ -271,7 +271,6 @@ export function getBestStore(products) {
 }
 
 export function getEnvironmentalEffect(stores) {
-    console.log;
     const CO2_PER_KM = 140;
     const BIRDS_DISTANCE_TO_ROAD_MULTIPLIER = 4;
 
