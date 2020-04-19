@@ -1,29 +1,24 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, Picker, ImageBackground} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import COLOR from '../../../assets/colors';
-import Button from '../common/Button';
 import RoundButton from '../common/RoundButton';
 import StoreSticker from '../common/StoreSticker';
-import calcBestPrice, {calcTotalPrice} from '../../utilities/calcBestPrice';
 import Popup from '../common/Popup';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Icon} from '../../../assets/icomoon';
 import DetailedProduct from './DetailedProduct';
-import filterStores from '../../utilities/filterStores';
 
 const OPTION_SUSTAINABLE = 1;
 const OPTION_ECONOMICAL = 2;
 
-export default ({product, removeItem, setQuantity, setPickup}, props) => {
-    const [lowestPrice, setLowestPrice] = useState(null);
-    const [totalPrice, setTotalPrice] = useState(null);
+export default (
+    {product, productBestPrice, removeItem, setQuantity, setPickup},
+    props,
+) => {
     const [productName, setProductName] = useState(null);
-    const [inStores, setInStores] = useState(null);
-    const [isPromotion, setIsPromotion] = useState(false);
     const [pickedUp, setPickedUp] = useState(false);
-    const [promotion, setPromotion] = useState(null);
-    const [grantedPromotion, setGrantedPromotion] = useState(false);
     const [popupVisible, setPopupVisible] = useState(false);
+
     useEffect(() => {
         let name = '';
         product.data && (name = product.data.productInformation.name);
@@ -31,86 +26,54 @@ export default ({product, removeItem, setQuantity, setPickup}, props) => {
             name = name.substring(0, 25) + '...';
         }
         setProductName(name);
-        if (product.data) {
-            let priceInformation = calcBestPrice(
-                product?.data?.storeInformation,
-            );
-            setIsPromotion(priceInformation.promotion.isPromotion);
-            setLowestPrice(priceInformation.price);
-            setTotalPrice(
-                (priceInformation.price * product.quantity).toFixed(2),
-            );
-            setPromotion(priceInformation.promotion);
-            setInStores(filterStores(product.data.storeInformation));
+    }, [product]);
 
-            if (setPickup === OPTION_ECONOMICAL) {
-                setInStores([
-                    {isSelected: true, retailer: priceInformation.retailer},
-                ]);
-            }
-        }
-    }, [product.data]);
-
-    useEffect(() => {
-        if (promotion) {
-            let result = calcTotalPrice(
-                lowestPrice,
-                product.quantity,
-                promotion.promotionPrice,
-                promotion.noOfItemsToDiscount,
-            );
-            setTotalPrice(result.price);
-            setGrantedPromotion(result.grantedPromotion);
-        }
-    }, [promotion, product.quantity]);
-
-    function renderStores() {
-        return (
-            <View style={styles.storeContainer}>
-                {inStores.map(store => {
-                    if (store.isSelected) {
-                        return (
-                            <View style={{width: 60, marginRight: 5}}>
-                                <StoreSticker
-                                    text={store.retailer}
-                                    backgroundColor={COLOR[store.retailer]}
-                                />
-                            </View>
-                        );
-                    }
-                })}
-            </View>
-        );
-    }
-
+    useEffect(() => {}, [productBestPrice]);
     const RenderPromotion = () => {
         return (
             <View
                 style={{
                     flex: 1,
                 }}>
-                {isPromotion && (
-                    <View
-                        style={{
-                            alignSelf: 'center',
-                            flexDirection: 'row',
-                            backgroundColor: COLOR.SECONDARY,
-                            padding: 5,
-                            paddingLeft: 10,
-                            paddingRight: 10,
-                            borderRadius: 25,
-                        }}>
-                        {promotion?.noOfItemsToDiscount > 1 && (
-                            <Text style={styles.promotionText}>
-                                {promotion.noOfItemsToDiscount} för{' '}
+                {productBestPrice.cheapestStore[0] &&
+                    productBestPrice.cheapestStore[0].priceInformation
+                        .isPromotion && (
+                        <View
+                            style={{
+                                alignSelf: 'center',
+                                flexDirection: 'row',
+                                backgroundColor: COLOR.SECONDARY,
+                                padding: 5,
+                                paddingLeft: 10,
+                                paddingRight: 10,
+                                borderRadius: 25,
+                            }}>
+                            {productBestPrice.cheapestStore[0].priceInformation
+                                .currentPromotions[0].noOfItemsToDiscount >
+                                1 && (
+                                <Text style={styles.promotionText}>
+                                    {
+                                        productBestPrice.cheapestStore[0]
+                                            .priceInformation
+                                            .currentPromotions[0]
+                                            .noOfItemsToDiscount
+                                    }{' '}
+                                    för{' '}
+                                </Text>
+                            )}
+                            <Text style={styles.promotion}>
+                                {(productBestPrice.price / product.quantity) *
+                                    productBestPrice.cheapestStore[0]
+                                        .priceInformation.currentPromotions[0]
+                                        .noOfItemsToDiscount}
+                                {productBestPrice.cheapestStore[0]
+                                    .priceInformation.currentPromotions[0]
+                                    .noOfItemsToDiscount > 1
+                                    ? ':-'
+                                    : '/st'}
                             </Text>
-                        )}
-                        <Text style={styles.promotion}>
-                            {promotion?.promotionPrice}
-                            {promotion?.noOfItemsToDiscount > 1 ? ':-' : '/st'}
-                        </Text>
-                    </View>
-                )}
+                        </View>
+                    )}
             </View>
         );
     };
@@ -129,13 +92,13 @@ export default ({product, removeItem, setQuantity, setPickup}, props) => {
                 {product.data && (
                     <>
                         <Text style={styles.text}>{productName}</Text>
-                        {inStores && renderStores()}
+                        {/* {inStores && renderStores()} */}
                     </>
                 )}
             </View>
             <View style={styles.rightContainer}>
                 <RenderPromotion />
-                {grantedPromotion && (
+                {productBestPrice.grantedPromotion && (
                     <Text
                         style={[
                             styles.priceText,
@@ -146,7 +109,12 @@ export default ({product, removeItem, setQuantity, setPickup}, props) => {
                                 fontSize: 15,
                             },
                         ]}>
-                        {(lowestPrice * product.quantity).toFixed(2)}:-
+                        (
+                        {(
+                            productBestPrice.cheapestStore[0].priceInformation
+                                .price * product.quantity
+                        ).toFixed(2)}
+                        :-)
                     </Text>
                 )}
                 {product.data && (
@@ -159,12 +127,12 @@ export default ({product, removeItem, setQuantity, setPickup}, props) => {
                             style={[
                                 styles.price,
                                 {
-                                    color: grantedPromotion
+                                    color: productBestPrice.grantedPromotion
                                         ? COLOR.PRIMARY
                                         : COLOR.WHITE,
                                 },
                             ]}>
-                            {totalPrice}:-
+                            {productBestPrice.price}:-
                         </Text>
                     </View>
                 )}

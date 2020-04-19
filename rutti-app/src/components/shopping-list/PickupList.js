@@ -15,6 +15,7 @@ import RoundButton from '../common/RoundButton';
 import calcBestPrice, {
     getTotalSavings,
     calcHighestPrice,
+    getProductPrice,
 } from '../../utilities/calcBestPrice';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
@@ -293,6 +294,10 @@ export default ({products, close}, props) => {
                                                 )
                                             }
                                             product={product}
+                                            productBestPrice={getProductPrice(
+                                                product,
+                                                products,
+                                            )}
                                         />
                                     ))}
                                 </View>
