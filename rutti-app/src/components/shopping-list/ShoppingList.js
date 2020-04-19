@@ -11,6 +11,8 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import PickupList from './PickupList';
 import Button from '../common/Button';
+import RoundButton from '../common/RoundButton';
+
 import FadeInView from '../animations/FadeInView';
 
 let cacheMap = new Map();
@@ -105,16 +107,6 @@ export default ({list, stores}, props) => {
                                             product={product}
                                         />
                                     ))}
-                                    <Button
-                                        text="Hitta bästa rutt"
-                                        type={'primary'}
-                                        inAnimatedView={
-                                            Platform.OS === 'android'
-                                        }
-                                        onPress={() => {
-                                            setPickupListVisible(true);
-                                        }}
-                                    />
                                 </View>
                             </TouchableWithoutFeedback>
                         </ScrollView>
@@ -134,7 +126,7 @@ export default ({list, stores}, props) => {
                         <LinearGradient
                             style={{
                                 position: 'absolute',
-                                bottom: 0,
+                                bottom: 60,
                                 width: '100%',
                                 height: 10,
                             }}
@@ -144,6 +136,30 @@ export default ({list, stores}, props) => {
                             ]}
                             pointerEvents={'none'}
                         />
+                        <View
+                            style={{
+                                paddingTop: 10,
+                                flexDirection: 'row',
+                            }}>
+                            <View style={{flex: 1, marginRight: 10}}>
+                                <Button
+                                    text="Hitta bästa rutt"
+                                    type={'primary'}
+                                    inAnimatedView={Platform.OS === 'android'}
+                                    onPress={() => {
+                                        setPickupListVisible(true);
+                                    }}
+                                />
+                            </View>
+                            <RoundButton
+                                icon={'share'}
+                                big={true}
+                                inAnimatedView={Platform.OS === 'android'}
+                                onPress={() => {
+                                    console.log('share');
+                                }}
+                            />
+                        </View>
                     </View>
                 </FadeInView>
             )}

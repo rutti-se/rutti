@@ -101,9 +101,8 @@ const styles = StyleSheet.create({
     button: {
         width: '100%',
         borderRadius: 50,
-        height: 60,
+        height: 50,
         padding: 5,
-        marginBottom: 6,
         justifyContent: 'center',
     },
 

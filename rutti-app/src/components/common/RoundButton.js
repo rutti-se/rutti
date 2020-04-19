@@ -12,6 +12,7 @@ export default (
         color,
         underlayColor,
         small,
+        big,
         iconColor,
         disabled,
         inAnimatedView,
@@ -42,7 +43,11 @@ export default (
             <TouchableOpacity
                 underlayColor={COLOR.PRIMARY}
                 style={[
-                    small ? styles.buttonSmall : styles.button,
+                    small
+                        ? styles.buttonSmall
+                        : big
+                        ? styles.buttonBig
+                        : styles.button,
                     {backgroundColor: color ? color : COLOR.PRIMARY},
                 ]}
                 onPressOut={onPress}
@@ -66,6 +71,13 @@ const styles = StyleSheet.create({
         height: 30,
         width: 30,
         borderRadius: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    buttonBig: {
+        height: 50,
+        width: 50,
+        borderRadius: 400,
         justifyContent: 'center',
         alignItems: 'center',
     },

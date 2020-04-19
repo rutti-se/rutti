@@ -13,83 +13,27 @@ import LottieView from 'lottie-react-native';
 import Button from '../common/Button';
 import RoundButton from '../common/RoundButton';
 import calcBestPrice, {
-    calcTotalPrice,
+    getTotalSavings,
     calcHighestPrice,
 } from '../../utilities/calcBestPrice';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import getDistanceFromLatLonInKm from '../../utilities/calcDistance';
 
 const NO_OPTION_SELECTED = 0;
 const OPTION_SUSTAINABLE = 1;
 const OPTION_ECONOMICAL = 2;
-const CO2_PER_KM = 140;
-const BIRDS_DISTANCE_TO_ROAD_MULTIPLIER = 4;
 
 export default ({products, close}, props) => {
     const [pickupOption, setPickupOption] = useState(NO_OPTION_SELECTED);
     const [listVisible, setListVisible] = useState(false);
     const [savings, setSavings] = useState({
-        sustainable: 0,
-        economical: 0,
+        economicalSavings: 0,
+        environmentalSavings: 0,
     });
 
     useEffect(() => {
-        let sustainable = 0;
-        let economical = 0;
-
-        let shopMap = new Map();
-
-        products.forEach(product => {
-            if (product.data && product.data.storeInformation) {
-                let priceInfo = calcBestPrice(product.data.storeInformation);
-
-                let highPriceInfo = calcHighestPrice(
-                    product.data.storeInformation,
-                    priceInfo.price,
-                    priceInfo.promotion.comparePrice,
-                );
-
-                product.data.storeInformation.forEach(store => {
-                    !shopMap.has(store.store.retailer) &&
-                        shopMap.set(store.store.retailer, store);
-                });
-
-                let maxPrice = calcTotalPrice(
-                    highPriceInfo.price,
-                    product.quantity,
-                    highPriceInfo.promotion.promotionPrice,
-                    highPriceInfo.promotion.noOfItemsToDiscount,
-                ).price;
-                let minPrice = calcTotalPrice(
-                    priceInfo.price,
-                    product.quantity,
-                    priceInfo.promotion.promotionPrice,
-                    priceInfo.promotion.noOfItemsToDiscount,
-                ).price;
-                economical += maxPrice - minPrice;
-            }
-        });
-
-        const shopsForDistance = [...shopMap.values()];
-
-        if (shopsForDistance.length > 1) {
-            for (let i = 1; i < shopsForDistance.length; i++) {
-                let shop1 = shopsForDistance[i - 1];
-                let shop2 = shopsForDistance[i];
-                console.log(shop1);
-                sustainable +=
-                    getDistanceFromLatLonInKm(
-                        shop1.store.latitude,
-                        shop1.store.longitude,
-                        shop2.store.latitude,
-                        shop2.store.longitude,
-                    ) *
-                    BIRDS_DISTANCE_TO_ROAD_MULTIPLIER *
-                    CO2_PER_KM;
-            }
+        if (products && products.length > 0) {
+            setSavings(getTotalSavings(products));
         }
-
-        setSavings({economical, sustainable});
     }, [products]);
 
     return (
@@ -251,15 +195,15 @@ export default ({products, close}, props) => {
                             textAlign: 'center',
                         }}>
                         {pickupOption === OPTION_ECONOMICAL &&
-                            savings.economical > 0 &&
+                            savings.economicalSavings > 0 &&
                             `Du sparar nästan ${Math.round(
-                                savings.economical,
+                                savings.economicalSavings,
                             )} kr`}
 
                         {pickupOption === OPTION_SUSTAINABLE &&
-                            savings.sustainable > 0 &&
+                            savings.environmentalSavings > 0 &&
                             `Du minskar CO2-utsläpp med cirka ${Math.round(
-                                savings.sustainable,
+                                savings.environmentalSavings,
                             )} gram`}
                     </Text>
                     <View
