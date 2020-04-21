@@ -12,7 +12,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import PickupList from './PickupList';
 import Button from '../common/Button';
 import RoundButton from '../common/RoundButton';
-
+import {getProductPrice} from '../../utilities/calcBestPrice';
 import FadeInView from '../animations/FadeInView';
 
 let cacheMap = new Map();
@@ -105,6 +105,13 @@ export default ({list, stores}, props) => {
                                                 )
                                             }
                                             product={product}
+                                            productBestPrice={
+                                                product?.data &&
+                                                getProductPrice(
+                                                    product,
+                                                    products,
+                                                )
+                                            }
                                         />
                                     ))}
                                 </View>
