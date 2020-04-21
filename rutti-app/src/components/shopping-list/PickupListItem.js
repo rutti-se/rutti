@@ -132,7 +132,7 @@ export default (
                                         : COLOR.WHITE,
                                 },
                             ]}>
-                            {productBestPrice.price}:-
+                            {productBestPrice.price.toFixed(2)}:-
                         </Text>
                     </View>
                 )}
